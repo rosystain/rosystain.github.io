@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#">
+
+<head>
+  <meta charset="UTF-8" >
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title>Archives: 2019/10 | 痴呆屋</title>
+  <meta name="description" content="" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta property="og:type" content="website">
+<meta property="og:title" content="痴呆屋">
+<meta property="og:url" content="https://rosystain.com/archives/2019/10/index.html">
+<meta property="og:site_name" content="痴呆屋">
+<meta property="og:locale">
+<meta property="article:author" content="Chock">
+<meta name="twitter:card" content="summary">
+  <!-- build:css css/screen.css -->
+
+  
+<link rel="stylesheet" href="/css/screen.css">
+
+  
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  
+  <!-- endbuild -->
+  
+  <!-- build:css fancybox/jquery.fancybox.css -->
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  <!-- endbuild -->
+  
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+  <meta name="generator" content="痴呆屋">
+  
+  
+  <link rel="alternate" type="application/atom+xml" title="Atom 0.3" href="atom.xml">
+  
+  
+</head>
+
+
+<body class="home-template">
+
+  <header class="main-header  " >
+    <nav class="main-nav overlay clearfix">
+        
+        <a class="subscribe-button icon-feed" href="/atom.xml">Subscribe</a>
+    </nav>
+    
+    <div class="vertical">
+        <div class="site-head-content inner">
+             <a class="blog-logo" href="/"><img src="http://cdn.hoposs.com/logo-casper.png" alt="Blog Logo"/></a>         
+            <!--<h1 class="page-title">痴呆屋</h1>
+            <h2 class="page-description"></h2>-->
+        </div>
+    </div>
+    
+    <!--<a class="scroll-down icon-arrow-left" href="#content" data-offset="-45"><span class="hidden">Scroll Down</span></a> -->
+</header>
+
+  
+<main id="content" class="content" role="main">
+  
+  <article class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+    
+    <header class="post-header">
+      
+
+  <h2 class="post-title" itemprop="name">
+    <a href="/NAS/2019/10/09/269/">神奇的联合文件系统(UnionFileSystem)</a>
+  </h2>
+
+
+    </header>
+    
+    <section class="post-excerpt" itemprop="description articleBody">
+      <p>
+      
+        <p>关于联合文件系统（这里简称UnionFS）最早是从<a target="_blank" rel="noopener" href="http://www.songming.me/unionfilesystem.html">一段香</a>的OMV介绍文中看到的，实际用上它的契机倒是因为近几年被老莱炒火的unRAID。</p>
+<p>unRAID号称可以在允许磁盘休眠的同时实现跨盘卷与数据冗余，想了一想这不就是一段香提到的UFS+Snapraid吗。</p>
+<p>本着试用结束后就回去折腾OMV的想法试了2个月的unRAID，在试用期过后系统再起不能的时候我的大脑已被真香支配，便情不自禁地冲了钱成为了正儿八经的unRAID用户。当然这并不是一篇unRAID的安利文，这里主要还是想介绍一下unRAID所使用的核心之一——UnionFS。</p>
+		
+		<p>
+			<a href="/NAS/2019/10/09/269/" class="excerpt-link">Read More...</a>
+		</p>
+		        
+      
+      </p>
+    </section>
+    <section class="post-meta">
+    
+      <span> Chock</span>
+    
+    
+    
+    on 
+    <a href='/tags/NAS/'>NAS</a>,
+    
+    <a href='/tags/OMV/'>OMV</a>,
+    
+    <a href='/tags/unRAID/'>unRAID</a>
+    
+    
+      <time datetime="2019-10-09T10:38:16.000Z" itemprop="datePublished" class="post-date">
+          Oct 09 2019
+      </time>
+</section>
+
+  </article>
+  
+  <nav class="pagination" role="pagination">
+    
+    <span class="page-number">Page 1 of 1</span>
+    
+  </nav>
+</main>
+
+
+  <footer class="site-footer clearfix">
+ <section class="copyright"><a href="/">痴呆屋</a> &copy; <script>document.write(new Date().getFullYear())</script> &bull; All rights reserved.</section>
+</footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/jquery-2.0.3.min.js"><\/script>')</script>
+
+<script type="text/javascript" src="/js/jquery.fitvids.js"></script>
+<script type="text/javascript">
+(function($){
+  var $postContent = $(".post-content");
+  $postContent.fitVids();
+})(jQuery);
+</script>
+
+<script type="text/javascript" src="/js/index.js"></script>
+
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    var wrapAll = function(q) {
+      $(q).each( function() {
+        var $img = $(this),
+            href = $img.attr('src');
+        $img.wrap('<a rel="fancybox" href="' + href + '" title="' + $img.attr('alt') + '" class="link"></a>');
+      });
+    };
+    wrapAll('.post-content img');
+    wrapAll('.post-excerpt img');
+    $('[rel="fancybox"]').fancybox();
+  })(jQuery);
+</script>
+
+
+
+
+
+</body>
+</html>

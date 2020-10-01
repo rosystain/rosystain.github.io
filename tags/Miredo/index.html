@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#">
+
+<head>
+  <meta charset="UTF-8" >
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title>Tag: Miredo | 痴呆屋</title>
+  <meta name="description" content="" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta property="og:type" content="website">
+<meta property="og:title" content="痴呆屋">
+<meta property="og:url" content="https://rosystain.com/tags/Miredo/index.html">
+<meta property="og:site_name" content="痴呆屋">
+<meta property="og:locale">
+<meta property="article:author" content="Chock">
+<meta name="twitter:card" content="summary">
+  <!-- build:css css/screen.css -->
+
+  
+<link rel="stylesheet" href="/css/screen.css">
+
+  
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  
+  <!-- endbuild -->
+  
+  <!-- build:css fancybox/jquery.fancybox.css -->
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  <!-- endbuild -->
+  
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+  <meta name="generator" content="痴呆屋">
+  
+  
+  <link rel="alternate" type="application/atom+xml" title="Atom 0.3" href="atom.xml">
+  
+  
+</head>
+
+
+<body class="home-template">
+
+  <header class="main-header  " >
+    <nav class="main-nav overlay clearfix">
+        
+        <a class="subscribe-button icon-feed" href="/atom.xml">Subscribe</a>
+    </nav>
+    
+    <div class="vertical">
+        <div class="site-head-content inner">
+             <a class="blog-logo" href="/"><img src="http://cdn.hoposs.com/logo-casper.png" alt="Blog Logo"/></a>         
+            <!--<h1 class="page-title">痴呆屋</h1>
+            <h2 class="page-description"></h2>-->
+        </div>
+    </div>
+    
+    <!--<a class="scroll-down icon-arrow-left" href="#content" data-offset="-45"><span class="hidden">Scroll Down</span></a> -->
+</header>
+
+  
+<main id="content" class="content" role="main">
+  
+  <article class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+    
+    <header class="post-header">
+      
+
+  <h2 class="post-title" itemprop="name">
+    <a href="/NAS/2017/11/26/29/">在Debian Strech上开启Miredo</a>
+  </h2>
+
+
+    </header>
+    
+    <section class="post-excerpt" itemprop="description articleBody">
+      <p>
+      
+        <p>Miredo是Debian/Ubuntu上的类Teredo服务，通常可以用它来访问一些ipv6的网络，除此之外，每台Miredo的客户机都可以分到一个2001开头的ipv6 。 这个ipv6对于内网的BT软件是否有实质性的帮助一直都没有确切的说法，但使用Miredo一段时间后观察数据流量，可以发现确实从它上面走了一些流量，可见它虽然帮助不大，但聊胜于无。 Debian的官方源自带Miredo，所以 [cc]apt install miredo[/cc] 查看网卡信息 [cc]ifconfig[/cc] 出现名为teredo的接口即表示安装成功 若出现RTNETLINK permission denied的错误提示 则需要在sysctl.conf的末尾下添加以下几项 [cc] vim /etc/sysctl.conf net.ipv6.conf.all.disable_ipv6 = 0 net.ipv6.conf.default.disable_ipv6 = 0 net.ipv6.conf.lo.disable_ipv6 = 0 [/cc] 保存退出重启，这时会遇到另外一个问题。Miredo的默认启动优先级要高于域名解析服务，于是它在每次开机的时候都会因为无法正常解析中继服务器的域名而导致启动失败。 最简单的办法是将这个地址改成IP [cc]vim /etc/miredo.conf[/cc] 将原有的地址注释掉，添加一条 [cc]ServerAddress 83.170.6.76[/cc] 保存重启后，检查Miredo运行状况 [cc]service miredo status[/cc] 一切正常 <a href="https://rosystain.com/wp-content/uploads/2017/11/Snipaste_2017-11-26_21-24-10.png"><img src="https://rosystain.com/wp-content/uploads/2017/11/Snipaste_2017-11-26_21-24-10.png"></a> 尝试ping以下ipv6的域名 <a href="https://rosystain.com/wp-content/uploads/2017/11/Snipaste_2017-11-26_21-26-31.png"><img src="https://rosystain.com/wp-content/uploads/2017/11/Snipaste_2017-11-26_21-26-31.png"></a> 依旧正常 这样就算是安装配置完毕了。</p>
+
+      
+      </p>
+    </section>
+    <section class="post-meta">
+    
+      <span> Chock</span>
+    
+    
+    
+    on 
+    <a href='/tags/Debian/'>Debian</a>,
+    
+    <a href='/tags/NAS/'>NAS</a>,
+    
+    <a href='/tags/OMV/'>OMV</a>,
+    
+    <a href='/tags/Miredo/'>Miredo</a>,
+    
+    <a href='/tags/Transmission/'>Transmission</a>
+    
+    
+      <time datetime="2017-11-26T13:27:42.000Z" itemprop="datePublished" class="post-date">
+          Nov 26 2017
+      </time>
+</section>
+
+  </article>
+  
+  <nav class="pagination" role="pagination">
+    
+    <span class="page-number">Page 1 of 1</span>
+    
+  </nav>
+</main>
+
+
+  <footer class="site-footer clearfix">
+ <section class="copyright"><a href="/">痴呆屋</a> &copy; <script>document.write(new Date().getFullYear())</script> &bull; All rights reserved.</section>
+</footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/jquery-2.0.3.min.js"><\/script>')</script>
+
+<script type="text/javascript" src="/js/jquery.fitvids.js"></script>
+<script type="text/javascript">
+(function($){
+  var $postContent = $(".post-content");
+  $postContent.fitVids();
+})(jQuery);
+</script>
+
+<script type="text/javascript" src="/js/index.js"></script>
+
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    var wrapAll = function(q) {
+      $(q).each( function() {
+        var $img = $(this),
+            href = $img.attr('src');
+        $img.wrap('<a rel="fancybox" href="' + href + '" title="' + $img.attr('alt') + '" class="link"></a>');
+      });
+    };
+    wrapAll('.post-content img');
+    wrapAll('.post-excerpt img');
+    $('[rel="fancybox"]').fancybox();
+  })(jQuery);
+</script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#">
+
+<head>
+  <meta charset="UTF-8" >
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title>Category: NAS | 痴呆屋</title>
+  <meta name="description" content="" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta property="og:type" content="website">
+<meta property="og:title" content="痴呆屋">
+<meta property="og:url" content="https://rosystain.com/categories/NAS/index.html">
+<meta property="og:site_name" content="痴呆屋">
+<meta property="og:locale">
+<meta property="article:author" content="Chock">
+<meta name="twitter:card" content="summary">
+  <!-- build:css css/screen.css -->
+
+  
+<link rel="stylesheet" href="/css/screen.css">
+
+  
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  
+  <!-- endbuild -->
+  
+  <!-- build:css fancybox/jquery.fancybox.css -->
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  <!-- endbuild -->
+  
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+  <meta name="generator" content="痴呆屋">
+  
+  
+  <link rel="alternate" type="application/atom+xml" title="Atom 0.3" href="atom.xml">
+  
+  
+</head>
+
+
+<body class="home-template">
+
+  <header class="main-header  " >
+    <nav class="main-nav overlay clearfix">
+        
+        <a class="subscribe-button icon-feed" href="/atom.xml">Subscribe</a>
+    </nav>
+    
+    <div class="vertical">
+        <div class="site-head-content inner">
+             <a class="blog-logo" href="/"><img src="http://cdn.hoposs.com/logo-casper.png" alt="Blog Logo"/></a>         
+            <!--<h1 class="page-title">痴呆屋</h1>
+            <h2 class="page-description"></h2>-->
+        </div>
+    </div>
+    
+    <!--<a class="scroll-down icon-arrow-left" href="#content" data-offset="-45"><span class="hidden">Scroll Down</span></a> -->
+</header>
+
+  
+<main id="content" class="content" role="main">
+  
+  <article class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+    
+    <header class="post-header">
+      
+
+  <h2 class="post-title" itemprop="name">
+    <a href="/NAS/2019/10/09/269/">神奇的联合文件系统(UnionFileSystem)</a>
+  </h2>
+
+
+    </header>
+    
+    <section class="post-excerpt" itemprop="description articleBody">
+      <p>
+      
+        <p>关于联合文件系统（这里简称UnionFS）最早是从<a target="_blank" rel="noopener" href="http://www.songming.me/unionfilesystem.html">一段香</a>的OMV介绍文中看到的，实际用上它的契机倒是因为近几年被老莱炒火的unRAID。</p>
+<p>unRAID号称可以在允许磁盘休眠的同时实现跨盘卷与数据冗余，想了一想这不就是一段香提到的UFS+Snapraid吗。</p>
+<p>本着试用结束后就回去折腾OMV的想法试了2个月的unRAID，在试用期过后系统再起不能的时候我的大脑已被真香支配，便情不自禁地冲了钱成为了正儿八经的unRAID用户。当然这并不是一篇unRAID的安利文，这里主要还是想介绍一下unRAID所使用的核心之一——UnionFS。</p>
+		
+		<p>
+			<a href="/NAS/2019/10/09/269/" class="excerpt-link">Read More...</a>
+		</p>
+		        
+      
+      </p>
+    </section>
+    <section class="post-meta">
+    
+      <span> Chock</span>
+    
+    
+    
+    on 
+    <a href='/tags/NAS/'>NAS</a>,
+    
+    <a href='/tags/OMV/'>OMV</a>,
+    
+    <a href='/tags/unRAID/'>unRAID</a>
+    
+    
+      <time datetime="2019-10-09T10:38:16.000Z" itemprop="datePublished" class="post-date">
+          Oct 09 2019
+      </time>
+</section>
+
+  </article>
+  
+  <article class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+    
+    <header class="post-header">
+      
+
+  <h2 class="post-title" itemprop="name">
+    <a href="/NAS/2019/05/04/241/">无法逃离PLEX的魔爪</a>
+  </h2>
+
+
+    </header>
+    
+    <section class="post-excerpt" itemprop="description articleBody">
+      <p>
+      
+        <p>在搞定IPV6后终于可以如愿以偿地在地铁上听PLEX上的歌了，但不知是我家上行带宽太小还是IPV6本身不稳定的缘故，间歇性的连接失败总是在比较尴尬的时刻来临。</p>
+<p>想了想我收藏的歌其实也不是很多，为什么不直接把它们丢在第三方公有云上呢。一番搜索后得知吃灰已久的Apple Music已经提供类似网易音乐云盘的功能（iTunes Match）。</p>
+<p>PLEX本身不会去修改任何文件信息（比如ID3），所以如果要打算回到iTunes上，那么从源头去整理ID3才是一劳永逸的</p>
+<p> 继续一番搜索后找到了这个叫MusicBrainz的服务。</p>
+<p><a href="https://rosystain.com/wp-content/uploads/2019/05/header-logo-791fb3f.png"><img src="https://rosystain.com/wp-content/uploads/2019/05/header-logo-791fb3f-300x46.png"></a> 使用下来匹配精度要比PLEX高不少，针对一些疑难杂歌提供的手动匹配功能也非常顺手，唯一的缺点大概就是它只使用自家的数据库以至于确实有一部分刮削不到信息，但对于勤劳的我来说只要能自行编辑数据库那就不是问题。</p>
+<p>得益于MusicBrainz优秀的操作体验，我花了大概儿时手动整理歌曲1/100的时间就处理完了大半的歌。</p>
+<p>在批量执行ID3写入的时间里我打开了那个又卡又臃肿的iTunes，一边导入音乐库的同时我掏出了手机正准备订阅AM会员。而就在我打算支付的时候我才注意到资料库依旧是空空如也。</p>
+<p>嗯！9102年了iTunes还是不支持FLAC。</p>
+<p>iTunes再见，PLEX我又回来了。</p>
+
+      
+      </p>
+    </section>
+    <section class="post-meta">
+    
+      <span> Chock</span>
+    
+    
+    
+    on 
+    <a href='/tags/NAS/'>NAS</a>,
+    
+    <a href='/tags/IPV6/'>IPV6</a>,
+    
+    <a href='/tags/PLEX/'>PLEX</a>
+    
+    
+      <time datetime="2019-05-04T15:53:43.000Z" itemprop="datePublished" class="post-date">
+          May 04 2019
+      </time>
+</section>
+
+  </article>
+  
+  <article class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+    
+    <header class="post-header">
+      
+
+  <h2 class="post-title" itemprop="name">
+    <a href="/NAS/2019/04/26/233/">通过IPv6连接你的PLEX服务器</a>
+  </h2>
+
+
+    </header>
+    
+    <section class="post-excerpt" itemprop="description articleBody">
+      <p>
+      
+        <p>目前国内IPv6的推进速度已经相当不错，对于有家庭服务器需求的用户来说，获取一个不知道能用多久的公网IPv4可能已经远远超过了获得原生IPv6的难度。 长期受到无公网IP的我拿到IPv6后想到的第一件事就是试试能不能透过公网连接自家的PLEX库。</p>
+<h5 id="前期工作"><a href="#前期工作" class="headerlink" title="前期工作"></a>前期工作</h5><p>首先是配置路由器给局域各网客户机分配地址，不同路由系统对IPv6的自动化配置程度有所差异，我的Ubnt ER-X就属于比较麻烦的那种，好在官方论坛已经有比较详尽的配置示范。 仅仅配置完路由器后还无法通过IPv6测试，打开WIN10的防火墙，添加一条入站规则放行ICMPv6后一切显示正常。 <a href="https://rosystain.com/wp-content/uploads/2019/04/Snipaste_2019-04-26_15-26-43.png"><img src="https://rosystain.com/wp-content/uploads/2019/04/Snipaste_2019-04-26_15-26-43.png"></a></p>
+		
+		<p>
+			<a href="/NAS/2019/04/26/233/" class="excerpt-link">Read More...</a>
+		</p>
+		        
+      
+      </p>
+    </section>
+    <section class="post-meta">
+    
+      <span> Chock</span>
+    
+    
+    
+    on 
+    <a href='/tags/NAS/'>NAS</a>,
+    
+    <a href='/tags/IPV6/'>IPV6</a>,
+    
+    <a href='/tags/PLEX/'>PLEX</a>
+    
+    
+      <time datetime="2019-04-26T08:27:58.000Z" itemprop="datePublished" class="post-date">
+          Apr 26 2019
+      </time>
+</section>
+
+  </article>
+  
+  <article class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+    
+    <header class="post-header">
+      
+
+  <h2 class="post-title" itemprop="name">
+    <a href="/NAS/2017/11/29/17/">修复OMV4的Python报错</a>
+  </h2>
+
+
+    </header>
+    
+    <section class="post-excerpt" itemprop="description articleBody">
+      <p>
+      
+        <p>由于OMV4仍然是一个开发版本， 目前仍有一些小bug，目前发现的有NUT状态异常(提示找不到pid)，Python时不时弹出错误信息（通常在安装卸载软件时出现，见下图）。 <a href="https://rosystain.com/wp-content/uploads/2017/11/Snipaste_2017-11-28_13-40-03.png"><img src="https://rosystain.com/wp-content/uploads/2017/11/Snipaste_2017-11-28_13-40-03.png"></a> NUT在今天的插件更新后已经修复，剩下的就是Python了。 Python的报错到目前为止没有发现任何影响，但看到报错放着不管总觉得不太舒服，官方论坛里搜索了一番疑似是Python3.5的一个<a target="_blank" rel="noopener" href="https://bugs.python.org/issue29519">bug</a>，可以直接修改对应文件解决<a target="_blank" rel="noopener" href="https://github.com/python/cpython/commit/9cd7e17640a49635d1c1f8c2989578a8fc2c1de6">（链接）</a> [cc]vim /usr/lib/python3.5/weakref.py[/cc] 分别修改109和117两行即可(删除和高亮部分)</p>
+<blockquote>
+<p>self, *args = args if len(args) &gt; 1: raise TypeError(‘expected at most 1 arguments, got %d’ % len(args)) def remove(wr, selfref=ref(self)): <strong>def remove(wr, selfref=ref(self), _atomic_removal=_remove_dead_weakref):</strong> self = selfref() if self is not None: if self._iterating: self._pending_removals.append(wr.key) else: # Atomic removal is necessary since this function # can be called asynchronously by the GC _remove_dead_weakref(d, wr.key) <strong>_atomic_removal(d, wr.key)</strong> self._remove = remove # A list of keys to be removed self._pending_removals = []</p>
+</blockquote>
+
+      
+      </p>
+    </section>
+    <section class="post-meta">
+    
+      <span> Chock</span>
+    
+    
+    
+    on 
+    <a href='/tags/Debian/'>Debian</a>,
+    
+    <a href='/tags/NAS/'>NAS</a>,
+    
+    <a href='/tags/OMV/'>OMV</a>
+    
+    
+      <time datetime="2017-11-29T15:30:44.000Z" itemprop="datePublished" class="post-date">
+          Nov 29 2017
+      </time>
+</section>
+
+  </article>
+  
+  <article class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+    
+    <header class="post-header">
+      
+
+  <h2 class="post-title" itemprop="name">
+    <a href="/NAS/2017/11/26/29/">在Debian Strech上开启Miredo</a>
+  </h2>
+
+
+    </header>
+    
+    <section class="post-excerpt" itemprop="description articleBody">
+      <p>
+      
+        <p>Miredo是Debian/Ubuntu上的类Teredo服务，通常可以用它来访问一些ipv6的网络，除此之外，每台Miredo的客户机都可以分到一个2001开头的ipv6 。 这个ipv6对于内网的BT软件是否有实质性的帮助一直都没有确切的说法，但使用Miredo一段时间后观察数据流量，可以发现确实从它上面走了一些流量，可见它虽然帮助不大，但聊胜于无。 Debian的官方源自带Miredo，所以 [cc]apt install miredo[/cc] 查看网卡信息 [cc]ifconfig[/cc] 出现名为teredo的接口即表示安装成功 若出现RTNETLINK permission denied的错误提示 则需要在sysctl.conf的末尾下添加以下几项 [cc] vim /etc/sysctl.conf net.ipv6.conf.all.disable_ipv6 = 0 net.ipv6.conf.default.disable_ipv6 = 0 net.ipv6.conf.lo.disable_ipv6 = 0 [/cc] 保存退出重启，这时会遇到另外一个问题。Miredo的默认启动优先级要高于域名解析服务，于是它在每次开机的时候都会因为无法正常解析中继服务器的域名而导致启动失败。 最简单的办法是将这个地址改成IP [cc]vim /etc/miredo.conf[/cc] 将原有的地址注释掉，添加一条 [cc]ServerAddress 83.170.6.76[/cc] 保存重启后，检查Miredo运行状况 [cc]service miredo status[/cc] 一切正常 <a href="https://rosystain.com/wp-content/uploads/2017/11/Snipaste_2017-11-26_21-24-10.png"><img src="https://rosystain.com/wp-content/uploads/2017/11/Snipaste_2017-11-26_21-24-10.png"></a> 尝试ping以下ipv6的域名 <a href="https://rosystain.com/wp-content/uploads/2017/11/Snipaste_2017-11-26_21-26-31.png"><img src="https://rosystain.com/wp-content/uploads/2017/11/Snipaste_2017-11-26_21-26-31.png"></a> 依旧正常 这样就算是安装配置完毕了。</p>
+
+      
+      </p>
+    </section>
+    <section class="post-meta">
+    
+      <span> Chock</span>
+    
+    
+    
+    on 
+    <a href='/tags/Debian/'>Debian</a>,
+    
+    <a href='/tags/NAS/'>NAS</a>,
+    
+    <a href='/tags/OMV/'>OMV</a>,
+    
+    <a href='/tags/Miredo/'>Miredo</a>,
+    
+    <a href='/tags/Transmission/'>Transmission</a>
+    
+    
+      <time datetime="2017-11-26T13:27:42.000Z" itemprop="datePublished" class="post-date">
+          Nov 26 2017
+      </time>
+</section>
+
+  </article>
+  
+  <article class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+    
+    <header class="post-header">
+      
+
+  <h2 class="post-title" itemprop="name">
+    <a href="/NAS/2017/11/26/18/">在OMV4上安装Transmission并开启自动下载</a>
+  </h2>
+
+
+    </header>
+    
+    <section class="post-excerpt" itemprop="description articleBody">
+      <p>
+      
+        <p>OMV4的插件库上暂时没有任何BT下载器，虽然使用DOCKER安装一样很方便，但Transmission本身有非常优秀的GUI远端控制，配置完后几乎不需要再去使用WEBUI来管理，因此这里直接通过CLI安装了。 Debian的官方源本身提供Transmission，所以只需 [cc]apt install transmission-daemon[/cc] 安装完毕后先中止服务 [cc]service transmission-daemon stop[/cc] 修改的它的配置文件 [cc]vim /etc/transmission-daemon/settings.json[/cc] 确保相关设置为以下参数以启用远端管理 [cc]“rpc-enable” = true, “rpc-password” = yourpassword, “rpc-port” = 9091 (or customport), “rpc-username” = transmission (or customname), “rpc-whitelist” = “*“,[/cc] 在末尾添加watch相关参数以开启自动下载（非末尾项须逗号结尾） [cc]“watch-dir”: “PATH/TO/Watch”, “watch-dir-enabled”: true[/cc] 保存并退出，重启Transimission应该就能用Transmission Remote GUI连接上了。 此时可直接通过Remote修改其他数值。</p>
+
+      
+      </p>
+    </section>
+    <section class="post-meta">
+    
+      <span> Chock</span>
+    
+    
+    
+    on 
+    <a href='/tags/Debian/'>Debian</a>,
+    
+    <a href='/tags/NAS/'>NAS</a>,
+    
+    <a href='/tags/OMV/'>OMV</a>,
+    
+    <a href='/tags/Transmission/'>Transmission</a>
+    
+    
+      <time datetime="2017-11-26T12:11:16.000Z" itemprop="datePublished" class="post-date">
+          Nov 26 2017
+      </time>
+</section>
+
+  </article>
+  
+  <article class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+    
+    <header class="post-header">
+      
+
+  <h2 class="post-title" itemprop="name">
+    <a href="/NAS/2017/11/26/6/">在Debian Stretch上安装OMV 4</a>
+  </h2>
+
+
+    </header>
+    
+    <section class="post-excerpt" itemprop="description articleBody">
+      <p>
+      
+        <p>原先兼职做NAS的HTPC已经接近服役一年，由于近期4K HDR的视频渐渐开始多了起来，Win10 的秋季更新也几乎同一时间提供了HDR的支援，这台基于Ubuntu的AllInOne一体机显然不再是优秀的HTPC方案，于是决定逐步将HTPC与NAS这两样需求分离开来。 OMV（OPENMEDIAVAULT）是基于Debian的NAS系统，对于原本就习惯使用Debian的人来说，与其说它是一个系统，不如说它是一套针对NAS应用的WEB管理组件而已，这跟我原先使用的Ubuntu+Webmin的组合并无本质上的不同。 Webmin本身是一套非常强大的WEB面板，在管理Linux系统本身无可挑剔，但在应对NAS应用时却显得有力无处使，大多时候我会忘掉这个面板而选择直接使用SSH进行操作。 尽管OMV可能仍然无法让你完全扔掉SSH，但初期配置做得足够完善的话后面基本可以只靠WebUI来调整一些小设置了。 目前OMV的最新稳定版为基于Debian 8（Jessie）的OMV3，Jessie的桌面环境对Kaby Lake存在兼容问题，而对应Stretch的OMV4却仍处于测试版，考虑到Debian本身脱离OMV也照样能正常运作，因此这里还是激进地选择了OMV4。 官方并不会为处于测试状态地OMV4提供完整的打包镜像，这就需先安装Debian后期再安装OMV了。 Stretch已经正式发布且对较新的设备支持良好，安装过程中没有出现任何问题。 完毕后进入SSH，获取root权限 [cc]sudo su[/cc] 添加OMV4的源并更新软件库 [cc]echo “deb <a target="_blank" rel="noopener" href="http://packages.openmediavault.org/public">http://packages.openmediavault.org/public</a> arrakis main” &gt; /etc/apt/sources.list.d/openmediavault.list apt update[/cc] 提示缺少公钥 [cc]apt install openmediavault-keyring postfix[/cc] 再更新一次 [cc]apt-get update[/cc] 安装OMV [cc]apt-get install openmediavault[/cc] 最后的步骤 [cc]omv-initsystem[/cc] 之后就可以打开浏览器键入OMV所在的主机IP访问管理页面了。 初始账户 [cc]username : admin password : openmediavault[/cc] OMV安装完毕后会禁用掉非root用户的ssh权限，登陆WEBUI后记得先进入用户管理添加SSH用户组 安装额外的插件库 [cc]wget <a target="_blank" rel="noopener" href="http://omv-extras.org/openmediavault-omvextrasorg/_latest/_all4.deb">http://omv-extras.org/openmediavault-omvextrasorg\_latest\_all4.deb</a> dpkg -i openmediavault-omvextrasorg_latest_all4.deb[/cc] 如安装失败，可使用apt-get -f install修复安装，最后再 [cc]apt update[/cc] 完毕</p>
+
+      
+      </p>
+    </section>
+    <section class="post-meta">
+    
+      <span> Chock</span>
+    
+    
+    
+    on 
+    <a href='/tags/HTPC/'>HTPC</a>,
+    
+    <a href='/tags/Debian/'>Debian</a>,
+    
+    <a href='/tags/NAS/'>NAS</a>,
+    
+    <a href='/tags/OMV/'>OMV</a>
+    
+    
+      <time datetime="2017-11-26T08:53:11.000Z" itemprop="datePublished" class="post-date">
+          Nov 26 2017
+      </time>
+</section>
+
+  </article>
+  
+  <nav class="pagination" role="pagination">
+    
+    <span class="page-number">Page 1 of 1</span>
+    
+  </nav>
+</main>
+
+
+  <footer class="site-footer clearfix">
+ <section class="copyright"><a href="/">痴呆屋</a> &copy; <script>document.write(new Date().getFullYear())</script> &bull; All rights reserved.</section>
+</footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/jquery-2.0.3.min.js"><\/script>')</script>
+
+<script type="text/javascript" src="/js/jquery.fitvids.js"></script>
+<script type="text/javascript">
+(function($){
+  var $postContent = $(".post-content");
+  $postContent.fitVids();
+})(jQuery);
+</script>
+
+<script type="text/javascript" src="/js/index.js"></script>
+
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    var wrapAll = function(q) {
+      $(q).each( function() {
+        var $img = $(this),
+            href = $img.attr('src');
+        $img.wrap('<a rel="fancybox" href="' + href + '" title="' + $img.attr('alt') + '" class="link"></a>');
+      });
+    };
+    wrapAll('.post-content img');
+    wrapAll('.post-excerpt img');
+    $('[rel="fancybox"]').fancybox();
+  })(jQuery);
+</script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#">
+
+<head>
+  <meta charset="UTF-8" >
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title>Archives: 2017/11 | 痴呆屋</title>
+  <meta name="description" content="" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta property="og:type" content="website">
+<meta property="og:title" content="痴呆屋">
+<meta property="og:url" content="https://rosystain.com/archives/2017/11/index.html">
+<meta property="og:site_name" content="痴呆屋">
+<meta property="og:locale">
+<meta property="article:author" content="Chock">
+<meta name="twitter:card" content="summary">
+  <!-- build:css css/screen.css -->
+
+  
+<link rel="stylesheet" href="/css/screen.css">
+
+  
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  
+  <!-- endbuild -->
+  
+  <!-- build:css fancybox/jquery.fancybox.css -->
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  <!-- endbuild -->
+  
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+  <meta name="generator" content="痴呆屋">
+  
+  
+  <link rel="alternate" type="application/atom+xml" title="Atom 0.3" href="atom.xml">
+  
+  
+</head>
+
+
+<body class="home-template">
+
+  <header class="main-header  " >
+    <nav class="main-nav overlay clearfix">
+        
+        <a class="subscribe-button icon-feed" href="/atom.xml">Subscribe</a>
+    </nav>
+    
+    <div class="vertical">
+        <div class="site-head-content inner">
+             <a class="blog-logo" href="/"><img src="http://cdn.hoposs.com/logo-casper.png" alt="Blog Logo"/></a>         
+            <!--<h1 class="page-title">痴呆屋</h1>
+            <h2 class="page-description"></h2>-->
+        </div>
+    </div>
+    
+    <!--<a class="scroll-down icon-arrow-left" href="#content" data-offset="-45"><span class="hidden">Scroll Down</span></a> -->
+</header>
+
+  
+<main id="content" class="content" role="main">
+  
+  <article class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+    
+    <header class="post-header">
+      
+
+  <h2 class="post-title" itemprop="name">
+    <a href="/NAS/2017/11/29/17/">修复OMV4的Python报错</a>
+  </h2>
+
+
+    </header>
+    
+    <section class="post-excerpt" itemprop="description articleBody">
+      <p>
+      
+        <p>由于OMV4仍然是一个开发版本， 目前仍有一些小bug，目前发现的有NUT状态异常(提示找不到pid)，Python时不时弹出错误信息（通常在安装卸载软件时出现，见下图）。 <a href="https://rosystain.com/wp-content/uploads/2017/11/Snipaste_2017-11-28_13-40-03.png"><img src="https://rosystain.com/wp-content/uploads/2017/11/Snipaste_2017-11-28_13-40-03.png"></a> NUT在今天的插件更新后已经修复，剩下的就是Python了。 Python的报错到目前为止没有发现任何影响，但看到报错放着不管总觉得不太舒服，官方论坛里搜索了一番疑似是Python3.5的一个<a target="_blank" rel="noopener" href="https://bugs.python.org/issue29519">bug</a>，可以直接修改对应文件解决<a target="_blank" rel="noopener" href="https://github.com/python/cpython/commit/9cd7e17640a49635d1c1f8c2989578a8fc2c1de6">（链接）</a> [cc]vim /usr/lib/python3.5/weakref.py[/cc] 分别修改109和117两行即可(删除和高亮部分)</p>
+<blockquote>
+<p>self, *args = args if len(args) &gt; 1: raise TypeError(‘expected at most 1 arguments, got %d’ % len(args)) def remove(wr, selfref=ref(self)): <strong>def remove(wr, selfref=ref(self), _atomic_removal=_remove_dead_weakref):</strong> self = selfref() if self is not None: if self._iterating: self._pending_removals.append(wr.key) else: # Atomic removal is necessary since this function # can be called asynchronously by the GC _remove_dead_weakref(d, wr.key) <strong>_atomic_removal(d, wr.key)</strong> self._remove = remove # A list of keys to be removed self._pending_removals = []</p>
+</blockquote>
+
+      
+      </p>
+    </section>
+    <section class="post-meta">
+    
+      <span> Chock</span>
+    
+    
+    
+    on 
+    <a href='/tags/Debian/'>Debian</a>,
+    
+    <a href='/tags/NAS/'>NAS</a>,
+    
+    <a href='/tags/OMV/'>OMV</a>
+    
+    
+      <time datetime="2017-11-29T15:30:44.000Z" itemprop="datePublished" class="post-date">
+          Nov 29 2017
+      </time>
+</section>
+
+  </article>
+  
+  <article class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+    
+    <header class="post-header">
+      
+
+  <h2 class="post-title" itemprop="name">
+    <a href="/HTPC/2017/11/27/21/">在Debian Stretch上通过Steam进行游戏串流</a>
+  </h2>
+
+
+    </header>
+    
+    <section class="post-excerpt" itemprop="description articleBody">
+      <p>
+      
+        <p>Steam在Linux下已经有不少游戏，但这可不是我用它的理由。 Steam的家庭流式传输可以使某台PC上的游戏画面以流媒体的形式传输到同网络下另一台装有Steam的设备上，并接受该设备反馈的按键信息。并且在画面损失和延迟控制方面平衡的相当好。 由于是它的本质是流媒体传输，因此对接受端的硬件要求非常低，只需一台能安装Steam且能流畅播放H264编码视频的机子而已(HTPC绝配)。 安装前首先确保登陆用户拥有以下权限 [cc]#usermod -a -G video,audio second_user[/cc] 添加Steam的Non-free源到/etc/apt/sources.list [cc] # SteamRepo Stretch deb <a target="_blank" rel="noopener" href="http://httpredir.debian.org/debian/">http://httpredir.debian.org/debian/</a> stretch main contrib non-free [/cc] 对于64位的系统须添加i386的支持 [cc]dpkg –add-architecture i386[/cc] 安装并使用aptitude进行包管理使它自动下载相关依赖 [cc]apt install aptitude aptitude update[/cc] 安装Steam [cc]aptitude install steam[/cc] Steam在Stretch上不会像Jessie那样出现各种各样的问题，通常情况下安装完毕后就可以正常登陆。 <a href="https://rosystain.com/wp-content/uploads/2017/11/2017-11-27-12-52-13%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png"><img src="https://rosystain.com/wp-content/uploads/2017/11/2017-11-27-12-49-18%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE-e1550152901576.png"><img src="https://rosystain.com/wp-content/uploads/2017/11/2017-11-27-12-52-13%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE-e1550152837510.png"></a> 串流时既可以使用接受设备的控制器（手柄、键盘等），也可直接使用源主机的设备（假如距离不远能收到信号的话） 由于Steam是32位的应用，无法使用64位的驱动，因此需要安装32位驱动才能开启硬件解码，否则在性能较低的设备上可能无法流畅运行。 [cc] apt install i965-va-driver:i386 apt install libva1:i386 apt install libva-x11-1:i386 apt install libva-glx1:i386 [/cc] 安装后重启Steam，进入设置&gt;家用流式传输&gt;高级客户端选项 确保硬件解码已经勾选，开启显示性能信息 <a href="https://rosystain.com/wp-content/uploads/2017/11/2017-11-27-12-57-10%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png"><img src="https://rosystain.com/wp-content/uploads/2017/11/2017-11-27-12-57-10%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png"></a> <a href="https://rosystain.com/wp-content/uploads/2017/11/2017-11-27-12-57-44%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png"><img src="https://rosystain.com/wp-content/uploads/2017/11/2017-11-27-12-57-44%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png"></a> 再次通过流式传输打开游戏，左下方Debug区域Decoder一栏显示VAAPI hardware decoding就代表硬解生效了。<a href="https://rosystain.com/wp-content/uploads/2017/11/2017-11-27-13-28-49%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE-e1511760858365.png"><img src="https://rosystain.com/wp-content/uploads/2017/11/2017-11-27-13-28-49%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE-e1511760858365.png"></a> N卡和A卡的驱动及其他相关问题可从在通过以下连接查阅 <a target="_blank" rel="noopener" href="https://wiki.debian.org/Steam">https://wiki.debian.org/Steam</a> 追记: Steam的某次更新似乎修改了控制器的规则，在Debian上可能会遇到手柄无法被识别的情况，需自行添建立配置文件。 [cc] vim /etc/udev/rules.d/99-steam-controller-perms.rules [/cc] [cc] # This rule is needed for basic functionality of the controller in Steam and keyboard/mouse emulation SUBSYSTEM==”usb”, ATTRS{idVendor}==”28de”, MODE=”0666” # This rule is necessary for gamepad emulation; make sure you replace ‘pgriffais’ with a group that the user that runs Steam belongs to KERNEL==”uinput”, MODE=”0660”, GROUP=”pgriffais”, OPTIONS+=”static_node=uinput” # DualShock 4 wired SUBSYSTEM==”usb”, ATTRS{idVendor}==”054c”, ATTRS{idProduct}==”05c4”, MODE=”0666” # DualShock 4 wireless adapter SUBSYSTEM==”usb”, ATTRS{idVendor}==”054c”, ATTRS{idProduct}==”0ba0”, MODE=”0666” # DualShock 4 slim wired SUBSYSTEM==”usb”, ATTRS{idVendor}==”054c”, ATTRS{idProduct}==”09cc”, MODE=”0666” # Valve HID devices over USB hidraw KERNEL==”hidraw*“, ATTRS{idVendor}==”28de”, MODE=”0666” # Valve HID devices over bluetooth hidraw KERNEL==”hidraw*“, KERNELS==”*28DE:*“, MODE=”0666” # DualShock 4 over bluetooth hidraw KERNEL==”hidraw*“, KERNELS==”*054C:05C4*“, MODE=”0666” # DualShock 4 Slim over bluetooth hidraw KERNEL==”hidraw*“, KERNELS==”*054C:09CC*“, MODE=”0666” [/cc] 保存并退出后，重新加载一遍udev [cc]udevadm control –reload udevadm trigger[/cc] 再次重启Steam应该就能正常识别手柄了。</p>
+
+      
+      </p>
+    </section>
+    <section class="post-meta">
+    
+      <span> Chock</span>
+    
+    
+    
+    on 
+    <a href='/tags/HTPC/'>HTPC</a>,
+    
+    <a href='/tags/Debian/'>Debian</a>,
+    
+    <a href='/tags/Steam/'>Steam</a>
+    
+    
+      <time datetime="2017-11-27T05:42:59.000Z" itemprop="datePublished" class="post-date">
+          Nov 27 2017
+      </time>
+</section>
+
+  </article>
+  
+  <article class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+    
+    <header class="post-header">
+      
+
+  <h2 class="post-title" itemprop="name">
+    <a href="/NAS/2017/11/26/29/">在Debian Strech上开启Miredo</a>
+  </h2>
+
+
+    </header>
+    
+    <section class="post-excerpt" itemprop="description articleBody">
+      <p>
+      
+        <p>Miredo是Debian/Ubuntu上的类Teredo服务，通常可以用它来访问一些ipv6的网络，除此之外，每台Miredo的客户机都可以分到一个2001开头的ipv6 。 这个ipv6对于内网的BT软件是否有实质性的帮助一直都没有确切的说法，但使用Miredo一段时间后观察数据流量，可以发现确实从它上面走了一些流量，可见它虽然帮助不大，但聊胜于无。 Debian的官方源自带Miredo，所以 [cc]apt install miredo[/cc] 查看网卡信息 [cc]ifconfig[/cc] 出现名为teredo的接口即表示安装成功 若出现RTNETLINK permission denied的错误提示 则需要在sysctl.conf的末尾下添加以下几项 [cc] vim /etc/sysctl.conf net.ipv6.conf.all.disable_ipv6 = 0 net.ipv6.conf.default.disable_ipv6 = 0 net.ipv6.conf.lo.disable_ipv6 = 0 [/cc] 保存退出重启，这时会遇到另外一个问题。Miredo的默认启动优先级要高于域名解析服务，于是它在每次开机的时候都会因为无法正常解析中继服务器的域名而导致启动失败。 最简单的办法是将这个地址改成IP [cc]vim /etc/miredo.conf[/cc] 将原有的地址注释掉，添加一条 [cc]ServerAddress 83.170.6.76[/cc] 保存重启后，检查Miredo运行状况 [cc]service miredo status[/cc] 一切正常 <a href="https://rosystain.com/wp-content/uploads/2017/11/Snipaste_2017-11-26_21-24-10.png"><img src="https://rosystain.com/wp-content/uploads/2017/11/Snipaste_2017-11-26_21-24-10.png"></a> 尝试ping以下ipv6的域名 <a href="https://rosystain.com/wp-content/uploads/2017/11/Snipaste_2017-11-26_21-26-31.png"><img src="https://rosystain.com/wp-content/uploads/2017/11/Snipaste_2017-11-26_21-26-31.png"></a> 依旧正常 这样就算是安装配置完毕了。</p>
+
+      
+      </p>
+    </section>
+    <section class="post-meta">
+    
+      <span> Chock</span>
+    
+    
+    
+    on 
+    <a href='/tags/Debian/'>Debian</a>,
+    
+    <a href='/tags/NAS/'>NAS</a>,
+    
+    <a href='/tags/OMV/'>OMV</a>,
+    
+    <a href='/tags/Miredo/'>Miredo</a>,
+    
+    <a href='/tags/Transmission/'>Transmission</a>
+    
+    
+      <time datetime="2017-11-26T13:27:42.000Z" itemprop="datePublished" class="post-date">
+          Nov 26 2017
+      </time>
+</section>
+
+  </article>
+  
+  <article class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+    
+    <header class="post-header">
+      
+
+  <h2 class="post-title" itemprop="name">
+    <a href="/NAS/2017/11/26/18/">在OMV4上安装Transmission并开启自动下载</a>
+  </h2>
+
+
+    </header>
+    
+    <section class="post-excerpt" itemprop="description articleBody">
+      <p>
+      
+        <p>OMV4的插件库上暂时没有任何BT下载器，虽然使用DOCKER安装一样很方便，但Transmission本身有非常优秀的GUI远端控制，配置完后几乎不需要再去使用WEBUI来管理，因此这里直接通过CLI安装了。 Debian的官方源本身提供Transmission，所以只需 [cc]apt install transmission-daemon[/cc] 安装完毕后先中止服务 [cc]service transmission-daemon stop[/cc] 修改的它的配置文件 [cc]vim /etc/transmission-daemon/settings.json[/cc] 确保相关设置为以下参数以启用远端管理 [cc]“rpc-enable” = true, “rpc-password” = yourpassword, “rpc-port” = 9091 (or customport), “rpc-username” = transmission (or customname), “rpc-whitelist” = “*“,[/cc] 在末尾添加watch相关参数以开启自动下载（非末尾项须逗号结尾） [cc]“watch-dir”: “PATH/TO/Watch”, “watch-dir-enabled”: true[/cc] 保存并退出，重启Transimission应该就能用Transmission Remote GUI连接上了。 此时可直接通过Remote修改其他数值。</p>
+
+      
+      </p>
+    </section>
+    <section class="post-meta">
+    
+      <span> Chock</span>
+    
+    
+    
+    on 
+    <a href='/tags/Debian/'>Debian</a>,
+    
+    <a href='/tags/NAS/'>NAS</a>,
+    
+    <a href='/tags/OMV/'>OMV</a>,
+    
+    <a href='/tags/Transmission/'>Transmission</a>
+    
+    
+      <time datetime="2017-11-26T12:11:16.000Z" itemprop="datePublished" class="post-date">
+          Nov 26 2017
+      </time>
+</section>
+
+  </article>
+  
+  <article class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+    
+    <header class="post-header">
+      
+
+  <h2 class="post-title" itemprop="name">
+    <a href="/NAS/2017/11/26/6/">在Debian Stretch上安装OMV 4</a>
+  </h2>
+
+
+    </header>
+    
+    <section class="post-excerpt" itemprop="description articleBody">
+      <p>
+      
+        <p>原先兼职做NAS的HTPC已经接近服役一年，由于近期4K HDR的视频渐渐开始多了起来，Win10 的秋季更新也几乎同一时间提供了HDR的支援，这台基于Ubuntu的AllInOne一体机显然不再是优秀的HTPC方案，于是决定逐步将HTPC与NAS这两样需求分离开来。 OMV（OPENMEDIAVAULT）是基于Debian的NAS系统，对于原本就习惯使用Debian的人来说，与其说它是一个系统，不如说它是一套针对NAS应用的WEB管理组件而已，这跟我原先使用的Ubuntu+Webmin的组合并无本质上的不同。 Webmin本身是一套非常强大的WEB面板，在管理Linux系统本身无可挑剔，但在应对NAS应用时却显得有力无处使，大多时候我会忘掉这个面板而选择直接使用SSH进行操作。 尽管OMV可能仍然无法让你完全扔掉SSH，但初期配置做得足够完善的话后面基本可以只靠WebUI来调整一些小设置了。 目前OMV的最新稳定版为基于Debian 8（Jessie）的OMV3，Jessie的桌面环境对Kaby Lake存在兼容问题，而对应Stretch的OMV4却仍处于测试版，考虑到Debian本身脱离OMV也照样能正常运作，因此这里还是激进地选择了OMV4。 官方并不会为处于测试状态地OMV4提供完整的打包镜像，这就需先安装Debian后期再安装OMV了。 Stretch已经正式发布且对较新的设备支持良好，安装过程中没有出现任何问题。 完毕后进入SSH，获取root权限 [cc]sudo su[/cc] 添加OMV4的源并更新软件库 [cc]echo “deb <a target="_blank" rel="noopener" href="http://packages.openmediavault.org/public">http://packages.openmediavault.org/public</a> arrakis main” &gt; /etc/apt/sources.list.d/openmediavault.list apt update[/cc] 提示缺少公钥 [cc]apt install openmediavault-keyring postfix[/cc] 再更新一次 [cc]apt-get update[/cc] 安装OMV [cc]apt-get install openmediavault[/cc] 最后的步骤 [cc]omv-initsystem[/cc] 之后就可以打开浏览器键入OMV所在的主机IP访问管理页面了。 初始账户 [cc]username : admin password : openmediavault[/cc] OMV安装完毕后会禁用掉非root用户的ssh权限，登陆WEBUI后记得先进入用户管理添加SSH用户组 安装额外的插件库 [cc]wget <a target="_blank" rel="noopener" href="http://omv-extras.org/openmediavault-omvextrasorg/_latest/_all4.deb">http://omv-extras.org/openmediavault-omvextrasorg\_latest\_all4.deb</a> dpkg -i openmediavault-omvextrasorg_latest_all4.deb[/cc] 如安装失败，可使用apt-get -f install修复安装，最后再 [cc]apt update[/cc] 完毕</p>
+
+      
+      </p>
+    </section>
+    <section class="post-meta">
+    
+      <span> Chock</span>
+    
+    
+    
+    on 
+    <a href='/tags/HTPC/'>HTPC</a>,
+    
+    <a href='/tags/Debian/'>Debian</a>,
+    
+    <a href='/tags/NAS/'>NAS</a>,
+    
+    <a href='/tags/OMV/'>OMV</a>
+    
+    
+      <time datetime="2017-11-26T08:53:11.000Z" itemprop="datePublished" class="post-date">
+          Nov 26 2017
+      </time>
+</section>
+
+  </article>
+  
+  <nav class="pagination" role="pagination">
+    
+    <span class="page-number">Page 1 of 1</span>
+    
+  </nav>
+</main>
+
+
+  <footer class="site-footer clearfix">
+ <section class="copyright"><a href="/">痴呆屋</a> &copy; <script>document.write(new Date().getFullYear())</script> &bull; All rights reserved.</section>
+</footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/jquery-2.0.3.min.js"><\/script>')</script>
+
+<script type="text/javascript" src="/js/jquery.fitvids.js"></script>
+<script type="text/javascript">
+(function($){
+  var $postContent = $(".post-content");
+  $postContent.fitVids();
+})(jQuery);
+</script>
+
+<script type="text/javascript" src="/js/index.js"></script>
+
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    var wrapAll = function(q) {
+      $(q).each( function() {
+        var $img = $(this),
+            href = $img.attr('src');
+        $img.wrap('<a rel="fancybox" href="' + href + '" title="' + $img.attr('alt') + '" class="link"></a>');
+      });
+    };
+    wrapAll('.post-content img');
+    wrapAll('.post-excerpt img');
+    $('[rel="fancybox"]').fancybox();
+  })(jQuery);
+</script>
+
+
+
+
+
+</body>
+</html>
