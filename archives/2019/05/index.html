@@ -22,12 +22,6 @@
 <link rel="stylesheet" href="/css/screen.css">
 
   
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
-  
-  <!-- endbuild -->
-  
-  <!-- build:css fancybox/jquery.fancybox.css -->
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
   <!-- endbuild -->
   
   <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
@@ -42,7 +36,7 @@
 
 <body class="home-template">
 
-  <header class="main-header  " >
+  <header class="main-header  "  style="background-image: url(https://i.loli.net/2020/10/01/yNHjrehS2dvC4gE.png)" >
     <nav class="main-nav overlay clearfix">
         
         <a class="subscribe-button icon-feed" href="/atom.xml">Subscribe</a>
@@ -50,7 +44,7 @@
     
     <div class="vertical">
         <div class="site-head-content inner">
-             <a class="blog-logo" href="/"><img src="https://i.loli.net/2020/10/01/vx6sKlwRY3pmh5G.png" alt="Blog Logo"/></a>         
+             <a class="blog-logo" href="/"><img src="https://i.loli.net/2020/10/01/DLrZt28dBi3NI19.png" alt="Blog Logo"/></a>         
             <!--<h1 class="page-title">痴呆屋</h1>
             <h2 class="page-description"></h2>-->
         </div>
@@ -68,7 +62,7 @@
       
 
   <h2 class="post-title" itemprop="name">
-    <a href="/LOG/2019/05/09/243/">过气HTPC升级记</a>
+    <a href="/Z-Turn/2019/05/09/243/">过气HTPC升级记</a>
   </h2>
 
 
@@ -80,7 +74,7 @@
         <p>HP MICROSEVER GEN8是我钟爱的一款适合当NAS的微型服务器，但当初考虑到客厅三星电视的Tizen ≈ 无系统，NAS+HTPC的方案看起来会挺棒，于是就有了这个（现在看来这是一个坏主意）。</p>
 		
 		<p>
-			<a href="/LOG/2019/05/09/243/" class="excerpt-link">Read More...</a>
+			<a href="/Z-Turn/2019/05/09/243/" class="excerpt-link">Read More...</a>
 		</p>
 		        
       
@@ -111,7 +105,7 @@
       
 
   <h2 class="post-title" itemprop="name">
-    <a href="/NAS/2019/05/04/241/">无法逃离PLEX的魔爪</a>
+    <a href="/Z-Turn/2019/05/04/241/">无法逃离PLEX的魔爪</a>
   </h2>
 
 
@@ -123,8 +117,8 @@
         <p>在搞定IPV6后终于可以如愿以偿地在地铁上听PLEX上的歌了，但不知是我家上行带宽太小还是IPV6本身不稳定的缘故，间歇性的连接失败总是在比较尴尬的时刻来临。</p>
 <p>想了想我收藏的歌其实也不是很多，为什么不直接把它们丢在第三方公有云上呢。一番搜索后得知吃灰已久的Apple Music已经提供类似网易音乐云盘的功能（iTunes Match）。</p>
 <p>PLEX本身不会去修改任何文件信息（比如ID3），所以如果要打算回到iTunes上，那么从源头去整理ID3才是一劳永逸的</p>
-<p> 继续一番搜索后找到了这个叫MusicBrainz的服务。</p>
-<p><a href="https://rosystain.com/wp-content/uploads/2019/05/header-logo-791fb3f.png"><img src="https://rosystain.com/wp-content/uploads/2019/05/header-logo-791fb3f-300x46.png"></a> 使用下来匹配精度要比PLEX高不少，针对一些疑难杂歌提供的手动匹配功能也非常顺手，唯一的缺点大概就是它只使用自家的数据库以至于确实有一部分刮削不到信息，但对于勤劳的我来说只要能自行编辑数据库那就不是问题。</p>
+<p>继续一番搜索后找到了这个叫MusicBrainz的服务。</p>
+<p>使用下来匹配精度要比PLEX高不少，针对一些疑难杂歌提供的手动匹配功能也非常顺手，唯一的缺点大概就是它只使用自家的数据库以至于确实有一部分刮削不到信息，但对于勤劳的我来说只要能自行编辑数据库那就不是问题。</p>
 <p>得益于MusicBrainz优秀的操作体验，我花了大概儿时手动整理歌曲1/100的时间就处理完了大半的歌。</p>
 <p>在批量执行ID3写入的时间里我打开了那个又卡又臃肿的iTunes，一边导入音乐库的同时我掏出了手机正准备订阅AM会员。而就在我打算支付的时候我才注意到资料库依旧是空空如也。</p>
 <p>嗯！9102年了iTunes还是不支持FLAC。</p>
@@ -177,22 +171,6 @@
 </script>
 
 <script type="text/javascript" src="/js/index.js"></script>
-
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-<script type="text/javascript">
-  (function($){
-    var wrapAll = function(q) {
-      $(q).each( function() {
-        var $img = $(this),
-            href = $img.attr('src');
-        $img.wrap('<a rel="fancybox" href="' + href + '" title="' + $img.attr('alt') + '" class="link"></a>');
-      });
-    };
-    wrapAll('.post-content img');
-    wrapAll('.post-excerpt img');
-    $('[rel="fancybox"]').fancybox();
-  })(jQuery);
-</script>
 
 
 

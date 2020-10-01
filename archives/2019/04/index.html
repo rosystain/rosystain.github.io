@@ -22,12 +22,6 @@
 <link rel="stylesheet" href="/css/screen.css">
 
   
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
-  
-  <!-- endbuild -->
-  
-  <!-- build:css fancybox/jquery.fancybox.css -->
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
   <!-- endbuild -->
   
   <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
@@ -42,7 +36,7 @@
 
 <body class="home-template">
 
-  <header class="main-header  " >
+  <header class="main-header  "  style="background-image: url(https://i.loli.net/2020/10/01/yNHjrehS2dvC4gE.png)" >
     <nav class="main-nav overlay clearfix">
         
         <a class="subscribe-button icon-feed" href="/atom.xml">Subscribe</a>
@@ -50,7 +44,7 @@
     
     <div class="vertical">
         <div class="site-head-content inner">
-             <a class="blog-logo" href="/"><img src="https://i.loli.net/2020/10/01/vx6sKlwRY3pmh5G.png" alt="Blog Logo"/></a>         
+             <a class="blog-logo" href="/"><img src="https://i.loli.net/2020/10/01/DLrZt28dBi3NI19.png" alt="Blog Logo"/></a>         
             <!--<h1 class="page-title">痴呆屋</h1>
             <h2 class="page-description"></h2>-->
         </div>
@@ -68,7 +62,7 @@
       
 
   <h2 class="post-title" itemprop="name">
-    <a href="/NAS/2019/04/26/233/">通过IPv6连接你的PLEX服务器</a>
+    <a href="/Z-Turn/2019/04/26/233/">通过IPv6连接你的PLEX服务器</a>
   </h2>
 
 
@@ -81,7 +75,7 @@
 <h5 id="前期工作"><a href="#前期工作" class="headerlink" title="前期工作"></a>前期工作</h5><p>首先是配置路由器给局域各网客户机分配地址，不同路由系统对IPv6的自动化配置程度有所差异，我的Ubnt ER-X就属于比较麻烦的那种，好在官方论坛已经有比较详尽的配置示范。 仅仅配置完路由器后还无法通过IPv6测试，打开WIN10的防火墙，添加一条入站规则放行ICMPv6后一切显示正常。 <a href="https://rosystain.com/wp-content/uploads/2019/04/Snipaste_2019-04-26_15-26-43.png"><img src="https://rosystain.com/wp-content/uploads/2019/04/Snipaste_2019-04-26_15-26-43.png"></a></p>
 		
 		<p>
-			<a href="/NAS/2019/04/26/233/" class="excerpt-link">Read More...</a>
+			<a href="/Z-Turn/2019/04/26/233/" class="excerpt-link">Read More...</a>
 		</p>
 		        
       
@@ -114,7 +108,7 @@
       
 
   <h2 class="post-title" itemprop="name">
-    <a href="/HTPC/2019/04/11/223/">Embuary中文字体乱码修复</a>
+    <a href="/Z-Turn/2019/04/11/223/">Embuary中文字体乱码修复</a>
   </h2>
 
 
@@ -123,10 +117,12 @@
     <section class="post-excerpt" itemprop="description articleBody">
       <p>
       
-        <p><a href="https://rosystain.com/wp-content/uploads/2019/04/JNjJ5w7l.jpg"><img src="https://rosystain.com/wp-content/uploads/2019/04/JNjJ5w7l.jpg"></a> Embuary是我比较喜欢的一个Kodi皮肤，在我看来是kodi众多皮肤中<strong>仅有</strong>的几个符合现代审美的皮肤之一。 <a href="https://rosystain.com/wp-content/uploads/2019/04/fanart.jpg"><img src="https://rosystain.com/wp-content/uploads/2019/04/fanart.jpg"></a> 界面基本承袭Emby UI的设计语言，搭配Kodi + Emby这样的融合方案可谓是天衣无缝，虽然当初站了Plex的队，不过自己修改一下配色的话跟Plex也是挺搭的。 此皮肤原生支持Arial字体用于显示中、日等文本，但有一部分文字会显示成口口，打开一些其他插件更是口得一塌糊涂。 作者已在新版皮肤中修复此问题（仅限Kodi v18）</p>
+        <p>Embuary是我比较喜欢的一个Kodi皮肤，在我看来是kodi众多皮肤中<strong>仅有</strong>的几个符合现代审美的皮肤之一。</p>
+<p> 界面基本承袭Emby UI的设计语言，搭配Kodi + Emby这样的融合方案可谓是天衣无缝，虽然当初站了Plex的队，不过自己修改一下配色的话跟Plex也是挺搭的。 此皮肤原生支持Arial字体用于显示中、日等文本，但有一部分文字会显示成口口，打开一些其他插件更是口得一塌糊涂。</p>
+<p>作者已在新版皮肤中修复此问题（仅限Kodi v18）</p>
 		
 		<p>
-			<a href="/HTPC/2019/04/11/223/" class="excerpt-link">Read More...</a>
+			<a href="/Z-Turn/2019/04/11/223/" class="excerpt-link">Read More...</a>
 		</p>
 		        
       
@@ -217,22 +213,6 @@
 </script>
 
 <script type="text/javascript" src="/js/index.js"></script>
-
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-<script type="text/javascript">
-  (function($){
-    var wrapAll = function(q) {
-      $(q).each( function() {
-        var $img = $(this),
-            href = $img.attr('src');
-        $img.wrap('<a rel="fancybox" href="' + href + '" title="' + $img.attr('alt') + '" class="link"></a>');
-      });
-    };
-    wrapAll('.post-content img');
-    wrapAll('.post-excerpt img');
-    $('[rel="fancybox"]').fancybox();
-  })(jQuery);
-</script>
 
 
 
