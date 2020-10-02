@@ -62,7 +62,7 @@
       
 
   <h2 class="post-title" itemprop="name">
-    <a href="/Z-Turn/2020/10/01/ckfrm7sju0009pwxg5eb3dhfn/">正式弃用Wordpress</a>
+    <a href="/Z-Turn/2020/10/01/ckfrwphag0029t8xgcficeqhi/">正式弃用Wordpress</a>
   </h2>
 
 
@@ -74,7 +74,7 @@
         <p><del>才不会说是因为没有备份Wordpress才被迫更换平台的呢。</del></p>
 		
 		<p>
-			<a href="/Z-Turn/2020/10/01/ckfrm7sju0009pwxg5eb3dhfn/" class="excerpt-link">Read More...</a>
+			<a href="/Z-Turn/2020/10/01/ckfrwphag0029t8xgcficeqhi/" class="excerpt-link">Read More...</a>
 		</p>
 		        
       
@@ -231,66 +231,6 @@
     </div>
     
     <a href='/tags/ZeroTier/'>ZeroTier</a>
-    </div>
-    
-    
-</section>
-
-
-                                
-                                    
-                                
-  </article>
-  
-  <article class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
-    
-    <header class="post-header">
-      
-
-  <h2 class="post-title" itemprop="name">
-    <a href="/Z-Turn/2019/10/09/269/">神奇的联合文件系统(UnionFileSystem)</a>
-  </h2>
-
-
-    </header>
-    
-    <section class="post-excerpt" itemprop="description articleBody">
-      <p>
-      
-        <p>关于联合文件系统（这里简称UnionFS）最早是从<a target="_blank" rel="noopener" href="http://www.songming.me/unionfilesystem.html">一段香</a>的OMV介绍文中看到的，实际用上它的契机倒是因为近几年被老莱炒火的unRAID。</p>
-<p>unRAID号称可以在允许磁盘休眠的同时实现跨盘卷与数据冗余，想了一想这不就是一段香提到的UFS+Snapraid吗。</p>
-<p>本着试用结束后就回去折腾OMV的想法试了2个月的unRAID，在试用期过后系统再起不能的时候我的大脑已被真香支配，便情不自禁地冲了钱成为了正儿八经的unRAID用户。当然这并不是一篇unRAID的安利文，这里主要还是想介绍一下unRAID所使用的核心之一——UnionFS。</p>
-		
-		<p>
-			<a href="/Z-Turn/2019/10/09/269/" class="excerpt-link">Read More...</a>
-		</p>
-		        
-      
-      </p>
-    </section>
-    <section class="post-meta">
-    
-      <span> Chock</span>
-    
-    on 
-    <a href="/categories/Z-Turn/" class="post-category">
-    Z-Turn
-    </a>
-    
-      <time datetime="2019-10-09T10:38:16.000Z" itemprop="datePublished" class="post-date">
-          Oct 09 2019
-      </time>
-      
-    
-    <div class="post-meta-tags">
-    
-    <a href='/tags/NAS/'>NAS</a>,
-    </div>
-    
-    <a href='/tags/OMV/'>OMV</a>,
-    </div>
-    
-    <a href='/tags/unRAID/'>unRAID</a>
     </div>
     
     
@@ -634,10 +574,85 @@
     <a href='/tags/Debian/'>Debian</a>,
     </div>
     
-    <a href='/tags/Steam/'>Steam</a>,
+    <a href='/tags/HTPC/'>HTPC</a>,
     </div>
     
-    <a href='/tags/HTPC/'>HTPC</a>
+    <a href='/tags/Steam/'>Steam</a>
+    </div>
+    
+    
+</section>
+
+
+                                
+                                    
+                                
+  </article>
+  
+  <article class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+    
+    <header class="post-header">
+      
+
+  <h2 class="post-title" itemprop="name">
+    <a href="/Z-Turn/2017/11/26/29/">在Debian Strech上开启Miredo</a>
+  </h2>
+
+
+    </header>
+    
+    <section class="post-excerpt" itemprop="description articleBody">
+      <p>
+      
+        <p>Miredo是Debian/Ubuntu上的类Teredo服务，通常可以用它来访问一些ipv6的网络，除此之外，每台Miredo的客户机都可以分到一个2001开头的ipv6 。</p>
+<p>这个ipv6对于内网的BT软件是否有实质性的帮助一直都没有确切的说法，但使用Miredo一段时间后观察数据流量，可以发现确实从它上面走了一些流量，可见它虽然帮助不大，但聊胜于无。</p>
+<p>Debian的官方源自带Miredo，所以 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install miredo</span><br></pre></td></tr></table></figure>
+
+<p>查看网卡信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ifconfig</span><br></pre></td></tr></table></figure>
+
+<p>出现名为teredo的接口即表示安装成功 若出现<code>RTNETLINK permission denied</code>的错误提示 则需要在sysctl.conf的末尾下添加以下几项 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/sysctl.conf</span><br><span class="line">net.ipv6.conf.all.disable_ipv6 = 0</span><br><span class="line">net.ipv6.conf.default.disable_ipv6 = 0</span><br><span class="line">net.ipv6.conf.lo.disable_ipv6 = 0</span><br></pre></td></tr></table></figure>
+
+<p>保存退出重启，这时会遇到另外一个问题。Miredo的默认启动优先级要高于域名解析服务，于是它在每次开机的时候都会因为无法正常解析中继服务器的域名而导致启动失败。</p>
+<p>最简单的办法是将这个地址改成IP </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/miredo.conf</span><br></pre></td></tr></table></figure>
+
+<p>将原有的地址注释掉，添加一条</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ServerAddress 83.170.6.76</span><br></pre></td></tr></table></figure>
+
+<p>保存重启后，检查Miredo运行状况</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service miredo status</span><br></pre></td></tr></table></figure>
+
+<p>一切正常 。</p>
+
+      
+      </p>
+    </section>
+    <section class="post-meta">
+    
+      <span> Chock</span>
+    
+    on 
+    <a href="/categories/Z-Turn/" class="post-category">
+    Z-Turn
+    </a>
+    
+      <time datetime="2017-11-26T13:27:42.000Z" itemprop="datePublished" class="post-date">
+          Nov 26 2017
+      </time>
+      
+    
+    <div class="post-meta-tags">
+    
+    <a href='/tags/Debian/'>Debian</a>,
+    </div>
+    
+    <a href='/tags/Miredo/'>Miredo</a>,
+    </div>
+    
+    <a href='/tags/OpenMediaVault/'>OpenMediaVault</a>
     </div>
     
     

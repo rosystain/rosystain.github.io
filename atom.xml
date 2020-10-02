@@ -18,8 +18,8 @@
   
   <entry>
     <title>正式弃用Wordpress</title>
-    <link href="https://rosystain.com/Z-Turn/2020/10/01/ckfrm7sju0009pwxg5eb3dhfn/"/>
-    <id>https://rosystain.com/Z-Turn/2020/10/01/ckfrm7sju0009pwxg5eb3dhfn/</id>
+    <link href="https://rosystain.com/Z-Turn/2020/10/01/ckfrwphag0029t8xgcficeqhi/"/>
+    <id>https://rosystain.com/Z-Turn/2020/10/01/ckfrwphag0029t8xgcficeqhi/</id>
     <published>2020-10-01T02:55:56.000Z</published>
     <updated>2020-10-01T14:34:19.559Z</updated>
     
@@ -92,33 +92,6 @@
     <category term="ubnt" scheme="https://rosystain.com/tags/ubnt/"/>
     
     <category term="ZeroTier" scheme="https://rosystain.com/tags/ZeroTier/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>神奇的联合文件系统(UnionFileSystem)</title>
-    <link href="https://rosystain.com/Z-Turn/2019/10/09/269/"/>
-    <id>https://rosystain.com/Z-Turn/2019/10/09/269/</id>
-    <published>2019-10-09T10:38:16.000Z</published>
-    <updated>2020-10-01T14:36:41.207Z</updated>
-    
-    <content type="html"><![CDATA[<p>关于联合文件系统（这里简称UnionFS）最早是从<a href="http://www.songming.me/unionfilesystem.html">一段香</a>的OMV介绍文中看到的，实际用上它的契机倒是因为近几年被老莱炒火的unRAID。</p><p>unRAID号称可以在允许磁盘休眠的同时实现跨盘卷与数据冗余，想了一想这不就是一段香提到的UFS+Snapraid吗。</p><p>本着试用结束后就回去折腾OMV的想法试了2个月的unRAID，在试用期过后系统再起不能的时候我的大脑已被真香支配，便情不自禁地冲了钱成为了正儿八经的unRAID用户。当然这并不是一篇unRAID的安利文，这里主要还是想介绍一下unRAID所使用的核心之一——UnionFS。</p><a id="more"></a><p>UnionFS的分支很多，现在应该都用mergerfs了吧，unRAID与mergerfs相似度较高，兴许只是将mergerfs整合了一下，但这些分支版本本身也大同小异，是不是mergerfs也不太重要。</p><p>实施部分我想放到后面来写，在此之前，我们先来看看最常见的存储形式——静态卷。</p><p>静态卷类似Windows中的C盘、D盘、E盘，磁盘与磁盘之间数据独立，互不影响。缺点是多盘管理十分不便。</p><p>我们往往会根据数据类型而对这些静态卷进行分类，比如视频存放在Vol1，工作文档存放在Vol2，久而久之，可能在Vol1爆满的时候Vol2还是空闲。</p><p>你也可以把Vol3挂载到Vol1的同级目录中，让它们看起来像是同一块磁盘的2个目录，但往往很多时候你想要的是往Vol1里塞更多东西而不是骗自己说Vol3也一样。</p><p><strong>那么有没有办法把这3块盘串在一起呢？</strong> 你好，有的！逻辑卷就是为此而生。</p><p>我们平时所看到的文件其实是通过文件系统（filesytem）将一堆二进制数据“模拟”出来的产物。既然文件系统可以从一块盘中的茫茫多的数据里找出对应的数据块构成文件，那么自然也可以在多块盘的数据中找出对应的数据组合成相应的文件。</p><p>把一块连续的数据分散成几个小部分分别存储到各磁盘中去，这种存储方式我们称之为<strong>条带化存储</strong>，而存放这些数据的磁盘组我们称之为”存储池”。</p><p>对整个存储池建立文件系统形成的卷便成了逻辑卷。</p><p>常见的存储池有LVM、RAID、ZPool、StoragePool（Windows）等</p><p>有了存储池便不用再担心磁盘分类及空间利用率的问题，因为你的所有硬盘都“合并”成了一块，于此同时，数据分散也有利于减轻单个磁盘的IO负担，变相提高了系统的整体IO性能。</p><p>凡事有利也有弊，现在来说说坏处。</p><p>数据条带化带来的一个显著影响就是盘与盘之间风险共享，当一块磁盘发生故障时，上层文件系统中涉及此盘数据的文件将被一并波及。</p><p>在企业级的应用里往往会通过<strong>数据冗余</strong>来解决这个问题，冗余使得数据在损毁后有了重建的可能。人们常提到的raid5在如今动辄10T一块硬盘的环境下可靠性已经远远达不到能充分信赖的程度，而可靠性更佳的raid6/1则需要庞大的冗余成本。</p><p>通常我们建议普通家庭用户尽量采用备份而非冗余的方式保护数据，毕竟对家庭用户来说硬盘中的大部分数据都是网络上随处可见的文件，在小部分的重要数据有多个备份的前提下，即便发生磁盘故障，你也不会永远失去那些未备份的数据。</p><p>但你整理硬盘倾注的心血可能就打水漂了。</p><p>在充分认识存储池的利弊后，很多人选择了JBOD这种首尾相连的垂直条带化存储，再辅予一定的备份措施后不失为一种相对合理且成本低廉的存储方式。</p><p>而另一种方案则是这里要重点介绍的对象，它有静态卷的一切优点，又具备存储池逻辑卷的大部分优势，它就是UnionFS。<a href="https://rosystain.com/wp-content/uploads/2019/10/%E8%99%9A%E6%8B%9F%E5%8D%B7_%E7%94%BB%E6%9D%BF-1.png"><img src="https://rosystain.com/wp-content/uploads/2019/10/%E8%99%9A%E6%8B%9F%E5%8D%B7_%E7%94%BB%E6%9D%BF-1.png"></a> UnionFS本质上只是把现有静态卷映射到一个统一的目录里假装自己是一个逻辑卷（如下图）。我们这里就称它为虚拟卷好了。</p><p><a href="https://rosystain.com/wp-content/uploads/2019/10/ufs_%E7%94%BB%E6%9D%BF-1.png"><img src="https://rosystain.com/wp-content/uploads/2019/10/ufs_%E7%94%BB%E6%9D%BF-1.png"></a> 当Disk1损坏时并被拔出时，机智的你应该已经猜到它会是下面的样子了 <a href="https://rosystain.com/wp-content/uploads/2019/10/ufs2_%E7%94%BB%E6%9D%BF-1.png"><img src="https://rosystain.com/wp-content/uploads/2019/10/ufs2_%E7%94%BB%E6%9D%BF-1.png"></a> 这样静态卷不易管理文件的问题解决了，数据条带化的隐患也不用过于担心了。UFS自身也可通过一定的存储调度机制来自动分配数据存放位置，虽然无法跟条带化存储相提并论，但依然在一定程度上改善了静态卷空间利用率。利多而弊极少（弊：相传UnionFS的IO性能会有所降低，最好配合SSD做缓存使用，但我其实不太能感受得出来） <strong>那么怎么实现呢？</strong> 推荐使用mergerfs，<a href="https://github.com/trapexit/mergerfs">项目地址</a></p>]]></content>
-    
-    
-    <summary type="html">&lt;p&gt;关于联合文件系统（这里简称UnionFS）最早是从&lt;a href=&quot;http://www.songming.me/unionfilesystem.html&quot;&gt;一段香&lt;/a&gt;的OMV介绍文中看到的，实际用上它的契机倒是因为近几年被老莱炒火的unRAID。&lt;/p&gt;
-&lt;p&gt;unRAID号称可以在允许磁盘休眠的同时实现跨盘卷与数据冗余，想了一想这不就是一段香提到的UFS+Snapraid吗。&lt;/p&gt;
-&lt;p&gt;本着试用结束后就回去折腾OMV的想法试了2个月的unRAID，在试用期过后系统再起不能的时候我的大脑已被真香支配，便情不自禁地冲了钱成为了正儿八经的unRAID用户。当然这并不是一篇unRAID的安利文，这里主要还是想介绍一下unRAID所使用的核心之一——UnionFS。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="Z-Turn" scheme="https://rosystain.com/categories/Z-Turn/"/>
-    
-    
-    <category term="NAS" scheme="https://rosystain.com/tags/NAS/"/>
-    
-    <category term="OMV" scheme="https://rosystain.com/tags/OMV/"/>
-    
-    <category term="unRAID" scheme="https://rosystain.com/tags/unRAID/"/>
     
   </entry>
   
@@ -269,9 +242,9 @@
     
     <category term="Debian" scheme="https://rosystain.com/tags/Debian/"/>
     
-    <category term="Steam" scheme="https://rosystain.com/tags/Steam/"/>
-    
     <category term="HTPC" scheme="https://rosystain.com/tags/HTPC/"/>
+    
+    <category term="Steam" scheme="https://rosystain.com/tags/Steam/"/>
     
   </entry>
   
@@ -298,9 +271,9 @@
     
     <category term="Debian" scheme="https://rosystain.com/tags/Debian/"/>
     
-    <category term="OpenMediaVault" scheme="https://rosystain.com/tags/OpenMediaVault/"/>
-    
     <category term="Miredo" scheme="https://rosystain.com/tags/Miredo/"/>
+    
+    <category term="OpenMediaVault" scheme="https://rosystain.com/tags/OpenMediaVault/"/>
     
   </entry>
   
@@ -353,9 +326,9 @@
     
     <category term="Debian" scheme="https://rosystain.com/tags/Debian/"/>
     
-    <category term="HTPC" scheme="https://rosystain.com/tags/HTPC/"/>
-    
     <category term="OpenMediaVault" scheme="https://rosystain.com/tags/OpenMediaVault/"/>
+    
+    <category term="HTPC" scheme="https://rosystain.com/tags/HTPC/"/>
     
     <category term="NAS" scheme="https://rosystain.com/tags/NAS/"/>
     
