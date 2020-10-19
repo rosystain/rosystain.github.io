@@ -18,8 +18,8 @@
   
   <entry>
     <title>关于跑步</title>
-    <link href="https://rosystain.com/Life/2020/10/19/ckggtcoep0001w8xgffn50eep/"/>
-    <id>https://rosystain.com/Life/2020/10/19/ckggtcoep0001w8xgffn50eep/</id>
+    <link href="https://rosystain.com/Life/2020/10/19/ckggteoxw0000toxghqxb3d7g/"/>
+    <id>https://rosystain.com/Life/2020/10/19/ckggteoxw0000toxghqxb3d7g/</id>
     <published>2020-10-19T15:03:00.000Z</published>
     <updated>2020-10-19T17:18:09.208Z</updated>
     
@@ -42,22 +42,9 @@
   </entry>
   
   <entry>
-    <title></title>
-    <link href="https://rosystain.com/uncategorized/2020/10/08/ckggtcoeb0000w8xg3ffxf3l0/"/>
-    <id>https://rosystain.com/uncategorized/2020/10/08/ckggtcoeb0000w8xg3ffxf3l0/</id>
-    <published>2020-10-08T05:59:56.964Z</published>
-    <updated>2020-10-08T05:59:46.000Z</updated>
-    
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
     <title>正式弃用Wordpress</title>
-    <link href="https://rosystain.com/Z-Turn/2020/10/01/ckggtcoez000hw8xgdtiafsg0/"/>
-    <id>https://rosystain.com/Z-Turn/2020/10/01/ckggtcoez000hw8xgdtiafsg0/</id>
+    <link href="https://rosystain.com/Z-Turn/2020/10/01/ckggteoyf000ttoxgfmfcggzh/"/>
+    <id>https://rosystain.com/Z-Turn/2020/10/01/ckggteoyf000ttoxgfmfcggzh/</id>
     <published>2020-10-01T02:55:56.000Z</published>
     <updated>2020-10-01T14:34:19.000Z</updated>
     
@@ -177,9 +164,9 @@
     <category term="Z-Turn" scheme="https://rosystain.com/categories/Z-Turn/"/>
     
     
-    <category term="IPV6" scheme="https://rosystain.com/tags/IPV6/"/>
-    
     <category term="NAS" scheme="https://rosystain.com/tags/NAS/"/>
+    
+    <category term="IPV6" scheme="https://rosystain.com/tags/IPV6/"/>
     
     <category term="PLEX" scheme="https://rosystain.com/tags/PLEX/"/>
     
@@ -203,9 +190,9 @@
     <category term="Z-Turn" scheme="https://rosystain.com/categories/Z-Turn/"/>
     
     
-    <category term="IPV6" scheme="https://rosystain.com/tags/IPV6/"/>
-    
     <category term="NAS" scheme="https://rosystain.com/tags/NAS/"/>
+    
+    <category term="IPV6" scheme="https://rosystain.com/tags/IPV6/"/>
     
     <category term="PLEX" scheme="https://rosystain.com/tags/PLEX/"/>
     
@@ -278,9 +265,9 @@
     <category term="Z-Turn" scheme="https://rosystain.com/categories/Z-Turn/"/>
     
     
-    <category term="HTPC" scheme="https://rosystain.com/tags/HTPC/"/>
-    
     <category term="Debian" scheme="https://rosystain.com/tags/Debian/"/>
+    
+    <category term="HTPC" scheme="https://rosystain.com/tags/HTPC/"/>
     
     <category term="Steam" scheme="https://rosystain.com/tags/Steam/"/>
     
@@ -362,13 +349,13 @@
     <category term="Z-Turn" scheme="https://rosystain.com/categories/Z-Turn/"/>
     
     
-    <category term="HTPC" scheme="https://rosystain.com/tags/HTPC/"/>
-    
-    <category term="NAS" scheme="https://rosystain.com/tags/NAS/"/>
-    
     <category term="Debian" scheme="https://rosystain.com/tags/Debian/"/>
     
     <category term="OpenMediaVault" scheme="https://rosystain.com/tags/OpenMediaVault/"/>
+    
+    <category term="HTPC" scheme="https://rosystain.com/tags/HTPC/"/>
+    
+    <category term="NAS" scheme="https://rosystain.com/tags/NAS/"/>
     
   </entry>
   
