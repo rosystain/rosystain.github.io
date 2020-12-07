@@ -6,7 +6,7 @@
   <link href="https://rosystain.com/atom.xml" rel="self"/>
   
   <link href="https://rosystain.com/"/>
-  <updated>2020-12-07T13:54:03.338Z</updated>
+  <updated>2020-12-07T15:06:11.977Z</updated>
   <id>https://rosystain.com/</id>
   
   <author>
@@ -18,12 +18,12 @@
   
   <entry>
     <title>不再残缺的美好：Plexamp</title>
-    <link href="https://rosystain.com/Misc/2020/12/07/ckiemmnm80010dkxg0023g3ci/"/>
-    <id>https://rosystain.com/Misc/2020/12/07/ckiemmnm80010dkxg0023g3ci/</id>
+    <link href="https://rosystain.com/Misc/2020/12/07/ckieou5sh000a44xg58whafo8/"/>
+    <id>https://rosystain.com/Misc/2020/12/07/ckieou5sh000a44xg58whafo8/</id>
     <published>2020-12-07T13:35:00.000Z</published>
-    <updated>2020-12-07T13:54:03.338Z</updated>
+    <updated>2020-12-07T15:06:11.977Z</updated>
     
-    <content type="html"><![CDATA[<p><img src="https://i.loli.net/2020/11/24/oRmlKUjC7vtHpna.png" alt="plexamp-banner"></p><p>今年四月，向来傲慢且怠惰的Plex一口气发布了2款手机App，分别是用于监管后台信息的Plex Dash及音乐播放器Plexamp。前者看起来是打算要取代Tautulli，后者则其实在桌面系统上由来已久。</p><p>先不论仅仅支持移动端的Plex Dash是否真的能代替桌面移动两开花的Tautulli，另外那个终于从桌面端滑向移动端的Plexamp则宛如重获新生。</p><p>如果你也使用或打算使用Plex管理音乐且正好购买了Plex Pass的话，那么Plexamp是一款能让你持续上头的音乐播放器。</p><a id="more"></a><h3 id="关于Plexamp"><a href="#关于Plexamp" class="headerlink" title="关于Plexamp"></a>关于Plexamp</h3><p><img src="https://miro.medium.com/max/9600/1*_5vj2zq-mkZT88N8syPMtA@2x.png" alt="Image for post"></p><p>Plexamp是由Plex在2017年推出的跨平台音乐客户端，最初仅支持Windows与macOS。尽管它的名字一看就是在致敬Winamp，但它并非是在<strong>Winamp精神续作</strong>这样的包袱下诞生的。它首先不是一款通用播放软件，PlexMediaServer仍然是它正常运作的绝对前提，它的外观也与Winamp截然不同。</p><p>作为Plex的减法产物，剥去了一切与音乐不相关的元素后，在自己本地的收藏中聆听音乐这件事也确实变得纯粹起来。在全局热键系统的帮助下，你甚至可以像使用Spotlight那样激活Plexamp的搜索框快速找到想听的歌曲。</p><p>只不过每当我按下激活搜索框的热键时，<strong>接下来听什么</strong>这个问题却往往无法在立刻得到答案。每每到此，我便陷入短暂的呆滞，旋即沮丧着脸试图快速想起一个之前建立的歌单名，或者就干脆回到网页端去慢慢浏览。</p><p>而我每多使用一次Plexamp，这种沮丧就每增加一分。</p><p><strong>浏览</strong>是Plexamp的最大短板，最初的Plexamp并没有一个完整的媒体库界面，除了仅有几个”Recently”节点外绝大部分音乐需要靠搜索来访问。此外，在高分屏下摆弄一个大约只占显示器1/32的软件无论如何都难以让我对它尚且无法实现的浏览体验有所期待。</p><p>鉴于<strong>本来在网页端听歌也并没有什么不满意的地方</strong>，我很快就卸载并淡忘了它。</p><p>直到我在手机上与它再次相遇。</p><h3 id="Plexamp-v3"><a href="#Plexamp-v3" class="headerlink" title="Plexamp v3"></a>Plexamp v3</h3><p><img src="https://i.loli.net/2020/12/06/LKceIXMz3QTigHP.png" alt="customisation"></p><p>新版的Plexamp在获得一系列更新的同时几乎是原模原样地被搬到了iOS/Android上面，原来在PC上只占据一隅的它到了移动设备上自然就成了全屏应用。它的一切在手机上都显得刚刚好，好像从诞生起它就是一款手机应用，而PC版才是从手机移植过来似的。</p><p>在界面上，原本就颇受好评的<strong>专辑提色器</strong>现在也更倾向于使用对比更高的撞色来以显得更加动感。新版还增加了低饱和的明亮模式以迎合口味清新的人群，以及完全禁用提色器的纯白、纯黑外观。</p><p>前面就有说到它在外观上与Winamp大相径庭，但它却跟iTunes的迷你模式高度相仿，尤其是启用了纯白模式后那简直就是一个模子出来的孪生兄弟。</p><p><img src="https://i.loli.net/2020/12/07/RVxFMeSD5BoXhaI.png" alt="itunes&amp;plexamp"></p><p>而在使用上，Plexamp与你以往在Spotify或是Apple Music上的操作习惯大抵相似。值得一提的是，本就不该缺失的<strong>循环播放</strong>功能也终于在Plex打破了旷日持久得坚持后于上个月初的更新中解禁。</p><p>至此，Plexamp在基础功能上缺失的最后一块拼图也已经补上。作为一款精致可爱的手机音乐播放器，除了精致可爱之外，你当然也会乐于看到它仍有相当多的进阶功能：</p><ul><li><strong>支持ALAC，</strong>从iTunes迁移到Plex需要把所有歌曲重新编码吗？答案是不用</li><li><strong>支持转码，</strong>你最讨厌的转码能在音乐上为你节约大量的手机流量，你可以为Wifi及蜂窝网络分别设定目标码率</li><li><strong>支持Tidal，</strong>如果你在Plex中绑定了Tidal账户，那现在你也可以像使用Roon那样直接在Plexamp中搜索并播放来自Tidal的歌曲了（但不支持Master音质）</li><li><strong>支持自动播放，</strong>在播放完列表的最后一首歌曲后，等待你的不再是寂静。未开启循环播放时自动启用，算法上它或许不如Spotify，但在一款本地播放器上能见到这样的功能老实说让我觉得受宠若惊</li><li>**支持无线Cast,**你可以将正在播放的音乐投放到任何开启Plex或Plexamp的设备，无论是手机还是平板，抑或是一台连接着音响的树莓派</li><li>**支持Last.FM,**可自动上传播放记录到Last.FM（如果刮削时能匹配到的话）</li><li><strong>支持Carplay，</strong>听说Carplay甚至会左右你买车的选择？</li></ul><p>以及一些算不上特色但你会觉得它最好有的功能：</p><ul><li><strong>支持无缝播放</strong></li><li><strong>支持睡眠定时器</strong></li><li><strong>支持EQ</strong></li><li><strong>支持电台</strong></li><li><strong>支持音量平衡</strong></li><li><strong>支持倍速播放</strong></li><li><strong>支持离线播放</strong></li><li>…</li></ul><h3 id="Plex-vs-Plexamp"><a href="#Plex-vs-Plexamp" class="headerlink" title="Plex vs Plexamp"></a>Plex vs Plexamp</h3><p><img src="https://i.loli.net/2020/12/07/Hbo2UmRdsEky5uz.png" alt="plex&amp;plexamp"></p><p>Plex是集视频、音乐、相册、分享于一体的综合媒体中心，Plexamp则是单一的音乐播放器。两者在定位上的差别可以直接在UI的设计差异中体现出来——Plex的音乐板块重视封面的展示，像是在强调这些专辑只不过是你诸多收藏中的一小环；而Plexamp则更倾向于直奔主题，它不需要跟任何板块统一设计语言，因而能直观且迅速地找到你想要的歌曲。</p><p>如果你有给歌曲打分的习惯，那你多半会觉得五星制的评分对于音乐来说过于啰嗦。Plexamp提供了可选的一星制评分体系，你将不再需要思考自己对某首歌的喜爱程度有多深，只需点击喜欢即可。</p><p>Plex/Plexamp在局域网中用来访问服务端的地址与外部网络时使用的并不相同，如果你也是在HomeServer上搭设的Plex服务端，那么每当你打开Plex都无可避免地需要等待与服务器重新握手。而在Plexamp启动时，你完全不会感知到任何与服务器再连接的动静，它们会在后台悄悄地完成，没有漫长的启动画面，也没有你讨厌的转圈圈。</p><p>Plexamp也得到了更适合音乐播放器的缓存机制，哪怕是在Plex服务器完全失联的情况下，你仍然继续可以播放此前缓存过的歌曲，在你访问未缓存的项目之前，失联也是不会被感知的。若你对自家Plex服务器的可用性没有信心，增加缓存空间则可以大幅提高离线播放的命中率。你的曲库里的歌曲也许数以万计，但你在迈出大门时想要立刻去听的往往还是你最近听过的那些。</p><h3 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h3><p>全新的Plexamp是一款从见到起就令我爱不释手的App，它漂亮得让我不禁认为视觉上的愉悦也可以提高听觉上的体验。</p><p>它同时也是Plex公司产品理念的极致体现——在意想不到的地方给你惊喜，在理所应当的方面吊你胃口。</p><p>作为Plex增值服务的一部分，它毫无疑问将成为Plex Pass的重要卖点。在与Emby等同类竞品的竞争中，它也使Plex在特定的需求点上得以展现出压倒性的竞争力。</p><p>但鉴于Plex的客户端在非iOS平台的拉胯表现，若你并非苹果全家桶用户，那么仅仅为了Plexamp而购买Plex Pass则是一件需要再三考虑的事情了。</p>]]></content>
+    <content type="html"><![CDATA[<p><img src="https://i.loli.net/2020/11/24/oRmlKUjC7vtHpna.png" alt="plexamp-banner"></p><p>今年四月，向来傲慢且怠惰的Plex一口气发布了2款手机App，分别是用于监管后台信息的Plex Dash及音乐播放器Plexamp。前者看起来是打算要取代Tautulli，后者则其实在桌面系统上由来已久。</p><p>先不论仅仅支持移动端的Plex Dash是否真的能代替桌面移动两开花的Tautulli，另外那个终于从桌面端滑向移动端的Plexamp则宛如重获新生。</p><p>如果你也使用或打算使用Plex管理音乐且正好购买了Plex Pass的话，那么Plexamp是一款能让你持续上头的音乐播放器。</p><a id="more"></a><h3 id="关于Plexamp"><a href="#关于Plexamp" class="headerlink" title="关于Plexamp"></a>关于Plexamp</h3><p><img src="https://miro.medium.com/max/9600/1*_5vj2zq-mkZT88N8syPMtA@2x.png" alt="Image for post"></p><p>Plexamp是由Plex在2017年推出的跨平台音乐客户端，最初仅支持Windows与macOS。尽管它的名字一看就是在致敬Winamp，但它并非是在<strong>Winamp精神续作</strong>这样的包袱下诞生的。它首先不是一款通用播放软件，PlexMediaServer仍然是它正常运作的绝对前提，它的外观也与Winamp截然不同。</p><p>作为Plex的减法产物，剥去了一切与音乐不相关的元素后，在自己本地的收藏中聆听音乐这件事也确实变得纯粹起来。在全局热键系统的帮助下，你甚至可以像使用Spotlight那样激活Plexamp的搜索框快速找到想听的歌曲。</p><p>只不过每当我按下激活搜索框的热键时，<strong>接下来听什么</strong>这个问题却往往无法在立刻得到答案。每每到此，我便陷入短暂的呆滞，旋即沮丧着脸试图快速想起一个之前建立的歌单名，或者就干脆回到网页端去慢慢浏览。</p><p>而我每多使用一次Plexamp，这种沮丧就每增加一分。</p><p><strong>浏览</strong>是Plexamp的最大短板，最初的Plexamp并没有一个完整的媒体库界面，除了仅有几个”Recently”节点外绝大部分音乐需要靠搜索来访问。此外，在高分屏下摆弄一个大约只占显示器1/32的软件无论如何都难以让我对它尚且无法实现的浏览体验有所期待。</p><p>鉴于<strong>本来在网页端听歌也并没有什么不满意的地方</strong>，我很快就卸载并淡忘了它。</p><p>直到我在手机上与它再次相遇。</p><h3 id="Plexamp-v3"><a href="#Plexamp-v3" class="headerlink" title="Plexamp v3"></a>Plexamp v3</h3><p><img src="https://i.loli.net/2020/12/06/LKceIXMz3QTigHP.png" alt="customisation"></p><p>新版的Plexamp在获得一系列更新的同时几乎是原模原样地被搬到了iOS/Android上面，原来在PC上只占据一隅的它到了移动设备上自然就成了全屏应用。它的一切在手机上都显得刚刚好，好像从诞生起它就是一款手机应用，而PC版才是从手机移植过来似的。</p><p>在界面上，原本就颇受好评的<strong>专辑提色器</strong>现在也更倾向于使用对比更高的撞色来以显得更加动感。新版还增加了低饱和的明亮模式以迎合口味清新的人群，以及完全禁用提色器的纯白、纯黑外观。</p><p>前面就有说到它在外观上与Winamp大相径庭，但它却跟iTunes的迷你模式高度相仿，尤其是启用了纯白模式后那简直就是一个模子出来的孪生兄弟。</p><p><img src="https://i.loli.net/2020/12/07/RVxFMeSD5BoXhaI.png" alt="itunes&amp;plexamp"></p><p>而在使用上，Plexamp与你以往在Spotify或是Apple Music上的操作习惯大抵相似。值得一提的是，本就不该缺失的<strong>循环播放</strong>功能也终于在Plex打破了旷日持久得坚持后于上个月初的更新中解禁。</p><p>至此，Plexamp在基础功能上缺失的最后一块拼图也已经补上。作为一款精致可爱的手机音乐播放器，除了精致可爱之外，你当然也会乐于看到它仍有相当多的进阶功能：</p><ul><li><strong>支持ALAC，</strong>从iTunes迁移到Plex需要把所有歌曲重新编码吗？答案是不用</li><li><strong>支持转码，</strong>你最讨厌的转码能在音乐上为你节约大量的手机流量，你可以为Wifi及蜂窝网络分别设定目标码率</li><li><strong>支持Tidal，</strong>如果你在Plex中绑定了Tidal账户，那现在你也可以像使用Roon那样直接在Plexamp中搜索并播放来自Tidal的歌曲了（但不支持Master音质）</li><li><strong>支持自动播放，</strong>在播放完列表的最后一首歌曲后，等待你的不再是寂静。未开启循环播放时自动启用，算法上它或许不如Spotify，但在一款本地播放器上能见到这样的功能老实说让我觉得受宠若惊</li><li><strong>支持无线Cast，</strong>你可以将正在播放的音乐投放到任何开启Plex或Plexamp的设备，无论是手机还是平板，抑或是一台连接着音响的树莓派</li><li><strong>支持Last.FM，</strong>可自动上传播放记录到Last.FM（如果刮削时能匹配到的话）</li><li><strong>支持Carplay，</strong>听说Carplay甚至会左右你买车的选择？</li></ul><p>以及一些算不上特色但你会觉得它最好有的功能：</p><ul><li><strong>支持无缝播放</strong></li><li><strong>支持睡眠定时器</strong></li><li><strong>支持EQ</strong></li><li><strong>支持电台</strong></li><li><strong>支持音量平衡</strong></li><li><strong>支持倍速播放</strong></li><li><strong>支持离线播放</strong></li><li>…</li></ul><h3 id="Plex-vs-Plexamp"><a href="#Plex-vs-Plexamp" class="headerlink" title="Plex vs Plexamp"></a>Plex vs Plexamp</h3><p><img src="https://i.loli.net/2020/12/07/Hbo2UmRdsEky5uz.png" alt="plex&amp;plexamp"></p><p>Plex是集视频、音乐、相册、分享于一体的综合媒体中心，Plexamp则是单一的音乐播放器。两者在定位上的差别可以直接在UI的设计差异中体现出来——Plex的音乐板块重视封面的展示，像是在强调这些专辑只不过是你诸多收藏中的一小环；而Plexamp则更倾向于直奔主题，它不需要跟任何板块统一设计语言，因而能直观且迅速地找到你想要的歌曲。</p><p>如果你有给歌曲打分的习惯，那你多半会觉得五星制的评分对于音乐来说过于啰嗦。Plexamp提供了可选的一星制评分体系，你将不再需要思考自己对某首歌的喜爱程度有多深，只需点击喜欢即可。</p><p>Plex/Plexamp在局域网中用来访问服务端的地址与外部网络时使用的并不相同，如果你也是在HomeServer上搭设的Plex服务端，那么每当你打开Plex都无可避免地需要等待与服务器重新握手。而在Plexamp启动时，你完全不会感知到任何与服务器再连接的动静，它们会在后台悄悄地完成，没有漫长的启动画面，也没有你讨厌的转圈圈。</p><p>Plexamp也得到了更适合音乐播放器的缓存机制，哪怕是在Plex服务器完全失联的情况下，你仍然继续可以播放此前缓存过的歌曲，在你访问未缓存的项目之前，失联也是不会被感知的。若你对自家Plex服务器的可用性没有信心，增加缓存空间则可以大幅提高离线播放的命中率。你的曲库里的歌曲也许数以万计，但你在迈出大门时想要立刻去听的往往还是你最近听过的那些。</p><h3 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h3><p>全新的Plexamp是一款从见到起就令我爱不释手的App，它漂亮得让我不禁认为视觉上的愉悦也可以提高听觉上的体验。</p><p>它同时也是Plex公司产品理念的极致体现——在意想不到的地方给你惊喜，在理所应当的方面吊你胃口。</p><p>作为Plex增值服务的一部分，它毫无疑问将成为Plex Pass的重要卖点。在与Emby等同类竞品的竞争中，它也使Plex在特定的需求点上得以展现出压倒性的竞争力。</p><p>但鉴于Plex的客户端在非iOS平台的拉胯表现，若你并非苹果全家桶用户，那么仅仅为了Plexamp而购买Plex Pass则是一件需要再三考虑的事情了。</p>]]></content>
     
     
     <summary type="html">&lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/11/24/oRmlKUjC7vtHpna.png&quot; alt=&quot;plexamp-banner&quot;&gt;&lt;/p&gt;
@@ -46,8 +46,8 @@
   
   <entry>
     <title>关于跑步</title>
-    <link href="https://rosystain.com/Life/2020/10/19/ckiemmnm7000sdkxg48p7fjev/"/>
-    <id>https://rosystain.com/Life/2020/10/19/ckiemmnm7000sdkxg48p7fjev/</id>
+    <link href="https://rosystain.com/Life/2020/10/19/ckieou5sf000544xg7z534gec/"/>
+    <id>https://rosystain.com/Life/2020/10/19/ckieou5sf000544xg7z534gec/</id>
     <published>2020-10-19T15:03:00.000Z</published>
     <updated>2020-10-25T07:07:34.441Z</updated>
     
@@ -71,8 +71,8 @@
   
   <entry>
     <title>正式弃用Wordpress</title>
-    <link href="https://rosystain.com/Misc/2020/10/01/ckiemmnm8000vdkxgfmey9uzw/"/>
-    <id>https://rosystain.com/Misc/2020/10/01/ckiemmnm8000vdkxgfmey9uzw/</id>
+    <link href="https://rosystain.com/Misc/2020/10/01/ckieou5sg000644xg2a805fl0/"/>
+    <id>https://rosystain.com/Misc/2020/10/01/ckieou5sg000644xg2a805fl0/</id>
     <published>2020-10-01T02:55:00.000Z</published>
     <updated>2020-11-24T07:08:36.046Z</updated>
     
@@ -313,9 +313,9 @@
     <category term="Notes" scheme="https://rosystain.com/categories/Notes/"/>
     
     
-    <category term="Linux" scheme="https://rosystain.com/tags/Linux/"/>
-    
     <category term="IPv6" scheme="https://rosystain.com/tags/IPv6/"/>
+    
+    <category term="Linux" scheme="https://rosystain.com/tags/Linux/"/>
     
   </entry>
   
