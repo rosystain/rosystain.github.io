@@ -62,82 +62,7 @@
       
 
   <h2 class="post-title" itemprop="name">
-    <a href="/Z-Turn/2017/11/26/29/">在Debian Strech上开启Miredo</a>
-  </h2>
-
-
-    </header>
-    
-    <section class="post-excerpt" itemprop="description articleBody">
-      <p>
-      
-        <p>Miredo是Debian/Ubuntu上的类Teredo服务，通常可以用它来访问一些ipv6的网络，除此之外，每台Miredo的客户机都可以分到一个2001开头的ipv6 。</p>
-<p>这个ipv6对于内网的BT软件是否有实质性的帮助一直都没有确切的说法，但使用Miredo一段时间后观察数据流量，可以发现确实从它上面走了一些流量，可见它虽然帮助不大，但聊胜于无。</p>
-<p>Debian的官方源自带Miredo，所以 </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install miredo</span><br></pre></td></tr></table></figure>
-
-<p>查看网卡信息</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ifconfig</span><br></pre></td></tr></table></figure>
-
-<p>出现名为teredo的接口即表示安装成功 若出现<code>RTNETLINK permission denied</code>的错误提示 则需要在sysctl.conf的末尾下添加以下几项 </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/sysctl.conf</span><br><span class="line">net.ipv6.conf.all.disable_ipv6 = 0</span><br><span class="line">net.ipv6.conf.default.disable_ipv6 = 0</span><br><span class="line">net.ipv6.conf.lo.disable_ipv6 = 0</span><br></pre></td></tr></table></figure>
-
-<p>保存退出重启，这时会遇到另外一个问题。Miredo的默认启动优先级要高于域名解析服务，于是它在每次开机的时候都会因为无法正常解析中继服务器的域名而导致启动失败。</p>
-<p>最简单的办法是将这个地址改成IP </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/miredo.conf</span><br></pre></td></tr></table></figure>
-
-<p>将原有的地址注释掉，添加一条</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ServerAddress 83.170.6.76</span><br></pre></td></tr></table></figure>
-
-<p>保存重启后，检查Miredo运行状况</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service miredo status</span><br></pre></td></tr></table></figure>
-
-<p>一切正常 。</p>
-
-      
-      </p>
-    </section>
-    <section class="post-meta">
-    
-      <span> Chock</span>
-    
-    on 
-    <a href="/categories/Z-Turn/" class="post-category">
-    Z-Turn
-    </a>
-    
-      <time datetime="2017-11-26T13:27:42.000Z" itemprop="datePublished" class="post-date">
-          Nov 26 2017
-      </time>
-      
-    
-    <div class="post-meta-tags">
-    
-    <a href='/tags/Debian/'>Debian</a>,
-    </div>
-    
-    <a href='/tags/Miredo/'>Miredo</a>,
-    </div>
-    
-    <a href='/tags/OpenMediaVault/'>OpenMediaVault</a>
-    </div>
-    
-    
-</section>
-
-
-                                
-                                    
-                                
-  </article>
-  
-  <article class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
-    
-    <header class="post-header">
-      
-
-  <h2 class="post-title" itemprop="name">
-    <a href="/Z-Turn/2017/11/26/18/">在OMV4上安装Transmission并开启自动下载</a>
+    <a href="/Notes/2017/11/26/18/">在OMV4上安装Transmission并开启自动下载</a>
   </h2>
 
 
@@ -169,24 +94,21 @@
       <span> Chock</span>
     
     on 
-    <a href="/categories/Z-Turn/" class="post-category">
-    Z-Turn
+    <a href="/categories/Notes/" class="post-category">
+    Notes
     </a>
     
-      <time datetime="2017-11-26T12:11:16.000Z" itemprop="datePublished" class="post-date">
+      <time datetime="2017-11-26T12:11:00.000Z" itemprop="datePublished" class="post-date">
           Nov 26 2017
       </time>
       
     
     <div class="post-meta-tags">
     
-    <a href='/tags/Debian/'>Debian</a>,
+    <a href='/tags/Linux/'>Linux</a>,
     </div>
     
-    <a href='/tags/OpenMediaVault/'>OpenMediaVault</a>,
-    </div>
-    
-    <a href='/tags/Transmission/'>Transmission</a>
+    <a href='/tags/OpenMediaVault/'>OpenMediaVault</a>
     </div>
     
     
@@ -204,7 +126,7 @@
       
 
   <h2 class="post-title" itemprop="name">
-    <a href="/Z-Turn/2017/11/26/6/">在Debian Stretch上安装OMV 4</a>
+    <a href="/Notes/2017/11/26/6/">在Debian Stretch上安装OMV 4</a>
   </h2>
 
 
@@ -217,7 +139,7 @@
 <p>OMV（OPENMEDIAVAULT）是基于Debian的NAS系统，对于原本就习惯使用Debian的人来说，与其说它是一个系统，不如说它是一套针对NAS应用的WEB管理组件而已，这跟我原先使用的Ubuntu+Webmin的组合并无本质上的不同。</p>
 		
 		<p>
-			<a href="/Z-Turn/2017/11/26/6/" class="excerpt-link">Read More...</a>
+			<a href="/Notes/2017/11/26/6/" class="excerpt-link">Read More...</a>
 		</p>
 		        
       
@@ -228,27 +150,21 @@
       <span> Chock</span>
     
     on 
-    <a href="/categories/Z-Turn/" class="post-category">
-    Z-Turn
+    <a href="/categories/Notes/" class="post-category">
+    Notes
     </a>
     
-      <time datetime="2017-11-26T08:53:11.000Z" itemprop="datePublished" class="post-date">
+      <time datetime="2017-11-26T08:53:00.000Z" itemprop="datePublished" class="post-date">
           Nov 26 2017
       </time>
       
     
     <div class="post-meta-tags">
     
-    <a href='/tags/Debian/'>Debian</a>,
+    <a href='/tags/Linux/'>Linux</a>,
     </div>
     
-    <a href='/tags/OpenMediaVault/'>OpenMediaVault</a>,
-    </div>
-    
-    <a href='/tags/HTPC/'>HTPC</a>,
-    </div>
-    
-    <a href='/tags/NAS/'>NAS</a>
+    <a href='/tags/OpenMediaVault/'>OpenMediaVault</a>
     </div>
     
     
