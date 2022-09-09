@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#">
+
+<head>
+  <meta charset="UTF-8" >
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title>通过IPv6连接你的Plex服务器 | 痴呆屋</title>
+  <meta name="description" content="" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="目前国内IPv6的推进速度已经相当不错，对于有家庭服务器需求的用户来说，获取一个不知道能用多久的公网IPv4可能已经远远超过了获得原生IPv6的难度。 长期受到无公网IP的我拿到IPv6后想到的第一件事就是试试能不能透过公网连接自家的PLEX库。 前期工作首先是配置路由器给局域各网客户机分配地址，不同路由系统对IPv6的自动化配置程度有所差异，我的Ubnt ER-X就属于比较麻烦的那种，好在官方论">
+<meta property="og:type" content="article">
+<meta property="og:title" content="通过IPv6连接你的Plex服务器">
+<meta property="og:url" content="https://rosystain.com/Notes/2019/04/26/233/index.html">
+<meta property="og:site_name" content="痴呆屋">
+<meta property="og:description" content="目前国内IPv6的推进速度已经相当不错，对于有家庭服务器需求的用户来说，获取一个不知道能用多久的公网IPv4可能已经远远超过了获得原生IPv6的难度。 长期受到无公网IP的我拿到IPv6后想到的第一件事就是试试能不能透过公网连接自家的PLEX库。 前期工作首先是配置路由器给局域各网客户机分配地址，不同路由系统对IPv6的自动化配置程度有所差异，我的Ubnt ER-X就属于比较麻烦的那种，好在官方论">
+<meta property="og:locale">
+<meta property="og:image" content="https://rosystain.com/wp-content/uploads/2019/04/Snipaste_2019-04-26_15-26-43.png">
+<meta property="og:image" content="https://rosystain.com/wp-content/uploads/2019/04/Snipaste_2019-04-26_15-43-08.png">
+<meta property="og:image" content="https://rosystain.com/wp-content/uploads/2019/04/IMG_3676.png">
+<meta property="article:published_time" content="2019-04-26T08:27:00.000Z">
+<meta property="article:modified_time" content="2020-11-24T07:02:35.000Z">
+<meta property="article:author" content="Chock">
+<meta property="article:tag" content="Plex">
+<meta property="article:tag" content="IPv6">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://rosystain.com/wp-content/uploads/2019/04/Snipaste_2019-04-26_15-26-43.png">
+  <!-- build:css css/screen.css -->
+
+  
+<link rel="stylesheet" href="/css/screen.css">
+
+  
+  <!-- endbuild -->
+  
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+  <meta name="generator" content="痴呆屋">
+  
+  
+  
+</head>
+
+
+<body class="post-template">
+
+  <header class="main-header post-head no-cover" >
+    <nav class="main-nav  clearfix">
+        <a class="back-button icon-arrow-left" href="/">Home</a>
+        <a class="subscribe-button icon-feed" href="/atom.xml">Subscribe</a>
+    </nav>
+    
+    <!--<a class="scroll-down icon-arrow-left" href="#content" data-offset="-45"><span class="hidden">Scroll Down</span></a> -->
+</header>
+
+  
+
+<main id="content" class="content" role="main">
+  <article class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+    <header class="post-header">
+      <h1 class="post-title" itemprop="name">通过IPv6连接你的Plex服务器</h1>
+      <section class="post-meta">
+  <time datetime="2019-04-26T08:27:00.000Z" itemprop="datePublished" class="post-date">
+      Apr 26 2019
+  </time>
+  on 
+  <a href="/categories/Notes/" class="post-category">
+  Notes
+  </a>
+  
+    
+  
+  <div class="post-meta-tags">
+  
+  <a href='/tags/Plex/'>Plex</a>,
+  </div>
+  
+  <a href='/tags/IPv6/'>IPv6</a>
+  </div>
+  
+  
+</section>
+    </header>
+    <section class="post-content" itemprop="description articleBody">
+      
+
+      
+      <section class="post-updated">
+  Last updated on <time datetime="2020-11-24T07:02:35.000Z" itemprop="dateModified">
+      Nov 24 2020
+  </time>
+</section>
+
+      
+      <p>目前国内IPv6的推进速度已经相当不错，对于有家庭服务器需求的用户来说，获取一个不知道能用多久的公网IPv4可能已经远远超过了获得原生IPv6的难度。 长期受到无公网IP的我拿到IPv6后想到的第一件事就是试试能不能透过公网连接自家的PLEX库。</p>
+<h5 id="前期工作"><a href="#前期工作" class="headerlink" title="前期工作"></a>前期工作</h5><p>首先是配置路由器给局域各网客户机分配地址，不同路由系统对IPv6的自动化配置程度有所差异，我的Ubnt ER-X就属于比较麻烦的那种，好在官方论坛已经有比较详尽的配置示范。 仅仅配置完路由器后还无法通过IPv6测试，打开WIN10的防火墙，添加一条入站规则放行ICMPv6后一切显示正常。 <a href="https://rosystain.com/wp-content/uploads/2019/04/Snipaste_2019-04-26_15-26-43.png"><img src="https://rosystain.com/wp-content/uploads/2019/04/Snipaste_2019-04-26_15-26-43.png"></a></p>
+<a id="more"></a>
+<h5 id="配置DDNS"><a href="#配置DDNS" class="headerlink" title="配置DDNS"></a>配置DDNS</h5><p>大部分域名解析服务提供商都有提供相关的API用于动态域名解析，如果你没有独立的域名，也可以直接向DDNS提供商申请二级动态域名。</p>
+<h5 id="配置PLEX"><a href="#配置PLEX" class="headerlink" title="配置PLEX"></a>配置PLEX</h5><p>由于PLEX自带的远程访问服务并不支持ipv6映射，尽管添加完DDNS的AAAA记录后你应该已经能在浏览器直接通过域名访问，但你仍然无法通过官网的Launch APP来使用PLEX的SSL证书，同时你的手机APP也无法找到你的服务器。 因此这里就需要用到先前配置好动态域名来进行主动上报。 打开PLEX WEB，依次进入设置/网络，点击显示高级选项，勾选Enable server support for IPv6，找到Custom server access URLs 填入需要上报的地址（<a target="_blank" rel="noopener" href="http://your.domain.com:32400/web%EF%BC%89%EF%BC%8C%E4%BF%9D%E5%AD%98%E4%BF%AE%E6%94%B9%E3%80%82">http://YOUR.DOMAIN.COM:32400/web），保存修改。</a> <a href="https://rosystain.com/wp-content/uploads/2019/04/Snipaste_2019-04-26_15-43-08.png"><img src="https://rosystain.com/wp-content/uploads/2019/04/Snipaste_2019-04-26_15-43-08.png"></a> 断开手机WIFI，打开PLEX，一切完美。 <a href="https://rosystain.com/wp-content/uploads/2019/04/IMG_3676.png"><img src="https://rosystain.com/wp-content/uploads/2019/04/IMG_3676.png"></a></p>
+
+    </section>
+    <!--<footer class="post-footer">
+      <section class="author">
+    <h4>Chock</h4>
+    <p></p>
+    
+      <section>
+        
+          <a href="" class="author-social">twitter</a>
+        
+          <a href="" class="author-social">google+</a>
+        
+          <a href="" class="author-social">github</a>
+        
+      </section>
+    </div>
+</section>
+
+      <section class="share">
+    <h4>Share this post</h4>
+    <a class="icon-twitter" target="_blank" rel="noopener" href="http://twitter.com/share?url=https://rosystain.com/Notes/2019/04/26/233/"
+       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+        <span class="hidden">Twitter</span>
+    </a>
+    <a class="icon-facebook" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u=https://rosystain.com/Notes/2019/04/26/233/"
+       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+        <span class="hidden">Facebook</span>
+    </a>
+    <a class="icon-google-plus" target="_blank" rel="noopener" href="https://plus.google.com/share?url=https://rosystain.com/Notes/2019/04/26/233/"
+       onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+        <span class="hidden">Google+</span>
+    </a>
+</section>
+    </footer>-->
+  </article>
+  <nav class="pagination" role="pagination">
+  
+  <a class="newer-posts" href="/Misc/2019/05/04/241/" title="无法逃离PLEX的魔爪">
+    ← Newer Post
+  </a>
+  
+  <span class="page-number">•</span>
+  
+  <a class="older-posts" href="/Notes/2019/04/11/223/" title="Embuary中文字体乱码修复">
+      Older Post →
+  </a>
+  
+</nav>
+
+  <div id="comment" class="comments-area">
+    <h1 class="title">Comments</h1>
+
+    <div class="valine_comment"></div>
+	<!--Leancloud 操作库:-->
+	<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+	<!--Valine 的核心代码库-->
+	<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+	<script>
+	new Valine({
+      el: '.valine_comment',
+      app_id: 'DHqLqeJy9e2KAtlclAT1PshW-MdYXbMMI',
+      app_key: 'I8EymBHiMVYrerFCtaq83rc6',
+      placeholder: '',
+      notify: '',
+      verify: '',
+    });
+	</script>
+</div>
+</main>
+
+
+  <footer class="site-footer clearfix">
+ <section class="copyright"><a href="/">痴呆屋</a> &copy; <script>document.write(new Date().getFullYear())</script> &bull; All rights reserved.</section>
+</footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/jquery-2.0.3.min.js"><\/script>')</script>
+
+<script type="text/javascript" src="/js/jquery.fitvids.js"></script>
+<script type="text/javascript">
+(function($){
+  var $postContent = $(".post-content");
+  $postContent.fitVids();
+})(jQuery);
+</script>
+
+<script type="text/javascript" src="/js/index.js"></script>
+
+
+
+
+
+</body>
+</html>

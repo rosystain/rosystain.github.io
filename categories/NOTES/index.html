@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#">
+
+<head>
+  <meta charset="UTF-8" >
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title>Category: NOTES | 痴呆屋</title>
+  <meta name="description" content="" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta property="og:type" content="website">
+<meta property="og:title" content="痴呆屋">
+<meta property="og:url" content="https://rosystain.com/categories/NOTES/index.html">
+<meta property="og:site_name" content="痴呆屋">
+<meta property="og:locale">
+<meta property="article:author" content="Chock">
+<meta name="twitter:card" content="summary">
+  <!-- build:css css/screen.css -->
+
+  
+<link rel="stylesheet" href="/css/screen.css">
+
+  
+  <!-- endbuild -->
+  
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+  <meta name="generator" content="痴呆屋">
+  
+  
+  
+</head>
+
+
+<body class="home-template">
+
+  <header class="main-header  "  style="background-image: url(https://i.loli.net/2020/10/01/yNHjrehS2dvC4gE.png)" >
+    <nav class="main-nav overlay clearfix">
+        
+        <a class="subscribe-button icon-feed" href="/atom.xml">Subscribe</a>
+    </nav>
+    
+    <div class="vertical">
+        <div class="site-head-content inner">
+             <a class="blog-logo" href="/"><img src="https://i.loli.net/2020/10/01/DLrZt28dBi3NI19.png" alt="Blog Logo"/></a>         
+            <!--<h1 class="page-title">痴呆屋</h1>
+            <h2 class="page-description"></h2>-->
+        </div>
+    </div>
+    
+    <!--<a class="scroll-down icon-arrow-left" href="#content" data-offset="-45"><span class="hidden">Scroll Down</span></a> -->
+</header>
+
+  
+<main id="content" class="content" role="main">
+  
+  <article class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+    
+    <header class="post-header">
+      
+
+  <h2 class="post-title" itemprop="name">
+    <a href="/NOTES/2022/09/05/cl7u808nt000532n6eamga0rn/">让 macOS 更好地合并同名文件夹</a>
+  </h2>
+
+
+    </header>
+    
+    <section class="post-excerpt" itemprop="description articleBody">
+      <p>
+      
+        <p>以往我在 Windows 下整理 NAS 上的文件时，遇到需要合并的同名文件夹时，只需要简单地把其中一个拖入到另一个文件夹所在的目录中。如若没有遇到同名文件冲突的情况，那么整个过程会在一瞬间完成，它时十分符合操作直觉的。</p>
+<p>但在 macOS 下想要像这样合并两个文件夹却是意外地困难。</p>
+<p>在 macOS 下，Finder 默认只为同名文件夹冲突提供了“停止”与“替换”两个选择，无须怀疑，这里的“替换”并没有字面之外意思。而在一番搜索后，不难会发现苹果设置了一个可以用 <code>opt</code> 键触发的隐藏的“合并”按钮。</p>
+<p>但这个“合并”始终是以<strong>拷贝</strong>的形式进行的，这意味着每一次合并文件夹的时候 Finder 都会制造一次毫无意义的磁盘写入。而这份无意义的写入所造成的影响对于 NAS 用户来说，则会被传输协议、磁盘性能、网络带宽等因素进一步放大，最后从<strong>无意义</strong>进化成了一种<strong>折磨</strong>。</p>
+<p>对此，如果不愿意选择那些更迎合 Windows 使用习惯的第三方文件管理器的话，使用跟 Finder 高度耦合的 Automator 来跑一个合并行为更接近 Windows 的脚本可以算是一个折中办法。</p>
+<p>Automator 能够很方便得透过 Finder 获取所选文件的路径，同时它也能调用 Finder 的弹窗选择器来手动选择一个路径来作为变量使用。像是这样：</p>
+<p><img src="/images/pasted-0.png" alt="upload successful"></p>
+<p>在运行工作流的时候，所有被选择的项目的路径都会依序作为列表值被输入，而在通过请求访达项目选择输出路径后，就得到了一个类似 <code>[&#39;-c&#39;, &#39;path1&#39;, &#39;path2&#39;, &#39;path3&#39;,...&#39;pathN&#39;] </code>的列表。起始项始终是固定的值 <code>&#39;-c&#39;</code>，所以此处只需要截取第二项至倒数第二项作为 <code>src</code>，以及结尾项作为 <code>dst</code> 即可。</p>
+<p>有了 <code>src</code> 和 <code>dst</code> ，事情就变得非常简单了，这里就用 Python 的 <code>shutil</code> 模块起一个脚本。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import sys,os,shutil</span><br><span class="line"></span><br><span class="line">src &#x3D; sys.argv[1:-1]</span><br><span class="line">dst &#x3D; sys.argv[-1]</span><br><span class="line"></span><br><span class="line">for item in src:</span><br><span class="line">    for root,dirs,files in os.walk(item):</span><br><span class="line">        for file in files:</span><br><span class="line">            old &#x3D; os.path.join(root,file)</span><br><span class="line">            new &#x3D; os.path.join(dst,os.path.relpath(old,item))</span><br><span class="line">            if not os.path.exists(os.path.dirname(new)):                                             </span><br><span class="line">                os.makedirs(os.path.dirname(new))</span><br><span class="line">            shutil.move(old,new)</span><br><span class="line">    shutil.rmtree(item)</span><br></pre></td></tr></table></figure>
+
+<p>现在将脚本拖入工作流，传递输入选择“作为自变量”，再把脚本的输出作为文本导出一份，最后这个样子就大抵堪用了。</p>
+<p><img src="/images/pasted-1.png" alt="upload successful"></p>
+<p>最后来验证一下，看起来没有问题</p>
+<p><img src="/images/pasted-2.png" alt="upload successful"></p>
+
+      
+      </p>
+    </section>
+    <section class="post-meta">
+    
+      <span> Chock</span>
+    
+    on 
+    <a href="/categories/NOTES/" class="post-category">
+    NOTES
+    </a>
+    
+      <time datetime="2022-09-05T14:05:00.000Z" itemprop="datePublished" class="post-date">
+          Sep 05 2022
+      </time>
+      
+    
+    <div class="post-meta-tags">
+    
+    <a href='/tags/NAS/'>NAS</a>,
+    </div>
+    
+    <a href='/tags/macOS/'>macOS</a>,
+    </div>
+    
+    <a href='/tags/Automator/'>Automator</a>
+    </div>
+    
+    
+</section>
+
+
+                                
+                                    
+                                
+  </article>
+  
+  <nav class="pagination" role="pagination">
+    
+    <span class="page-number">Page 1 of 1</span>
+    
+  </nav>
+</main>
+
+
+  <footer class="site-footer clearfix">
+ <section class="copyright"><a href="/">痴呆屋</a> &copy; <script>document.write(new Date().getFullYear())</script> &bull; All rights reserved.</section>
+</footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/jquery-2.0.3.min.js"><\/script>')</script>
+
+<script type="text/javascript" src="/js/jquery.fitvids.js"></script>
+<script type="text/javascript">
+(function($){
+  var $postContent = $(".post-content");
+  $postContent.fitVids();
+})(jQuery);
+</script>
+
+<script type="text/javascript" src="/js/index.js"></script>
+
+
+
+
+
+</body>
+</html>

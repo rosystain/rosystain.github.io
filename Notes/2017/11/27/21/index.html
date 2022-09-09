@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#">
+
+<head>
+  <meta charset="UTF-8" >
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title>在Debian Stretch上通过Steam进行游戏串流 | 痴呆屋</title>
+  <meta name="description" content="" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Steam在Linux下已经有不少游戏，但这可不是我用它的理由。 Steam的家庭流式传输可以使某台PC上的游戏画面以流媒体的形式传输到同网络下另一台装有Steam的设备上，并接受该设备反馈的按键信息。并且在画面损失和延迟控制方面平衡的相当好。 由于是它的本质是流媒体传输，因此对接受端的硬件要求非常低，只需一台能安装Steam且能流畅播放H264编码视频的机子而已(HTPC绝配)。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在Debian Stretch上通过Steam进行游戏串流">
+<meta property="og:url" content="https://rosystain.com/Notes/2017/11/27/21/index.html">
+<meta property="og:site_name" content="痴呆屋">
+<meta property="og:description" content="Steam在Linux下已经有不少游戏，但这可不是我用它的理由。 Steam的家庭流式传输可以使某台PC上的游戏画面以流媒体的形式传输到同网络下另一台装有Steam的设备上，并接受该设备反馈的按键信息。并且在画面损失和延迟控制方面平衡的相当好。 由于是它的本质是流媒体传输，因此对接受端的硬件要求非常低，只需一台能安装Steam且能流畅播放H264编码视频的机子而已(HTPC绝配)。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2017-11-27T05:42:00.000Z">
+<meta property="article:modified_time" content="2020-11-24T06:59:37.000Z">
+<meta property="article:author" content="Chock">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Steam">
+<meta property="article:tag" content="GameStream">
+<meta name="twitter:card" content="summary">
+  <!-- build:css css/screen.css -->
+
+  
+<link rel="stylesheet" href="/css/screen.css">
+
+  
+  <!-- endbuild -->
+  
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+  <meta name="generator" content="痴呆屋">
+  
+  
+  
+</head>
+
+
+<body class="post-template">
+
+  <header class="main-header post-head no-cover" >
+    <nav class="main-nav  clearfix">
+        <a class="back-button icon-arrow-left" href="/">Home</a>
+        <a class="subscribe-button icon-feed" href="/atom.xml">Subscribe</a>
+    </nav>
+    
+    <!--<a class="scroll-down icon-arrow-left" href="#content" data-offset="-45"><span class="hidden">Scroll Down</span></a> -->
+</header>
+
+  
+
+<main id="content" class="content" role="main">
+  <article class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+    <header class="post-header">
+      <h1 class="post-title" itemprop="name">在Debian Stretch上通过Steam进行游戏串流</h1>
+      <section class="post-meta">
+  <time datetime="2017-11-27T05:42:00.000Z" itemprop="datePublished" class="post-date">
+      Nov 27 2017
+  </time>
+  on 
+  <a href="/categories/Notes/" class="post-category">
+  Notes
+  </a>
+  
+    
+  
+  <div class="post-meta-tags">
+  
+  <a href='/tags/Linux/'>Linux</a>,
+  </div>
+  
+  <a href='/tags/Steam/'>Steam</a>,
+  </div>
+  
+  <a href='/tags/GameStream/'>GameStream</a>
+  </div>
+  
+  
+</section>
+    </header>
+    <section class="post-content" itemprop="description articleBody">
+      
+
+      
+      <section class="post-updated">
+  Last updated on <time datetime="2020-11-24T06:59:37.000Z" itemprop="dateModified">
+      Nov 24 2020
+  </time>
+</section>
+
+      
+      <p>Steam在Linux下已经有不少游戏，但这可不是我用它的理由。</p>
+<p>Steam的家庭流式传输可以使某台PC上的游戏画面以流媒体的形式传输到同网络下另一台装有Steam的设备上，并接受该设备反馈的按键信息。并且在画面损失和延迟控制方面平衡的相当好。</p>
+<p>由于是它的本质是流媒体传输，因此对接受端的硬件要求非常低，只需一台能安装Steam且能流畅播放H264编码视频的机子而已(HTPC绝配)。</p>
+<a id="more"></a>
+
+<p>安装前首先确保登陆用户拥有以下权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">usermod -a -G video,audio second\_user</span><br></pre></td></tr></table></figure>
+
+<p>添加Steam的Non-free源到/etc/apt/sources.list</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#SteamRepo Stretch</span></span><br><span class="line">deb http://httpredir.debian.org/debian/ stretch main contrib non-free</span><br></pre></td></tr></table></figure>
+
+<p>对于64位的系统须添加i386的支持</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dpkg --add-architecture i386</span><br></pre></td></tr></table></figure>
+
+<p>安装并使用aptitude进行包管理使它自动下载相关依赖</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">apt install aptitude</span><br><span class="line">aptitude update</span><br><span class="line">aptitude install steam</span><br></pre></td></tr></table></figure>
+
+<p>Steam在Stretch上不会像Jessie那样出现各种各样的问题，通常情况下安装完毕后就可以正常登陆。 </p>
+<p>串流时既可以使用接受设备的控制器（手柄、键盘等），也可直接使用源主机的设备（假如距离不远能收到信号的话） 由于Steam是32位的应用，无法使用64位的驱动，因此需要安装32位驱动才能开启硬件解码，否则在性能较低的设备上可能无法流畅运行。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install i965-va-driver:i386 apt install libva1:i386 apt install libva-x11-1:i386 apt install libva-glx1:i386</span><br></pre></td></tr></table></figure>
+
+<p>安装后重启Steam，进入设置&gt;家用流式传输&gt;高级客户端选项 确保硬件解码已经勾选，开启显示性能信息，再次通过流式传输打开游戏，左下方Debug区域Decoder一栏显示VAAPI hardware decoding就代表硬解生效了。</p>
+<p>N卡和A卡的驱动及其他相关问题可从在通过以下连接查阅 <a target="_blank" rel="noopener" href="https://wiki.debian.org/Steam">https://wiki.debian.org/Steam</a> </p>
+<p>追记: Steam的某次更新似乎修改了控制器的规则，在Debian上可能会遇到手柄无法被识别的情况，需自行添建立配置文件。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/udev/rules.d/99-steam-controller-perms.rules</span><br><span class="line"># This rule is needed for basic functionality of the controller in Steam and keyboard/mouse emulation</span><br><span class="line">SUBSYSTEM==&quot;usb&quot;, ATTRS&#123;idVendor&#125;==&quot;28de&quot;, MODE=&quot;0666&quot;</span><br><span class="line"></span><br><span class="line"># This rule is necessary for gamepad emulation; make sure you replace &#x27;pgriffais&#x27; with a group that the user that runs Steam belongs to</span><br><span class="line">KERNEL==&quot;uinput&quot;, MODE=&quot;0660&quot;, GROUP=&quot;pgriffais&quot;, OPTIONS+=&quot;static_node=uinput&quot;</span><br><span class="line"></span><br><span class="line"># Valve HID devices over USB hidraw</span><br><span class="line">KERNEL==&quot;hidraw*&quot;, ATTRS&#123;idVendor&#125;==&quot;28de&quot;, MODE=&quot;0666&quot;</span><br><span class="line"></span><br><span class="line"># Valve HID devices over bluetooth hidraw</span><br><span class="line">KERNEL==&quot;hidraw*&quot;, KERNELS==&quot;*28DE:*&quot;, MODE=&quot;0666&quot;</span><br><span class="line"></span><br><span class="line"># DualShock 4 over USB hidraw</span><br><span class="line">KERNEL==&quot;hidraw*&quot;, ATTRS&#123;idVendor&#125;==&quot;054c&quot;, ATTRS&#123;idProduct&#125;==&quot;05c4&quot;, MODE=&quot;0666&quot;</span><br><span class="line"></span><br><span class="line"># DualShock 4 wireless adapter over USB hidraw</span><br><span class="line">KERNEL==&quot;hidraw*&quot;, ATTRS&#123;idVendor&#125;==&quot;054c&quot;, ATTRS&#123;idProduct&#125;==&quot;0ba0&quot;, MODE=&quot;0666&quot;</span><br><span class="line"></span><br><span class="line"># DualShock 4 Slim over USB hidraw</span><br><span class="line">KERNEL==&quot;hidraw*&quot;, ATTRS&#123;idVendor&#125;==&quot;054c&quot;, ATTRS&#123;idProduct&#125;==&quot;09cc&quot;, MODE=&quot;0666&quot;</span><br><span class="line"></span><br><span class="line"># DualShock 4 over bluetooth hidraw</span><br><span class="line">KERNEL==&quot;hidraw*&quot;, KERNELS==&quot;*054C:05C4*&quot;, MODE=&quot;0666&quot;</span><br><span class="line"></span><br><span class="line"># DualShock 4 Slim over bluetooth hidraw</span><br><span class="line">KERNEL==&quot;hidraw*&quot;, KERNELS==&quot;*054C:09CC*&quot;, MODE=&quot;0666&quot;</span><br><span class="line"></span><br><span class="line"># Nintendo Switch Pro Controller over USB hidraw</span><br><span class="line">KERNEL==&quot;hidraw*&quot;, ATTRS&#123;idVendor&#125;==&quot;057e&quot;, ATTRS&#123;idProduct&#125;==&quot;2009&quot;, MODE=&quot;0666&quot;</span><br><span class="line"></span><br><span class="line"># Nintendo Switch Pro Controller over bluetooth hidraw</span><br><span class="line">KERNEL==&quot;hidraw*&quot;, KERNELS==&quot;*057E:2009*&quot;, MODE=&quot;0666&quot;</span><br></pre></td></tr></table></figure>
+
+<p>保存并退出后，重新加载一遍udev </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">udevadm control --reload udevadm trigger</span><br></pre></td></tr></table></figure>
+
+<p>再次重启Steam应该就能正常识别手柄了。</p>
+
+    </section>
+    <!--<footer class="post-footer">
+      <section class="author">
+    <h4>Chock</h4>
+    <p></p>
+    
+      <section>
+        
+          <a href="" class="author-social">twitter</a>
+        
+          <a href="" class="author-social">google+</a>
+        
+          <a href="" class="author-social">github</a>
+        
+      </section>
+    </div>
+</section>
+
+      <section class="share">
+    <h4>Share this post</h4>
+    <a class="icon-twitter" target="_blank" rel="noopener" href="http://twitter.com/share?url=https://rosystain.com/Notes/2017/11/27/21/"
+       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+        <span class="hidden">Twitter</span>
+    </a>
+    <a class="icon-facebook" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u=https://rosystain.com/Notes/2017/11/27/21/"
+       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+        <span class="hidden">Facebook</span>
+    </a>
+    <a class="icon-google-plus" target="_blank" rel="noopener" href="https://plus.google.com/share?url=https://rosystain.com/Notes/2017/11/27/21/"
+       onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+        <span class="hidden">Google+</span>
+    </a>
+</section>
+    </footer>-->
+  </article>
+  <nav class="pagination" role="pagination">
+  
+  <a class="newer-posts" href="/Life/2019/04/08/219/" title="记一次春游">
+    ← Newer Post
+  </a>
+  
+  <span class="page-number">•</span>
+  
+  <a class="older-posts" href="/Notes/2017/11/26/29/" title="在Debian Strech上开启Miredo">
+      Older Post →
+  </a>
+  
+</nav>
+
+  <div id="comment" class="comments-area">
+    <h1 class="title">Comments</h1>
+
+    <div class="valine_comment"></div>
+	<!--Leancloud 操作库:-->
+	<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+	<!--Valine 的核心代码库-->
+	<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+	<script>
+	new Valine({
+      el: '.valine_comment',
+      app_id: 'DHqLqeJy9e2KAtlclAT1PshW-MdYXbMMI',
+      app_key: 'I8EymBHiMVYrerFCtaq83rc6',
+      placeholder: '',
+      notify: '',
+      verify: '',
+    });
+	</script>
+</div>
+</main>
+
+
+  <footer class="site-footer clearfix">
+ <section class="copyright"><a href="/">痴呆屋</a> &copy; <script>document.write(new Date().getFullYear())</script> &bull; All rights reserved.</section>
+</footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/jquery-2.0.3.min.js"><\/script>')</script>
+
+<script type="text/javascript" src="/js/jquery.fitvids.js"></script>
+<script type="text/javascript">
+(function($){
+  var $postContent = $(".post-content");
+  $postContent.fitVids();
+})(jQuery);
+</script>
+
+<script type="text/javascript" src="/js/index.js"></script>
+
+
+
+
+
+</body>
+</html>

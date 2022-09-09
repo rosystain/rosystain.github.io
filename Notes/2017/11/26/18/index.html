@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#">
+
+<head>
+  <meta charset="UTF-8" >
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title>在OMV4上安装Transmission并开启自动下载 | 痴呆屋</title>
+  <meta name="description" content="" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="OMV4的插件库上暂时没有任何BT下载器，虽然使用DOCKER安装一样很方便，但Transmission本身有非常优秀的GUI远端控制，配置完后几乎不需要再去使用WEBUI来管理，因此这里直接通过CLI安装了。 Debian的官方源本身提供Transmission，所以只需  1apt-get install transmission-daemon  安装完毕后先中止服务，接着修改的它的配置文件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在OMV4上安装Transmission并开启自动下载">
+<meta property="og:url" content="https://rosystain.com/Notes/2017/11/26/18/index.html">
+<meta property="og:site_name" content="痴呆屋">
+<meta property="og:description" content="OMV4的插件库上暂时没有任何BT下载器，虽然使用DOCKER安装一样很方便，但Transmission本身有非常优秀的GUI远端控制，配置完后几乎不需要再去使用WEBUI来管理，因此这里直接通过CLI安装了。 Debian的官方源本身提供Transmission，所以只需  1apt-get install transmission-daemon  安装完毕后先中止服务，接着修改的它的配置文件">
+<meta property="og:locale">
+<meta property="article:published_time" content="2017-11-26T12:11:00.000Z">
+<meta property="article:modified_time" content="2020-11-24T06:58:05.000Z">
+<meta property="article:author" content="Chock">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="OpenMediaVault">
+<meta name="twitter:card" content="summary">
+  <!-- build:css css/screen.css -->
+
+  
+<link rel="stylesheet" href="/css/screen.css">
+
+  
+  <!-- endbuild -->
+  
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+  <meta name="generator" content="痴呆屋">
+  
+  
+  
+</head>
+
+
+<body class="post-template">
+
+  <header class="main-header post-head no-cover" >
+    <nav class="main-nav  clearfix">
+        <a class="back-button icon-arrow-left" href="/">Home</a>
+        <a class="subscribe-button icon-feed" href="/atom.xml">Subscribe</a>
+    </nav>
+    
+    <!--<a class="scroll-down icon-arrow-left" href="#content" data-offset="-45"><span class="hidden">Scroll Down</span></a> -->
+</header>
+
+  
+
+<main id="content" class="content" role="main">
+  <article class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+    <header class="post-header">
+      <h1 class="post-title" itemprop="name">在OMV4上安装Transmission并开启自动下载</h1>
+      <section class="post-meta">
+  <time datetime="2017-11-26T12:11:00.000Z" itemprop="datePublished" class="post-date">
+      Nov 26 2017
+  </time>
+  on 
+  <a href="/categories/Notes/" class="post-category">
+  Notes
+  </a>
+  
+    
+  
+  <div class="post-meta-tags">
+  
+  <a href='/tags/Linux/'>Linux</a>,
+  </div>
+  
+  <a href='/tags/OpenMediaVault/'>OpenMediaVault</a>
+  </div>
+  
+  
+</section>
+    </header>
+    <section class="post-content" itemprop="description articleBody">
+      
+
+      
+      <section class="post-updated">
+  Last updated on <time datetime="2020-11-24T06:58:05.000Z" itemprop="dateModified">
+      Nov 24 2020
+  </time>
+</section>
+
+      
+      <p>OMV4的插件库上暂时没有任何BT下载器，虽然使用DOCKER安装一样很方便，但Transmission本身有非常优秀的GUI远端控制，配置完后几乎不需要再去使用WEBUI来管理，因此这里直接通过CLI安装了。</p>
+<p>Debian的官方源本身提供Transmission，所以只需 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install transmission-daemon</span><br></pre></td></tr></table></figure>
+
+<p>安装完毕后先中止服务，接着修改的它的配置文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">service transmission-daemon stop</span><br><span class="line">vim /etc/transmission-daemon/settings.json</span><br></pre></td></tr></table></figure>
+
+<p>确保相关设置为以下参数以启用远端管理</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&quot;rpc-enable&quot; = true,</span><br><span class="line">&quot;rpc-password&quot; = yourpassword,</span><br><span class="line">&quot;rpc-port&quot; = 9091 (or customport),</span><br><span class="line">&quot;rpc-username&quot; = transmission (or customname),</span><br><span class="line">&quot;rpc-whitelist&quot; = &quot;\*&quot;,</span><br></pre></td></tr></table></figure>
+
+<p>在末尾添加watch相关参数以开启自动下载（非末尾项须逗号结尾）</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&quot;watch-dir&quot;: &quot;PATH/TO/Watch”,</span><br><span class="line">&quot;watch-dir-enabled&quot;: true</span><br></pre></td></tr></table></figure>
+
+<p>保存并退出，重启Transimission应该就能用Transmission Remote GUI连接上了。 此时可直接通过Remote修改其他数值。</p>
+
+    </section>
+    <!--<footer class="post-footer">
+      <section class="author">
+    <h4>Chock</h4>
+    <p></p>
+    
+      <section>
+        
+          <a href="" class="author-social">twitter</a>
+        
+          <a href="" class="author-social">google+</a>
+        
+          <a href="" class="author-social">github</a>
+        
+      </section>
+    </div>
+</section>
+
+      <section class="share">
+    <h4>Share this post</h4>
+    <a class="icon-twitter" target="_blank" rel="noopener" href="http://twitter.com/share?url=https://rosystain.com/Notes/2017/11/26/18/"
+       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+        <span class="hidden">Twitter</span>
+    </a>
+    <a class="icon-facebook" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u=https://rosystain.com/Notes/2017/11/26/18/"
+       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+        <span class="hidden">Facebook</span>
+    </a>
+    <a class="icon-google-plus" target="_blank" rel="noopener" href="https://plus.google.com/share?url=https://rosystain.com/Notes/2017/11/26/18/"
+       onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+        <span class="hidden">Google+</span>
+    </a>
+</section>
+    </footer>-->
+  </article>
+  <nav class="pagination" role="pagination">
+  
+  <a class="newer-posts" href="/Notes/2017/11/26/29/" title="在Debian Strech上开启Miredo">
+    ← Newer Post
+  </a>
+  
+  <span class="page-number">•</span>
+  
+  <a class="older-posts" href="/Notes/2017/11/26/6/" title="在Debian Stretch上安装OMV 4">
+      Older Post →
+  </a>
+  
+</nav>
+
+  <div id="comment" class="comments-area">
+    <h1 class="title">Comments</h1>
+
+    <div class="valine_comment"></div>
+	<!--Leancloud 操作库:-->
+	<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+	<!--Valine 的核心代码库-->
+	<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+	<script>
+	new Valine({
+      el: '.valine_comment',
+      app_id: 'DHqLqeJy9e2KAtlclAT1PshW-MdYXbMMI',
+      app_key: 'I8EymBHiMVYrerFCtaq83rc6',
+      placeholder: '',
+      notify: '',
+      verify: '',
+    });
+	</script>
+</div>
+</main>
+
+
+  <footer class="site-footer clearfix">
+ <section class="copyright"><a href="/">痴呆屋</a> &copy; <script>document.write(new Date().getFullYear())</script> &bull; All rights reserved.</section>
+</footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/jquery-2.0.3.min.js"><\/script>')</script>
+
+<script type="text/javascript" src="/js/jquery.fitvids.js"></script>
+<script type="text/javascript">
+(function($){
+  var $postContent = $(".post-content");
+  $postContent.fitVids();
+})(jQuery);
+</script>
+
+<script type="text/javascript" src="/js/index.js"></script>
+
+
+
+
+
+</body>
+</html>
