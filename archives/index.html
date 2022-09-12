@@ -60,7 +60,7 @@
       
 
   <h2 class="post-title" itemprop="name">
-    <a href="/Notes/2022/09/09/cl7uc53d0000190pm3s0xcxlv/">让 macOS 更好地合并同名文件夹</a>
+    <a href="/Notes/2022/09/09/cl7yw87w500053fpm251d320s/">让 macOS 更好地合并同名文件夹</a>
   </h2>
 
 
@@ -78,7 +78,7 @@
 <p><img src="/images/pasted-0.png" alt="upload successful"></p>
 <p>在运行工作流的时候，所有被选择的项目的路径都会依序作为列表值被输入，而在通过请求访达项目选择输出路径后，就得到了一个类似 <code>[&#39;-c&#39;, &#39;path1&#39;, &#39;path2&#39;, &#39;path3&#39;,...&#39;pathN&#39;] </code>的列表。起始项始终是固定的值 <code>&#39;-c&#39;</code>，所以此处只需要截取第二项至倒数第二项作为 <code>src</code>，以及结尾项作为 <code>dst</code> 即可。</p>
 <p>有了 <code>src</code> 和 <code>dst</code> ，事情就变得非常简单了，这里就用 Python 的 <code>shutil</code> 模块起一个脚本。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import sys,os,shutil</span><br><span class="line"></span><br><span class="line">src &#x3D; sys.argv[1:-1]</span><br><span class="line">dst &#x3D; sys.argv[-1]</span><br><span class="line"></span><br><span class="line">for item in src:</span><br><span class="line">    for root,dirs,files in os.walk(item):</span><br><span class="line">        for file in files:</span><br><span class="line">            old &#x3D; os.path.join(root,file)</span><br><span class="line">            new &#x3D; os.path.join(dst,os.path.relpath(old,item))</span><br><span class="line">            if not os.path.exists(os.path.dirname(new)):                                             </span><br><span class="line">                os.makedirs(os.path.dirname(new))</span><br><span class="line">            shutil.move(old,new)</span><br><span class="line">    shutil.rmtree(item)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import sys,os,shutil</span><br><span class="line"></span><br><span class="line">src &#x3D; sys.argv[1:-1]</span><br><span class="line">dst &#x3D; sys.argv[-1]</span><br><span class="line"></span><br><span class="line">for item in src:</span><br><span class="line">    for root,dirs,files in os.walk(item):</span><br><span class="line">        for file in files:</span><br><span class="line">            old &#x3D; os.path.join(root,file)</span><br><span class="line">            start &#x3D; os.path.dirname(item.rstrip(&#39;&#x2F;&#39;))</span><br><span class="line">            new &#x3D; os.path.join(dst,os.path.relpath(old,start))</span><br><span class="line">            if not os.path.exists(os.path.dirname(new)):                                             </span><br><span class="line">                os.makedirs(os.path.dirname(new))</span><br><span class="line">            shutil.move(old,new)</span><br><span class="line">    shutil.rmtree(item)</span><br></pre></td></tr></table></figure>
 
 <p>现在将脚本拖入工作流，传递输入选择“作为自变量”，再把脚本的输出作为文本导出一份，最后这个样子就大抵堪用了。</p>
 <p><img src="/images/pasted-1.png" alt="upload successful"></p>
@@ -128,7 +128,7 @@
       
 
   <h2 class="post-title" itemprop="name">
-    <a href="/Misc/2020/12/07/cl7uc53d5000290pmev7t3cc0/">独立的Plex音乐客户端：Plexamp</a>
+    <a href="/Misc/2020/12/07/cl7yw87vs00003fpmgir86jms/">独立的Plex音乐客户端：Plexamp</a>
   </h2>
 
 
@@ -143,7 +143,7 @@
 <p>如果你也使用或打算使用Plex管理音乐且正好购买了Plex Pass的话，那么Plexamp是一款能让你持续上头的音乐播放器。</p>
 		
 		<p>
-			<a href="/Misc/2020/12/07/cl7uc53d5000290pmev7t3cc0/" class="excerpt-link">Read More...</a>
+			<a href="/Misc/2020/12/07/cl7yw87vs00003fpmgir86jms/" class="excerpt-link">Read More...</a>
 		</p>
 		        
       
@@ -189,7 +189,7 @@
       
 
   <h2 class="post-title" itemprop="name">
-    <a href="/Life/2020/10/19/cl7uc53dd000690pm7o6mdfho/">关于跑步</a>
+    <a href="/Life/2020/10/19/cl7yw87vz00023fpm4v1se99g/">关于跑步</a>
   </h2>
 
 
@@ -240,7 +240,7 @@
       
 
   <h2 class="post-title" itemprop="name">
-    <a href="/Misc/2020/10/01/cl7uc53ek001v90pm40qj3jjx/">正式弃用Wordpress</a>
+    <a href="/Misc/2020/10/01/cl7yw87xd001p3fpmg4q93xuu/">正式弃用Wordpress</a>
   </h2>
 
 
@@ -252,7 +252,7 @@
         <p><del>才不会说是因为没有备份Wordpress才被迫更换平台的呢。</del></p>
 		
 		<p>
-			<a href="/Misc/2020/10/01/cl7uc53ek001v90pm40qj3jjx/" class="excerpt-link">Read More...</a>
+			<a href="/Misc/2020/10/01/cl7yw87xd001p3fpmg4q93xuu/" class="excerpt-link">Read More...</a>
 		</p>
 		        
       
@@ -389,16 +389,16 @@
     
     <div class="post-meta-tags">
     
-    <a href='/tags/Linux/'>Linux</a>,
-    </div>
-    
     <a href='/tags/ER-X/'>ER-X</a>,
     </div>
     
     <a href='/tags/ubnt/'>ubnt</a>,
     </div>
     
-    <a href='/tags/ZeroTier/'>ZeroTier</a>
+    <a href='/tags/ZeroTier/'>ZeroTier</a>,
+    </div>
+    
+    <a href='/tags/Linux/'>Linux</a>
     </div>
     
     
