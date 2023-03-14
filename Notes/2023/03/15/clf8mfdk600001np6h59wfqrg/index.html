@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#">
+
+<head>
+  <meta charset="UTF-8" >
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title>使用 Home Assistant 控制 Logitech Unifying 频道 | 痴呆屋</title>
+  <meta name="description" content="" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="前言自入手 MX Master 2S 起就对罗技的 Unifying 优联系列颇为钟爱，后来也把键盘换成了魔改 K375s 的 DIY 键盘。优联的 Flow 在双机双屏的情况下频道切换十分自如，但相较而言在双机共用一屏的时候因为手动切换频道的按键在鼠标底部就显得十分不便了。 此时购买带 KVM 的 HDMI 切换器使两台电脑共用一个接收器算是比较简单粗暴的办法，但因为听到不少关于此类切换器可能会">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 Home Assistant 控制 Logitech Unifying 频道">
+<meta property="og:url" content="https://rosystain.com/Notes/2023/03/15/clf8mfdk600001np6h59wfqrg/index.html">
+<meta property="og:site_name" content="痴呆屋">
+<meta property="og:description" content="前言自入手 MX Master 2S 起就对罗技的 Unifying 优联系列颇为钟爱，后来也把键盘换成了魔改 K375s 的 DIY 键盘。优联的 Flow 在双机双屏的情况下频道切换十分自如，但相较而言在双机共用一屏的时候因为手动切换频道的按键在鼠标底部就显得十分不便了。 此时购买带 KVM 的 HDMI 切换器使两台电脑共用一个接收器算是比较简单粗暴的办法，但因为听到不少关于此类切换器可能会">
+<meta property="og:locale">
+<meta property="og:image" content="https://rosystain.com/images/pasted-4.png">
+<meta property="article:published_time" content="2023-03-14T18:23:00.000Z">
+<meta property="article:modified_time" content="2023-03-14T18:59:46.016Z">
+<meta property="article:author" content="Chock">
+<meta property="article:tag" content="Unifying">
+<meta property="article:tag" content="Home Assistant">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://rosystain.com/images/pasted-4.png">
+  <!-- build:css css/screen.css -->
+
+  
+<link rel="stylesheet" href="/css/screen.css">
+
+  
+  <!-- endbuild -->
+  
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+  <meta name="generator" content="痴呆屋">
+  
+  
+  
+</head>
+
+
+<body class="post-template">
+
+  <header class="main-header post-head no-cover" >
+    <nav class="main-nav  clearfix">
+        <a class="back-button icon-arrow-left" href="/">Home</a>
+        <a class="subscribe-button icon-feed" href="/atom.xml">Subscribe</a>
+    </nav>
+    
+    <!--<a class="scroll-down icon-arrow-left" href="#content" data-offset="-45"><span class="hidden">Scroll Down</span></a> -->
+</header>
+
+  
+
+<main id="content" class="content" role="main">
+  <article class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+    <header class="post-header">
+      <h1 class="post-title" itemprop="name">使用 Home Assistant 控制 Logitech Unifying 频道</h1>
+      <section class="post-meta">
+  <time datetime="2023-03-14T18:23:00.000Z" itemprop="datePublished" class="post-date">
+      Mar 15 2023
+  </time>
+  on 
+  <a href="/categories/Notes/" class="post-category">
+  Notes
+  </a>
+  
+    
+  
+  <div class="post-meta-tags">
+  
+  <a href='/tags/Unifying/'>Unifying</a>,
+  </div>
+  
+  <a href='/tags/Home-Assistant/'>Home Assistant</a>
+  </div>
+  
+  
+</section>
+    </header>
+    <section class="post-content" itemprop="description articleBody">
+      
+
+      
+      <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>自入手 MX Master 2S 起就对罗技的 Unifying 优联系列颇为钟爱，后来也把键盘换成了魔改 K375s 的 DIY 键盘。优联的 Flow 在双机双屏的情况下频道切换十分自如，但相较而言在双机共用一屏的时候因为手动切换频道的按键在鼠标底部就显得十分不便了。</p>
+<p>此时购买带 KVM 的 HDMI 切换器使两台电脑共用一个接收器算是比较简单粗暴的办法，但因为听到不少关于此类切换器可能会在使用中遇到各种Bug迟迟没有下手。</p>
+<p>于是我便想，有没有一种方法可以用命令来切换键鼠的频道，从而进一步设定调用规则来实现双机一屏的自动切换呢？想着想着我便找到了这个项目 <a target="_blank" rel="noopener" href="https://github.com/marcelhoffs/input-switcher">marcelhoffs/input-switcher</a>。经过 2 天的测试算是得到了一个相对满意的结果，特此记录一下。</p>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>此脚本的原理大概是利用 <a target="_blank" rel="noopener" href="https://github.com/todbot/hidapitester/">hidapitester</a> 直接向特定硬件 ID 的 USB 设备发送一串 16 进制的报文来实现频道切换。具体报文可以通过分析 Linux 下的罗技驱动程序 <a target="_blank" rel="noopener" href="https://github.com/pwr-Solaar/Solaar">Solaar</a> 进行推测，原 Repo 只提供了 MX Anywhere 和 MX Keys 的报文，在实际使用中发现并不能兼容我的 MX Master 2S 与 K375s，因此需要自行使用 Solaar 提取。</p>
+<p>随便起一个 Ubuntu 虚拟机，桌面环境可以直接从自带的应用中心搜索安装 Solaar。</p>
+<p><img src="/images/pasted-4.png" alt="upload successful"></p>
+<p>随后打开 Solaar，插上接收器，设备列表中已配对的设备会亮起，此时打开终端，先查询下MX Master 2S</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">solaar -dd config &quot;MX Master 2S&quot; change-host 1 #任意其他频道，此处使用频道1</span><br></pre></td></tr></table></figure>
+<p>顺利的话会返回以下信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logitech_receiver.base: (17) &lt;&#x3D; w[11 01 091A 01000000000000000000000000000000]</span><br></pre></td></tr></table></figure>
+<p>根据 <a target="_blank" rel="noopener" href="https://github.com/marcelhoffs/input-switcher">marcelhoffs/input-switcher</a> 的说明，可以确认 MX Master 2S 切换至频道 1 时所发送的报文对应到 hidapitester 的格式为 <code>11,01,09,1A,01,00,00</code>。其中 <code>09</code> 对应具体的设备型号，<code>1A</code> 是一个随机数，这里只需要记住这两个数值即可。</p>
+<p>同样的办法查询 K375s</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">solaar -dd config &quot;K375s&quot; change-host 1</span><br></pre></td></tr></table></figure>
+<p>返回以下信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logitech_receiver.base: (19) &lt;&#x3D; w[11 03 081D 01000000000000000000000000000000]</span><br></pre></td></tr></table></figure>
+<p>记录 <code>081D</code>。</p>
+<h2 id="配置脚本"><a href="#配置脚本" class="headerlink" title="配置脚本"></a>配置脚本</h2><p>下载 <a target="_blank" rel="noopener" href="https://github.com/marcelhoffs/input-switcher">marcelhoffs/input-switcher</a> ，分别将对应系统的可执行文件（hdiapitester）与示例脚本放在适当的路径下。</p>
+<h4 id="1-Windows"><a href="#1-Windows" class="headerlink" title="1. Windows"></a>1. Windows</h4><p>我在 Windows 下使用优联的频道1，希望通过脚本切换到频道2。</p>
+<p>编辑 <code>switch_to_2.bat</code>，找到 <code>--send-output 0x10,0x01,0x09,0x1e,0x01,0x00,0x00</code> 字段，其中，开头的 <code>0x10</code> 为固定数值，紧接的 <code>0x01</code> 对应优联配对程序中的设备顺序（通常 <code>0x01</code> 对应键盘， <code>0x02</code> 对应鼠标，可在优联配对程序的高级设置中确认顺序），第三位第四位 <code>0x09,0x1e</code> 对应前面在 Ubuntu 下获取的设备码和随机码， 第五位对应设备频道编号，但表记不同的是这里的起始号为 0，因此这里的 <code>0x01</code> 对应频道 2，最后两位固定不变。</p>
+<p>在理解报文规律之后，便可以放心将示例中 MX Keys 的命令 替换成适配 K375s 的了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\hidapitester.exe --vidpid 046D:C52B --usage 0x0001 --usagePage 0xFF00 --open --length 7 --send-output 0x10,0x01,0x08,0x1d,0x01,0x00,0x00</span><br></pre></td></tr></table></figure>
+
+<p>MX Master 2S 也是如此：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\hidapitester.exe --vidpid 046D:C52B --usage 0x0001 --usagePage 0xFF00 --open --length 7 --send-output 0x10,0x01,0x09,0x1a,0x01,0x00,0x00</span><br></pre></td></tr></table></figure>
+
+<p>修改保存后直接执行脚本就可以判断频道切换有没有生效了。</p>
+<h4 id="2-macOS"><a href="#2-macOS" class="headerlink" title="2. macOS"></a>2. macOS</h4><p>macOS 下的配置基本上大同小异，按照 <code>switch.sh</code> 中的注视直接给变量赋值即可，除了第五位的频道编号要换成相对的数值外其余均可参照 Windows 所使用的命令。</p>
+<p>同样，修改保存后执行脚本测试是否生效。</p>
+<h2 id="Home-Assistant-自动化"><a href="#Home-Assistant-自动化" class="headerlink" title="Home Assistant 自动化"></a>Home Assistant 自动化</h2><p>在上面的工作全部完成之后，只需要利用 Logi Options 将脚本绑定到按键上就可以一键切换频道了。</p>
+<p>当然也可以让 Home Assistant 通过 mqtt 或者 ssh 的方式从后台调用脚本，我原本就十分依赖 HA 来控制 LG C2 的信号源，而现在只需要在切换 HDMI 信号的时候顺带执行前面做好的脚本就可以实现键鼠与显示器的输入源联动了。</p>
+<p>Windows 下只要用 HASS.Agent 内建的 Commands 功能就能将脚本打包成实体推送到 HA 服务器了，但 macOS 上似乎就只有 SSH 这条路比较好走了。</p>
+<p>除了在设置里启用 SSH， macOS 下还要注意 Ventura 开始默认不再支持 rsa 密钥，于是改用 ed25519。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t ed25519</span><br></pre></td></tr></table></figure>
+
+<p>另外，部署在 Docker 上的 Home Assistant 除了要映射公私钥之外，还需要确保 kown_host 文件持久化，否则每次重启容器后的第一次连接都会因为安全提示阻止脚本执行。可增加参数 <code>-o UserKnownHostsFile=CUSTOM_PATH/known_hosts</code> 重新指定文件位置。</p>
+<p>最后再打包一个 Shell Command 的实例，重启 HA 就可以根据需求调用了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">shell_command:</span><br><span class="line">    switch_input: </span><br><span class="line">		ssh -i &#x2F;config&#x2F;.ssh&#x2F;id_ed25519 -o UserKnownHostsFile&#x3D;&#x2F;config&#x2F;.ssh&#x2F;known_hosts USER@HOST_IP &quot;bash ~&#x2F;switch.sh&quot;</span><br></pre></td></tr></table></figure>
+    </section>
+    <!--<footer class="post-footer">
+      <section class="author">
+    <h4>Chock</h4>
+    <p></p>
+    
+      <section>
+        
+          <a href="" class="author-social">twitter</a>
+        
+          <a href="" class="author-social">google+</a>
+        
+          <a href="" class="author-social">github</a>
+        
+      </section>
+    </div>
+</section>
+
+      <section class="share">
+    <h4>Share this post</h4>
+    <a class="icon-twitter" target="_blank" rel="noopener" href="http://twitter.com/share?url=https://rosystain.com/Notes/2023/03/15/clf8mfdk600001np6h59wfqrg/"
+       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+        <span class="hidden">Twitter</span>
+    </a>
+    <a class="icon-facebook" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u=https://rosystain.com/Notes/2023/03/15/clf8mfdk600001np6h59wfqrg/"
+       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+        <span class="hidden">Facebook</span>
+    </a>
+    <a class="icon-google-plus" target="_blank" rel="noopener" href="https://plus.google.com/share?url=https://rosystain.com/Notes/2023/03/15/clf8mfdk600001np6h59wfqrg/"
+       onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+        <span class="hidden">Google+</span>
+    </a>
+</section>
+    </footer>-->
+  </article>
+  <nav class="pagination" role="pagination">
+  
+  <span class="page-number">•</span>
+  
+  <a class="older-posts" href="/Notes/2022/09/09/cl7yw87w500053fpm251d320s/" title="让 macOS 更好地合并同名文件夹">
+      Older Post →
+  </a>
+  
+</nav>
+
+  <div id="comment" class="comments-area">
+    <h1 class="title">Comments</h1>
+
+    <div class="valine_comment"></div>
+	<!--Leancloud 操作库:-->
+	<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+	<!--Valine 的核心代码库-->
+	<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+	<script>
+	new Valine({
+      el: '.valine_comment',
+      app_id: 'DHqLqeJy9e2KAtlclAT1PshW-MdYXbMMI',
+      app_key: 'I8EymBHiMVYrerFCtaq83rc6',
+      placeholder: '',
+      notify: '',
+      verify: '',
+    });
+	</script>
+</div>
+</main>
+
+
+  <footer class="site-footer clearfix">
+ <section class="copyright"><a href="/">痴呆屋</a> &copy; <script>document.write(new Date().getFullYear())</script> &bull; All rights reserved.</section>
+</footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/jquery-2.0.3.min.js"><\/script>')</script>
+
+<script type="text/javascript" src="/js/jquery.fitvids.js"></script>
+<script type="text/javascript">
+(function($){
+  var $postContent = $(".post-content");
+  $postContent.fitVids();
+})(jQuery);
+</script>
+
+<script type="text/javascript" src="/js/index.js"></script>
+
+
+
+
+
+</body>
+</html>
