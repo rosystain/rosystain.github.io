@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>痴呆屋</title>
+  
+  
+  <link href="https://rosystain.com/atom.xml" rel="self"/>
+  
+  <link href="https://rosystain.com/"/>
+  <updated>2023-03-15T05:13:09.315Z</updated>
+  <id>https://rosystain.com/</id>
+  
+  <author>
+    <name>Chock</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>使用 Home Assistant 控制 Logitech Unifying 频道</title>
+    <link href="https://rosystain.com/Notes/2023/03/15/cm26a8vqs0009xfrsde0eg8vj/"/>
+    <id>https://rosystain.com/Notes/2023/03/15/cm26a8vqs0009xfrsde0eg8vj/</id>
+    <published>2023-03-14T18:23:00.000Z</published>
+    <updated>2023-03-15T05:13:09.315Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>自入手 MX Master 2S 起就对罗技的 Unifying 优联系列颇为钟爱，后来也把键盘换成了魔改 K375s 的 DIY 键盘。优联的 Flow 在双机双屏的情况下频道切换十分自如，但相较而言在双机共用一屏的时候因为手动切换频道的按键在鼠标底部就显得十分不便了。</p><p>此时购买带 KVM 的 HDMI 切换器使两台电脑共用一个接收器算是比较简单粗暴的办法，但因为听到不少关于此类切换器可能会在使用中遇到各种Bug迟迟没有下手。</p><p>于是我便想，有没有一种方法可以用命令来切换键鼠的频道，从而进一步设定调用规则来实现双机一屏的自动切换呢？想着想着我便找到了这个项目 <a href="https://github.com/marcelhoffs/input-switcher">marcelhoffs/input-switcher</a>。经过 2 天的测试算是得到了一个相对满意的结果，特此记录一下。</p><a id="more"></a><h4 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h4><p>此脚本的原理大概是利用 <a href="https://github.com/todbot/hidapitester/">hidapitester</a> 直接向特定硬件 ID 的 USB 设备发送一串 16 进制的报文来实现频道切换。具体报文可以通过分析 Linux 下的罗技驱动程序 <a href="https://github.com/pwr-Solaar/Solaar">Solaar</a> 进行推测，原 Repo 只提供了 MX Anywhere 和 MX Keys 的报文，在实际使用中发现并不能兼容我的 MX Master 2S 与 K375s，因此需要自行使用 Solaar 提取。</p><p>随便起一个 Ubuntu 虚拟机，桌面环境可以直接从自带的应用中心搜索安装 Solaar。</p><p><img src="/images/pasted-4.png" alt="upload successful"></p><p>随后打开 Solaar，插上接收器，设备列表中已配对的设备会亮起，此时打开终端，先查询下MX Master 2S</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">solaar -dd config &quot;MX Master 2S&quot; change-host 1 #任意其他频道，此处使用频道1</span><br></pre></td></tr></table></figure><p>顺利的话会返回以下信息</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logitech_receiver.base: (17) &lt;&#x3D; w[11 01 091A 01000000000000000000000000000000]</span><br></pre></td></tr></table></figure><p>根据 <a href="https://github.com/marcelhoffs/input-switcher">marcelhoffs/input-switcher</a> 的说明，可以确认 MX Master 2S 切换至频道 1 时所发送的报文对应到 hidapitester 的格式为 <code>11,01,09,1A,01,00,00</code>。其中 <code>09</code> 对应具体的设备型号，<code>1A</code> 是一个随机数，这里只需要记住这两个数值即可。</p><p>同样的办法查询 K375s</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">solaar -dd config &quot;K375s&quot; change-host 1</span><br></pre></td></tr></table></figure><p>返回以下信息</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logitech_receiver.base: (19) &lt;&#x3D; w[11 03 081D 01000000000000000000000000000000]</span><br></pre></td></tr></table></figure><p>记录 <code>081D</code>。</p><h4 id="配置脚本"><a href="#配置脚本" class="headerlink" title="配置脚本"></a>配置脚本</h4><p>下载 <a href="https://github.com/marcelhoffs/input-switcher">marcelhoffs/input-switcher</a> ，分别将对应系统的可执行文件（hdiapitester）与示例脚本放在适当的路径下。</p><p>** 1. Windows **</p><p>我在 Windows 下使用优联的频道1，希望通过脚本切换到频道2。</p><p>编辑 <code>switch_to_2.bat</code>，找到 <code>--send-output 0x10,0x01,0x09,0x1e,0x01,0x00,0x00</code> 字段，其中，开头的 <code>0x10</code> 为固定数值不用变，紧接的 <code>0x01</code> 对应优联配对程序中的设备顺序（通常 <code>0x01</code> 对应键盘， <code>0x02</code> 对应鼠标，但我这边其实是反过来的，具体可在优联配对程序的高级设置中确认顺序），第三位第四位 <code>0x09,0x1e</code> 对应前面在 Ubuntu 下获取的设备码和随机码， 第五位需要把想要切换的频道号减去 1 （因为频道 1 对应的编号为 0x00 ），因此这里的 <code>0x01</code> 对应频道 2，最后两位固定不变。</p><p>在理解报文规律之后，便可以放心将示例中 MX Keys 的命令 替换成适配 K375s 的了：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\hidapitester.exe --vidpid 046D:C52B --usage 0x0001 --usagePage 0xFF00 --open --length 7 --send-output 0x10,0x02,0x08,0x1d,0x01,0x00,0x00</span><br></pre></td></tr></table></figure><p>MX Master 2S 也是如此：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\hidapitester.exe --vidpid 046D:C52B --usage 0x0001 --usagePage 0xFF00 --open --length 7 --send-output 0x10,0x01,0x09,0x1a,0x01,0x00,0x00</span><br></pre></td></tr></table></figure><p>修改保存后直接执行脚本就可以判断频道切换有没有生效了。</p><p>** 2. macOS **</p><p>macOS 下的配置基本上大同小异，按照 <code>switch.sh</code> 中的注视直接给变量赋值即可，除了第五位的频道编号要换成相对的数值外其余均可参照 Windows 所使用的命令。</p><p>同样，修改保存后执行脚本测试是否生效。</p><h4 id="Home-Assistant-自动化"><a href="#Home-Assistant-自动化" class="headerlink" title="Home Assistant 自动化"></a>Home Assistant 自动化</h4><p>在上面的工作全部完成之后，只需要利用 Logi Options 将脚本绑定到按键上就可以一键切换频道了。</p><p>当然也可以让 Home Assistant 通过 mqtt 或者 ssh 的方式从后台调用脚本，我原本就十分依赖 HA 来控制 LG C2 的信号源，而现在只需要在切换 HDMI 信号的时候顺带执行前面做好的脚本就可以实现键鼠与显示器的输入源联动了。</p><p>Windows 下只要用 HASS.Agent 内建的 Commands 功能就能将脚本打包成实体推送到 HA 服务器了，但 macOS 上似乎就只有 SSH 这条路比较好走了。</p><p>除了在设置里启用 SSH， macOS 下还要注意 Ventura 开始默认不再支持 rsa 密钥，于是改用 ed25519。 </p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t ed25519</span><br></pre></td></tr></table></figure><p>另外，部署在 Docker 上的 Home Assistant 除了要映射公私钥之外，还需要确保 kown_host 文件持久化，否则每次重启容器后的第一次连接都会因为安全提示阻止脚本执行。可增加参数 <code>-o UserKnownHostsFile=CUSTOM_PATH/known_hosts</code> 重新指定文件位置。</p><p>最后再打包一个 Shell Command 的实例，重启 HA 就可以根据需求调用了。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">shell_command:</span><br><span class="line">    switch_input: </span><br><span class="line">ssh -i &#x2F;config&#x2F;.ssh&#x2F;id_ed25519 -o UserKnownHostsFile&#x3D;&#x2F;config&#x2F;.ssh&#x2F;known_hosts USER@HOST_IP &quot;bash ~&#x2F;switch.sh&quot;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+    <summary type="html">&lt;h4 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h4&gt;&lt;p&gt;自入手 MX Master 2S 起就对罗技的 Unifying 优联系列颇为钟爱，后来也把键盘换成了魔改 K375s 的 DIY 键盘。优联的 Flow 在双机双屏的情况下频道切换十分自如，但相较而言在双机共用一屏的时候因为手动切换频道的按键在鼠标底部就显得十分不便了。&lt;/p&gt;
+&lt;p&gt;此时购买带 KVM 的 HDMI 切换器使两台电脑共用一个接收器算是比较简单粗暴的办法，但因为听到不少关于此类切换器可能会在使用中遇到各种Bug迟迟没有下手。&lt;/p&gt;
+&lt;p&gt;于是我便想，有没有一种方法可以用命令来切换键鼠的频道，从而进一步设定调用规则来实现双机一屏的自动切换呢？想着想着我便找到了这个项目 &lt;a href=&quot;https://github.com/marcelhoffs/input-switcher&quot;&gt;marcelhoffs/input-switcher&lt;/a&gt;。经过 2 天的测试算是得到了一个相对满意的结果，特此记录一下。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Notes" scheme="https://rosystain.com/categories/Notes/"/>
+    
+    
+    <category term="Unifying" scheme="https://rosystain.com/tags/Unifying/"/>
+    
+    <category term="Home Assistant" scheme="https://rosystain.com/tags/Home-Assistant/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>让 macOS 更好地合并同名文件夹</title>
+    <link href="https://rosystain.com/Notes/2022/09/09/cm26a8vqp0006xfrsc1dt9n8z/"/>
+    <id>https://rosystain.com/Notes/2022/09/09/cm26a8vqp0006xfrsc1dt9n8z/</id>
+    <published>2022-09-09T10:07:00.000Z</published>
+    <updated>2023-03-15T05:13:57.612Z</updated>
+    
+    <content type="html"><![CDATA[<p>以往我在 Windows 下整理 NAS 上的文件时，遇到需要合并的同名文件夹时，只需要简单地把其中一个拖入到另一个文件夹所在的目录中。如若没有遇到同名文件冲突的情况，那么整个过程会在一瞬间完成，它时十分符合操作直觉的。</p><p>但在 macOS 下想要像这样合并两个文件夹却是意外地困难。</p><p>在 macOS 下，Finder 默认只为同名文件夹冲突提供了“停止”与“替换”两个选择，无须怀疑，这里的“替换”并没有字面之外意思。而在一番搜索后，不难会发现苹果设置了一个可以用 <code>opt</code> 键触发的隐藏的“合并”按钮。</p><p>但这个“合并”始终是以<strong>拷贝</strong>的形式进行的，这意味着每一次合并文件夹的时候 Finder 都会制造一次毫无意义的磁盘写入。而这份无意义的写入所造成的影响对于 NAS 用户来说，则会被传输协议、磁盘性能、网络带宽等因素进一步放大，最后从<strong>无意义</strong>进化成了一种<strong>折磨</strong>。</p><p>对此，如果不愿意选择那些更迎合 Windows 使用习惯的第三方文件管理器的话，使用跟 Finder 高度耦合的 Automator 来跑一个合并行为更接近 Windows 的脚本可以算是一个折中办法。</p><p>Automator 能够很方便得透过 Finder 获取所选文件的路径，同时它也能调用 Finder 的弹窗选择器来手动选择一个路径来作为变量使用。像是这样：</p><p><img src="/images/pasted-0.png" alt="upload successful"></p><a id="more"></a><p>在运行工作流的时候，所有被选择的项目的路径都会依序作为列表值被输入，而在通过请求访达项目选择输出路径后，就得到了一个类似 <code>[&#39;-c&#39;, &#39;path1&#39;, &#39;path2&#39;, &#39;path3&#39;,...&#39;pathN&#39;] </code>的列表。起始项始终是固定的值 <code>&#39;-c&#39;</code>，所以此处只需要截取第二项至倒数第二项作为 <code>src</code>，以及结尾项作为 <code>dst</code> 即可。</p><p>有了 <code>src</code> 和 <code>dst</code> ，事情就变得非常简单了，这里就用 Python 的 <code>shutil</code> 模块起一个脚本。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import sys,os,shutil</span><br><span class="line"></span><br><span class="line">src &#x3D; sys.argv[1:-1]</span><br><span class="line">dst &#x3D; sys.argv[-1]</span><br><span class="line"></span><br><span class="line">for item in src:</span><br><span class="line">    for root,dirs,files in os.walk(item):</span><br><span class="line">        for file in files:</span><br><span class="line">            old &#x3D; os.path.join(root,file)</span><br><span class="line">            start &#x3D; os.path.dirname(item.rstrip(&#39;&#x2F;&#39;))</span><br><span class="line">            new &#x3D; os.path.join(dst,os.path.relpath(old,start))</span><br><span class="line">            if not os.path.exists(os.path.dirname(new)):                                             </span><br><span class="line">                os.makedirs(os.path.dirname(new))</span><br><span class="line">            shutil.move(old,new)</span><br><span class="line">    shutil.rmtree(item)</span><br></pre></td></tr></table></figure><p>现在将脚本拖入工作流，传递输入选择“作为自变量”，再把脚本的输出作为文本导出一份，最后这个样子就大抵堪用了。</p><p><img src="/images/pasted-1.png" alt="upload successful"></p><p>最后来验证一下，看起来没有问题</p><p><img src="/images/pasted-2.png" alt="upload successful"></p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;以往我在 Windows 下整理 NAS 上的文件时，遇到需要合并的同名文件夹时，只需要简单地把其中一个拖入到另一个文件夹所在的目录中。如若没有遇到同名文件冲突的情况，那么整个过程会在一瞬间完成，它时十分符合操作直觉的。&lt;/p&gt;
+&lt;p&gt;但在 macOS 下想要像这样合并两个文件夹却是意外地困难。&lt;/p&gt;
+&lt;p&gt;在 macOS 下，Finder 默认只为同名文件夹冲突提供了“停止”与“替换”两个选择，无须怀疑，这里的“替换”并没有字面之外意思。而在一番搜索后，不难会发现苹果设置了一个可以用 &lt;code&gt;opt&lt;/code&gt; 键触发的隐藏的“合并”按钮。&lt;/p&gt;
+&lt;p&gt;但这个“合并”始终是以&lt;strong&gt;拷贝&lt;/strong&gt;的形式进行的，这意味着每一次合并文件夹的时候 Finder 都会制造一次毫无意义的磁盘写入。而这份无意义的写入所造成的影响对于 NAS 用户来说，则会被传输协议、磁盘性能、网络带宽等因素进一步放大，最后从&lt;strong&gt;无意义&lt;/strong&gt;进化成了一种&lt;strong&gt;折磨&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;对此，如果不愿意选择那些更迎合 Windows 使用习惯的第三方文件管理器的话，使用跟 Finder 高度耦合的 Automator 来跑一个合并行为更接近 Windows 的脚本可以算是一个折中办法。&lt;/p&gt;
+&lt;p&gt;Automator 能够很方便得透过 Finder 获取所选文件的路径，同时它也能调用 Finder 的弹窗选择器来手动选择一个路径来作为变量使用。像是这样：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/pasted-0.png&quot; alt=&quot;upload successful&quot;&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Notes" scheme="https://rosystain.com/categories/Notes/"/>
+    
+    
+    <category term="macOS" scheme="https://rosystain.com/tags/macOS/"/>
+    
+    <category term="Automator" scheme="https://rosystain.com/tags/Automator/"/>
+    
+    <category term="Python" scheme="https://rosystain.com/tags/Python/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>独立的Plex音乐客户端：Plexamp</title>
+    <link href="https://rosystain.com/Misc/2020/12/07/cm26a8vqq0007xfrsbcbp5gtx/"/>
+    <id>https://rosystain.com/Misc/2020/12/07/cm26a8vqq0007xfrsbcbp5gtx/</id>
+    <published>2020-12-07T13:35:00.000Z</published>
+    <updated>2022-09-04T14:56:17.888Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="https://i.loli.net/2020/11/24/oRmlKUjC7vtHpna.png" alt="plexamp-banner"></p><p>今年四月，向来傲慢且怠惰的Plex一口气发布了2款手机App，分别是用于监管后台信息的Plex Dash及音乐播放器Plexamp。前者看起来是打算要取代Tautulli，后者则其实在桌面系统上由来已久。</p><p>先不论仅仅支持移动端的Plex Dash是否真的能代替桌面移动两开花的Tautulli，另外那个终于从桌面端滑向移动端的Plexamp则宛如重获新生。</p><p>如果你也使用或打算使用Plex管理音乐且正好购买了Plex Pass的话，那么Plexamp是一款能让你持续上头的音乐播放器。</p><a id="more"></a><h3 id="关于Plexamp"><a href="#关于Plexamp" class="headerlink" title="关于Plexamp"></a>关于Plexamp</h3><p><img src="https://miro.medium.com/max/9600/1*_5vj2zq-mkZT88N8syPMtA@2x.png" alt="Image for post"></p><p>Plexamp是由Plex在2017年推出的跨平台音乐客户端，最初仅支持Windows与macOS。尽管它的名字一看就是在致敬Winamp，但它并非是在<strong>Winamp精神续作</strong>这样的包袱下诞生的。它首先不是一款通用播放软件，PlexMediaServer仍然是它正常运作的绝对前提，它的外观也与Winamp截然不同。</p><p>作为Plex的减法产物，剥去了一切与音乐不相关的元素后，在自己本地的收藏中聆听音乐这件事也确实变得纯粹起来。在全局热键系统的帮助下，你甚至可以像使用Spotlight那样激活Plexamp的搜索快速找到想听的音轨。</p><p>可惜的是每当我按下激活搜索框的热键，<strong>接下来听什么</strong>这个问题却往往无法在这之后立刻得到答案。每每到此，我便陷入短暂的呆滞，旋即便沮丧着脸试图快速想起一个之前建立的歌单名，或者就干脆回到网页端去慢慢浏览。</p><p>而我每多使用一次Plexamp，这种沮丧就每增加一分。</p><p><strong>浏览</strong>是Plexamp的最大短板，最初的Plexamp并没有一个完整的媒体库界面，除了仅有几个“Recently”节点外绝大部分音乐需要靠搜索来访问。此外，在高分屏下摆弄一个大约只占显示器1/32的软件无论如何都难以让我对它尚且无法实现的浏览体验有所期待。</p><p>鉴于<strong>本来在网页端听歌也并没有什么不满意的地方</strong>，我很快就卸载并淡忘了它。</p><p>直到我在手机上与它再次相遇。</p><h3 id="Plexamp-v3"><a href="#Plexamp-v3" class="headerlink" title="Plexamp v3"></a>Plexamp v3</h3><p><img src="https://i.loli.net/2020/12/06/LKceIXMz3QTigHP.png" alt="customisation"></p><p>新版的Plexamp在获得一系列更新的同时几乎是原模原样地被搬到了iOS/Android上面，原来在PC上只占据一隅的它到了移动设备上自然就成了全屏应用。它的一切在手机上都显得刚刚好，好像从诞生起它就是一款手机应用，而PC版才是从手机移植过来似的。</p><p>在界面上，原本就颇受好评的<strong>专辑提色器</strong>现在也更倾向于使用对比更高的撞色来以显得更加动感。新版还增加了低饱和的明亮模式以迎合口味清新的人群，以及完全禁用提色器的纯白、纯黑外观。</p><p>前面就有说到它在外观上与Winamp大相径庭，但它却跟iTunes的迷你模式高度相仿，尤其是启用了纯白模式后那简直就是一个模子出来的孪生兄弟。</p><p><img src="https://i.loli.net/2020/12/07/RVxFMeSD5BoXhaI.png" alt="itunes&amp;plexamp"></p><p>而在使用上，Plexamp与你以往在Spotify或是Apple Music上的操作习惯大抵相似。值得一提的是，本就不该缺失的<strong>循环播放</strong>功能也终于在Plex打破了旷日持久得坚持后于上个月初的更新中解禁。</p><p>至此，Plexamp在基础功能上缺失的最后一块拼图也已经补上。作为一款精致可爱的手机音乐播放器，除了精致可爱之外，你当然也会乐于看到它仍有相当多的进阶功能：</p><ul><li><strong>支持ALAC，</strong>从iTunes迁移到Plex需要把所有歌曲重新编码吗？答案是不用</li><li><strong>支持转码，</strong>你最讨厌的转码能在音乐上为你节约大量的手机流量，你可以为Wifi及蜂窝网络分别设定目标码率</li><li><strong>支持Tidal，</strong>如果你在Plex中绑定了Tidal账户，那现在你也可以像使用Roon那样直接在Plexamp中搜索并播放来自Tidal的歌曲了（但不支持Master音质）</li><li><strong>支持自动播放，</strong>在播放完列表的最后一首歌曲后，等待你的不再是寂静。未开启循环播放时自动启用，算法上它或许不如Spotify，但在一款本地播放器上能见到这样的功能老实说让我觉得受宠若惊</li><li>**支持无线Cast,**你可以将正在播放的音乐投放到任何开启Plex或Plexamp的设备，无论是手机还是平板，抑或是一台连接着音响的树莓派</li><li>**支持Last.FM,**可自动上传播放记录到Last.FM（如果刮削时能匹配到的话）</li><li><strong>支持Carplay，</strong>听说Carplay甚至会左右你买车的选择？</li></ul><p>以及一些算不上特色但你会觉得它最好有的功能：</p><ul><li><strong>支持无缝播放</strong></li><li><strong>支持睡眠定时器</strong></li><li><strong>支持EQ</strong></li><li><strong>支持电台</strong></li><li><strong>支持音量平衡</strong></li><li><strong>支持倍速播放</strong></li><li><strong>支持离线播放</strong></li><li>…</li></ul><h3 id="Plex-vs-Plexamp"><a href="#Plex-vs-Plexamp" class="headerlink" title="Plex vs Plexamp"></a>Plex vs Plexamp</h3><p><img src="https://i.loli.net/2020/12/07/Hbo2UmRdsEky5uz.png" alt="plex&amp;plexamp"></p><p>Plex是集视频、音乐、相册、分享于一体的综合媒体中心，Plexamp则是单一的音乐播放器。两者在定位上的差别可以直接在UI的设计差异中体现出来——Plex的音乐板块重视封面的展示，像是在强调这些专辑只不过是你诸多收藏中的一小环；而Plexamp则更倾向于直奔主题，它不需要跟任何板块统一设计语言，因而能直观且迅速地找到你想要的歌曲。</p><p>如果你有给歌曲打分的习惯，那你多半会觉得五星制的评分对于音乐来说过于啰嗦。Plexamp提供了可选的一星制评分体系，你将不再需要思考自己对某首歌的喜爱程度有多深，只需点击喜欢即可。</p><p>Plex/Plexamp在局域网中用来访问服务端的地址与外部网络时使用的并不相同，如果你也是在HomeServer上搭设的Plex服务端，那么每当你打开Plex都无可避免地需要等待与服务器重新握手。而在Plexamp启动时，你完全不会感知到任何与服务器再连接的动静，它们会在后台悄悄地完成，没有漫长的启动画面，也没有你讨厌的转圈圈。</p><p>Plexamp也得到了更适合音乐播放器的缓存机制，哪怕是在Plex服务器完全失联的情况下，你仍然继续可以播放此前缓存过的歌曲，在你访问未缓存的项目之前，失联也是不会被感知的。若你对自家Plex服务器的可用性没有信心，增加缓存空间则可以大幅提高离线播放的命中率。你的曲库里的歌曲也许数以万计，但你在迈出大门时想要立刻去听的往往还是你最近听过的那些。</p><h3 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h3><p>全新的Plexamp是一款从见到起就令我爱不释手的App，它漂亮得让我不禁认为视觉上的愉悦也可以提高听觉上的体验。</p><p>它同时也是Plex公司产品理念的极致体现——在意想不到的地方给你惊喜，在理所应当的方面吊你胃口。</p><p>作为Plex增值服务的一部分，它毫无疑问将成为Plex Pass的重要卖点。在与Emby等同类竞品的竞争中，它也使Plex在特定的需求点上得以展现出压倒性的竞争力。</p><p>但鉴于Plex的客户端在非iOS平台的拉胯表现，若你并非苹果全家桶用户，那么仅仅为了Plexamp而购买Plex Pass则是一件需要再三考虑的事情了。</p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/11/24/oRmlKUjC7vtHpna.png&quot; alt=&quot;plexamp-banner&quot;&gt;&lt;/p&gt;
+&lt;p&gt;今年四月，向来傲慢且怠惰的Plex一口气发布了2款手机App，分别是用于监管后台信息的Plex Dash及音乐播放器Plexamp。前者看起来是打算要取代Tautulli，后者则其实在桌面系统上由来已久。&lt;/p&gt;
+&lt;p&gt;先不论仅仅支持移动端的Plex Dash是否真的能代替桌面移动两开花的Tautulli，另外那个终于从桌面端滑向移动端的Plexamp则宛如重获新生。&lt;/p&gt;
+&lt;p&gt;如果你也使用或打算使用Plex管理音乐且正好购买了Plex Pass的话，那么Plexamp是一款能让你持续上头的音乐播放器。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Misc" scheme="https://rosystain.com/categories/Misc/"/>
+    
+    
+    <category term="Plex" scheme="https://rosystain.com/tags/Plex/"/>
+    
+    <category term="Plexamp" scheme="https://rosystain.com/tags/Plexamp/"/>
+    
+    <category term="Music" scheme="https://rosystain.com/tags/Music/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>关于跑步</title>
+    <link href="https://rosystain.com/Life/2020/10/19/cm26a8vqk0002xfrs575sd172/"/>
+    <id>https://rosystain.com/Life/2020/10/19/cm26a8vqk0002xfrs575sd172/</id>
+    <published>2020-10-19T15:03:00.000Z</published>
+    <updated>2020-10-25T07:07:34.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>今年从春季开始晨跑，到了六月无论如何也抵挡不住酷暑的日晒就消停了一阵子。夜跑是个不错的选择，但当时的我却无法支配夜间的时间。于是夜跑似乎便成了自由的象征，我渴望夜跑即正如我渴望自由。</p><p>九月的时候，工作时间终于恢复了正常。压制了数个月的跑步欲也同时迸发了出来。没多久我就因为过度运动导致的足底酸疼去到医院做了个检查，除了确诊不太意外的足底筋膜炎之外还知道了自己有足弓塌陷。幸运的是我仍能通过使用更适合平足的跑鞋或者鞋垫来继续跑步这件事，并且合理的足弓训练也可以进一步地缓解我的足底负担。</p><p>强行捡个不幸的事儿来说的话，那就是像我这种容易纠结的人多少还是会对此有所埋怨。我消沉了好几天，觉得这是自己作为人的缺陷。我并不为此感到自卑，但自信也仿佛因此凝固。</p><p>直到我再次脚踏实地地奔跑起来时，有种如同是来自灵魂深处的涌动很快就淌遍全身，像是身体的某个开关被打开，又觉得那才是自己本来该有的样子，大概那就是自我的本能对运动的渴望吧。那么，这点点不幸也就显得无关紧要了。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;今年从春季开始晨跑，到了六月无论如何也抵挡不住酷暑的日晒就消停了一阵子。夜跑是个不错的选择，但当时的我却无法支配夜间的时间。于是夜跑似乎便成了自由的象征，我渴望夜跑即正如我渴望自由。&lt;/p&gt;
+&lt;p&gt;九月的时候，工作时间终于恢复了正常。压制了数个月的跑步欲也同时迸发了出来。没</summary>
+      
+    
+    
+    
+    <category term="Life" scheme="https://rosystain.com/categories/Life/"/>
+    
+    
+    <category term="Run" scheme="https://rosystain.com/tags/Run/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>正式弃用Wordpress</title>
+    <link href="https://rosystain.com/Misc/2020/10/01/cm26a8vre0025xfrs7h4r9s7i/"/>
+    <id>https://rosystain.com/Misc/2020/10/01/cm26a8vre0025xfrs7h4r9s7i/</id>
+    <published>2020-10-01T02:55:00.000Z</published>
+    <updated>2020-11-24T07:08:36.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><del>才不会说是因为没有备份Wordpress才被迫更换平台的呢。</del></p><a id="more"></a><p>几乎就是去年这个时候被安利了Hexo，拖延症晚期的我表现出了浓烈的兴趣，但我也确信自己只有等到放在阿里云的Wordpress无法继续使用时我才能憋出点“没空”以外的其他词语。</p><p>也不知怎么的，在数月前得知阿里云实例即将被释放的时候，我同时产生了“我的图片反正都在七牛”和“那个archive.tgz难道不是我潜意识里备份的Wordpress吗？”这两种错觉。</p><p>后来才想起早在七牛不再提供https域名的时候我就已经停止使用七牛作为图床了，而我那个archive.tgz尽管确实是Wordpress的备份档，但实为16年丢失数据库而弃用的那个备份档。</p><p>因此当我发现这Hexo连个评论系统都得自己动手移植的时候，我已经失去了重回Wordpress的船票。</p><p>于是手上唯一能依赖的就是事前从Wordpress导出xml文档了。整个迁移过程还算平滑，主要就是导出的xml在转换到md之后多数换行符变成了空格。因为文章数量也不多所以就直接老老实实手动修改了。</p><p>接着就是准备一个顺手的主题，NexT固然不错，但我还是喜欢简约一些的，单栏是个我会偏爱的选择。</p><p>很快我就找到了<a href="https://github.com/MIKAGMR/hexo-theme-ghost-casper">MIKAGMR/hexo-theme-ghost-casper</a>，它干净优雅，排版美观，我基于它做了一些修改，使其看来更像我在Wordpress所使用的那样。</p><p>评论系统使用了Valine。我对Javascript一窍不通，幸运的是依葫芦画瓢非常有效。</p><p>有时间的话大概还是想再熟悉熟悉CSS继续改主题，但那就是后面的事情了。</p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;&lt;del&gt;才不会说是因为没有备份Wordpress才被迫更换平台的呢。&lt;/del&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Misc" scheme="https://rosystain.com/categories/Misc/"/>
+    
+    
+    <category term="Blog" scheme="https://rosystain.com/tags/Blog/"/>
+    
+    <category term="Hexo" scheme="https://rosystain.com/tags/Hexo/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>再记一次春游</title>
+    <link href="https://rosystain.com/Life/2020/04/07/292/"/>
+    <id>https://rosystain.com/Life/2020/04/07/292/</id>
+    <published>2020-04-07T06:24:00.000Z</published>
+    <updated>2020-11-24T07:08:19.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>转眼又是一个四月，今年人数比去年多了不少，算上狗狗的话约有一倍之多。</p><p>人一旦多起来，就难免会自然而然地分裂成好几个小圈子，如此一来人数的变化就不再那么令人在意了。</p><p>为了不转而在意转眼又是一年这件事上，我尝试去在意一些别的东西，例如多喝水可以改善小腿干燥，拿野餐当借口延迟戒烟之类的。</p><p>这样的说法也让我自己感觉奇怪——这看起来就好像时间匆匆流逝这件事情比多喝水抑或是戒烟还重要似的，明明正是因为我在过去的一年里既没有怎么多喝水，又没有好好戒掉烟，或者还有什么我记不得的事情没有完成，才使得我会去在意一年过去这件事吧。</p><p>当然我也很快就原谅了自己的这点小愚蠢，迅速地开始享受早春午后的慵懒。 （过程略）</p><p><img src="https://i.loli.net/2020/10/01/zLdZG8irOWmUQIV.jpg" alt="IMG_20201001_092220_0007"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;转眼又是一个四月，今年人数比去年多了不少，算上狗狗的话约有一倍之多。&lt;/p&gt;
+&lt;p&gt;人一旦多起来，就难免会自然而然地分裂成好几个小圈子，如此一来人数的变化就不再那么令人在意了。&lt;/p&gt;
+&lt;p&gt;为了不转而在意转眼又是一年这件事上，我尝试去在意一些别的东西，例如多喝水可以改善小</summary>
+      
+    
+    
+    
+    <category term="Life" scheme="https://rosystain.com/categories/Life/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>在EdgeOS安装ZeroTier</title>
+    <link href="https://rosystain.com/Notes/2019/11/24/285/"/>
+    <id>https://rosystain.com/Notes/2019/11/24/285/</id>
+    <published>2019-11-24T10:18:00.000Z</published>
+    <updated>2020-11-24T07:08:10.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>EdgeOS更新2.0固件后底层系统从Debian7直升到了Debian9，现在已经可以直接通过ZeroTier官方提供的Linux安装脚本进行安装了。</p><h4 id="安装ZeroTier"><a href="#安装ZeroTier" class="headerlink" title="安装ZeroTier"></a>安装ZeroTier</h4><p>EdgeOS默认的apt源在国内的连接已经非常困难，非常容易因连接超时导致安装失败，建议自行替换国内镜像源。</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo -i curl -s https://install.zerotier.com | sudo bash</span><br></pre></td></tr></table></figure><p>安装成功后你将得到一个ZeroTier的Client ID。 接着用ZeroTier官网申请的网络ID来加入网络即可。</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo zerotier-cli join [NETWORK-ID]</span><br></pre></td></tr></table></figure><h4 id="保护配置文件"><a href="#保护配置文件" class="headerlink" title="保护配置文件"></a>保护配置文件</h4><p>为防止因固件升级导致配置文件丢失，我们可以把ZT的配置文件移动到/config/scripts再软连接回到原路径,这样在每次更新固件后重新执行一遍软连接就可以轻松恢复配置。</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv /var/lib/zerotier-one /config/scripts/ ln -s /config/scripts/zerotier-one</span><br></pre></td></tr></table></figure><h4 id="映射网络接口（可选）"><a href="#映射网络接口（可选）" class="headerlink" title="映射网络接口（可选）"></a>映射网络接口（可选）</h4><p>EdgeOS无法识别ZeroTier的接口（ZT0），因此ZT0不会反映到EdgeOS的WEBUI上面。但即便如此，ZeroTier依然能够正常工作。 如果你闲得蛋疼，路由器上又正好有空闲的网口没地方用，那么可以来试一下把zt0映射到eth(0~4)上面。 <em>在/var/lib/zerotier-one下创建一个devicemap文件，内容如下（将X替换成你闲置的那个口，下略）</em> </p><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;zerotiernetworkid&gt;=ethX</span><br></pre></td></tr></table></figure><p>重启ZeroTier </p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/zerotier-one restart</span><br></pre></td></tr></table></figure><p>这时ifconfig下的ethX应该已经对应zt0的接口信息了。</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> interfaces ethernet ethX description <span class="string">&quot;ZeroTier [NETWORK-ID]&quot;</span></span><br><span class="line">commit save</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;EdgeOS更新2.0固件后底层系统从Debian7直升到了Debian9，现在已经可以直接通过ZeroTier官方提供的Linux安装脚本进行安装了。&lt;/p&gt;
+&lt;h4 id=&quot;安装ZeroTier&quot;&gt;&lt;a href=&quot;#安装ZeroTier&quot; class=&quot;headerl</summary>
+      
+    
+    
+    
+    <category term="Notes" scheme="https://rosystain.com/categories/Notes/"/>
+    
+    
+    <category term="ER-X" scheme="https://rosystain.com/tags/ER-X/"/>
+    
+    <category term="ubnt" scheme="https://rosystain.com/tags/ubnt/"/>
+    
+    <category term="ZeroTier" scheme="https://rosystain.com/tags/ZeroTier/"/>
+    
+    <category term="Linux" scheme="https://rosystain.com/tags/Linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>过气HTPC升级记</title>
+    <link href="https://rosystain.com/Misc/2019/05/09/243/"/>
+    <id>https://rosystain.com/Misc/2019/05/09/243/</id>
+    <published>2019-05-09T06:22:00.000Z</published>
+    <updated>2020-11-24T07:06:25.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>HP MICROSEVER GEN8是我钟爱的一款适合当NAS的微型服务器，但当初考虑到客厅三星电视的Tizen ≈ 无系统，NAS+HTPC的方案看起来会挺棒，于是就有了这个（现在看来这是一个坏主意）。</p><a id="more"></a><p>到目前为止（2年来）它的软硬件都经历了不少变化，罗列一下话大概是这样： OS: SteamOS(Debian) → Ubuntu Desktop → Openmediavault(Debian) → <strong>Windows 10 LTSC</strong> MB: Gigabyte B150M D3H → <strong>Gigabyte B250M D3H</strong> CPU: Celeron G3900 → Pentium G4560 → <strong>Pentium G4600</strong> DIMM: <strong>ADATA 2133mhz DDR4 4G*2</strong> OS方面，各种NAS系统其实我试过许多，包括上面没有提及的Nas4Free、Freenas等等，但从整体来看我的OS选择基本上是从Linux到Windows的过渡，这里面其实没什么特别的理由，<strong>仅仅是Linux不支持HEVC硬解。</strong> 主板是淘汰旧电脑的时候顺手换上的。</p><p>CPU方面，G3900换成G4560的原因依然是为了HEVC的硬解(G3900仅支持到HEVC 8Bit)，而事实上G4560也依然未能成为4K电影的解决方案，其原因就在于4K电影几乎标配HDR。为了迎合Intel的核显HDR支持方针，我又把CPU换成了搭载HD630的G4600。然而我只算到了显卡的要求，忽视了板载HDMI1.4和DP1.2均无法支持HDR这一点。</p><p>接口问题除了上独显或者换主板外基本无解，过高的升级成本让我不得不选择廉价好用的电视盒子来解决影音需求。所以这一整套4K HTPC方案可以说是<strong>彻头彻尾的失败品</strong>了。</p><h4 id="RX-560"><a href="#RX-560" class="headerlink" title="RX 560"></a><strong>RX 560</strong></h4><p>其实电视盒子除了需要忍受解不动H264 Hi10P这一点之外作为影音方案已经非常优秀，但轮番用过很多盒子（非高端）后还是有一些小毛小病，如界面卡顿（视频库一旦臃肿后）、莫名其妙地初始化等等。</p><p>加上H264 Hi10P这个问题对于常看动画的人来说实在是一个痛点，回归HTPC这个念头始终萦绕在我的心间。</p><p>绕着绕着，某天我便打开了闲鱼，于是又有了这个。</p><p> 没选1030的原因主要是它阉割掉了NVENC，那样的话就无法利用Steam的流式传输投放到房间的电视上了，此外madVR对显卡3D性能有一定要求，1030存在后期继续长草换卡的风险。</p><p>而560在AVS论坛的那篇<a href="https://www.avsforum.com/forum/26-home-theater-computers/2364113-guide-building-4k-htpc-madvr.html">Guide: Building a 4K HTPC for madVR</a> 有作为廉价选择明确被推荐（虽然那边推荐的是Baffin XT，而这张560是Polaris XL的）。</p><p> 安装显卡前先检查下目前功耗状态，大概30W上下，然后开装。</p><p> 不得不吐槽下这个支架的位置竟然刚好挡住供电口，原本一插就完事了现在还得连硬盘架一起卸下来。</p><p> 安装结束，待机功耗50W上下，高了整整20W，稍微超过了点预期（这里也有电源转换率低的原因）。</p><p>开机装驱动重启，稍微设置一下lav跟madvr后就大功告成了。</p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;HP MICROSEVER GEN8是我钟爱的一款适合当NAS的微型服务器，但当初考虑到客厅三星电视的Tizen ≈ 无系统，NAS+HTPC的方案看起来会挺棒，于是就有了这个（现在看来这是一个坏主意）。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Misc" scheme="https://rosystain.com/categories/Misc/"/>
+    
+    
+    <category term="HTPC" scheme="https://rosystain.com/tags/HTPC/"/>
+    
+    <category term="Kodi" scheme="https://rosystain.com/tags/Kodi/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>无法逃离PLEX的魔爪</title>
+    <link href="https://rosystain.com/Misc/2019/05/04/241/"/>
+    <id>https://rosystain.com/Misc/2019/05/04/241/</id>
+    <published>2019-05-04T15:53:00.000Z</published>
+    <updated>2020-11-24T07:06:10.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>在搞定IPV6后终于可以如愿以偿地在地铁上听PLEX上的歌了，但不知是我家上行带宽太小还是IPV6本身不稳定的缘故，间歇性的连接失败总是在比较尴尬的时刻来临。</p><p>想了想我收藏的歌其实也不是很多，为什么不直接把它们丢在第三方公有云上呢。一番搜索后得知吃灰已久的Apple Music已经提供类似网易音乐云盘的功能（iTunes Match）。</p><p>PLEX本身不会去修改任何文件信息（比如ID3），所以如果要打算回到iTunes上，那么从源头去整理ID3才是一劳永逸的</p><p>继续一番搜索后找到了这个叫MusicBrainz的服务。</p><p>使用下来匹配精度要比PLEX高不少，针对一些疑难杂歌提供的手动匹配功能也非常顺手，唯一的缺点大概就是它只使用自家的数据库以至于确实有一部分刮削不到信息，但对于勤劳的我来说只要能自行编辑数据库那就不是问题。</p><p>得益于MusicBrainz优秀的操作体验，我花了大概儿时手动整理歌曲1/100的时间就处理完了大半的歌。</p><p>在批量执行ID3写入的时间里我打开了那个又卡又臃肿的iTunes，一边导入音乐库的同时我掏出了手机正准备订阅AM会员。而就在我打算支付的时候我才注意到资料库依旧是空空如也。</p><p>嗯！9102年了iTunes还是不支持FLAC。</p><p>iTunes再见，PLEX我又回来了。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;在搞定IPV6后终于可以如愿以偿地在地铁上听PLEX上的歌了，但不知是我家上行带宽太小还是IPV6本身不稳定的缘故，间歇性的连接失败总是在比较尴尬的时刻来临。&lt;/p&gt;
+&lt;p&gt;想了想我收藏的歌其实也不是很多，为什么不直接把它们丢在第三方公有云上呢。一番搜索后得知吃灰已久的Ap</summary>
+      
+    
+    
+    
+    <category term="Misc" scheme="https://rosystain.com/categories/Misc/"/>
+    
+    
+    <category term="Plex" scheme="https://rosystain.com/tags/Plex/"/>
+    
+    <category term="MusicBrainz" scheme="https://rosystain.com/tags/MusicBrainz/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>通过IPv6连接你的Plex服务器</title>
+    <link href="https://rosystain.com/Notes/2019/04/26/233/"/>
+    <id>https://rosystain.com/Notes/2019/04/26/233/</id>
+    <published>2019-04-26T08:27:00.000Z</published>
+    <updated>2020-11-24T07:02:35.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>目前国内IPv6的推进速度已经相当不错，对于有家庭服务器需求的用户来说，获取一个不知道能用多久的公网IPv4可能已经远远超过了获得原生IPv6的难度。 长期受到无公网IP的我拿到IPv6后想到的第一件事就是试试能不能透过公网连接自家的PLEX库。</p><h5 id="前期工作"><a href="#前期工作" class="headerlink" title="前期工作"></a>前期工作</h5><p>首先是配置路由器给局域各网客户机分配地址，不同路由系统对IPv6的自动化配置程度有所差异，我的Ubnt ER-X就属于比较麻烦的那种，好在官方论坛已经有比较详尽的配置示范。 仅仅配置完路由器后还无法通过IPv6测试，打开WIN10的防火墙，添加一条入站规则放行ICMPv6后一切显示正常。 <a href="https://rosystain.com/wp-content/uploads/2019/04/Snipaste_2019-04-26_15-26-43.png"><img src="https://rosystain.com/wp-content/uploads/2019/04/Snipaste_2019-04-26_15-26-43.png"></a></p><a id="more"></a><h5 id="配置DDNS"><a href="#配置DDNS" class="headerlink" title="配置DDNS"></a>配置DDNS</h5><p>大部分域名解析服务提供商都有提供相关的API用于动态域名解析，如果你没有独立的域名，也可以直接向DDNS提供商申请二级动态域名。</p><h5 id="配置PLEX"><a href="#配置PLEX" class="headerlink" title="配置PLEX"></a>配置PLEX</h5><p>由于PLEX自带的远程访问服务并不支持ipv6映射，尽管添加完DDNS的AAAA记录后你应该已经能在浏览器直接通过域名访问，但你仍然无法通过官网的Launch APP来使用PLEX的SSL证书，同时你的手机APP也无法找到你的服务器。 因此这里就需要用到先前配置好动态域名来进行主动上报。 打开PLEX WEB，依次进入设置/网络，点击显示高级选项，勾选Enable server support for IPv6，找到Custom server access URLs 填入需要上报的地址（<a href="http://your.domain.com:32400/web%EF%BC%89%EF%BC%8C%E4%BF%9D%E5%AD%98%E4%BF%AE%E6%94%B9%E3%80%82">http://YOUR.DOMAIN.COM:32400/web），保存修改。</a> <a href="https://rosystain.com/wp-content/uploads/2019/04/Snipaste_2019-04-26_15-43-08.png"><img src="https://rosystain.com/wp-content/uploads/2019/04/Snipaste_2019-04-26_15-43-08.png"></a> 断开手机WIFI，打开PLEX，一切完美。 <a href="https://rosystain.com/wp-content/uploads/2019/04/IMG_3676.png"><img src="https://rosystain.com/wp-content/uploads/2019/04/IMG_3676.png"></a></p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;目前国内IPv6的推进速度已经相当不错，对于有家庭服务器需求的用户来说，获取一个不知道能用多久的公网IPv4可能已经远远超过了获得原生IPv6的难度。 长期受到无公网IP的我拿到IPv6后想到的第一件事就是试试能不能透过公网连接自家的PLEX库。&lt;/p&gt;
+&lt;h5 id=&quot;前期工作&quot;&gt;&lt;a href=&quot;#前期工作&quot; class=&quot;headerlink&quot; title=&quot;前期工作&quot;&gt;&lt;/a&gt;前期工作&lt;/h5&gt;&lt;p&gt;首先是配置路由器给局域各网客户机分配地址，不同路由系统对IPv6的自动化配置程度有所差异，我的Ubnt ER-X就属于比较麻烦的那种，好在官方论坛已经有比较详尽的配置示范。 仅仅配置完路由器后还无法通过IPv6测试，打开WIN10的防火墙，添加一条入站规则放行ICMPv6后一切显示正常。 &lt;a href=&quot;https://rosystain.com/wp-content/uploads/2019/04/Snipaste_2019-04-26_15-26-43.png&quot;&gt;&lt;img src=&quot;https://rosystain.com/wp-content/uploads/2019/04/Snipaste_2019-04-26_15-26-43.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Notes" scheme="https://rosystain.com/categories/Notes/"/>
+    
+    
+    <category term="Plex" scheme="https://rosystain.com/tags/Plex/"/>
+    
+    <category term="IPv6" scheme="https://rosystain.com/tags/IPv6/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Embuary中文字体乱码修复</title>
+    <link href="https://rosystain.com/Notes/2019/04/11/223/"/>
+    <id>https://rosystain.com/Notes/2019/04/11/223/</id>
+    <published>2019-04-11T09:53:00.000Z</published>
+    <updated>2020-11-24T07:07:10.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>Embuary是我比较喜欢的一个Kodi皮肤，在我看来是kodi众多皮肤中<strong>仅有</strong>的几个符合现代审美的皮肤之一。</p><p> 界面基本承袭Emby UI的设计语言，搭配Kodi + Emby这样的融合方案可谓是天衣无缝，虽然当初站了Plex的队，不过自己修改一下配色的话跟Plex也是挺搭的。 此皮肤原生支持Arial字体用于显示中、日等文本，但有一部分文字会显示成口口，打开一些其他插件更是口得一塌糊涂。</p><p>作者已在新版皮肤中修复此问题（仅限Kodi v18）</p><a id="more"></a><p>审查了下font.xml文档发现它的Fallback Font在Arial下仍然指向了英文字体，稍作修改后一切正常。 文件路径：~/addons/skin.embuary/xml/Font.xml 修改后的配置文件：<a href="https://rosystain.com/wp-content/uploads/2019/04/Font.7z">Font.7z</a></p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;Embuary是我比较喜欢的一个Kodi皮肤，在我看来是kodi众多皮肤中&lt;strong&gt;仅有&lt;/strong&gt;的几个符合现代审美的皮肤之一。&lt;/p&gt;
+&lt;p&gt; 界面基本承袭Emby UI的设计语言，搭配Kodi + Emby这样的融合方案可谓是天衣无缝，虽然当初站了Plex的队，不过自己修改一下配色的话跟Plex也是挺搭的。 此皮肤原生支持Arial字体用于显示中、日等文本，但有一部分文字会显示成口口，打开一些其他插件更是口得一塌糊涂。&lt;/p&gt;
+&lt;p&gt;作者已在新版皮肤中修复此问题（仅限Kodi v18）&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Notes" scheme="https://rosystain.com/categories/Notes/"/>
+    
+    
+    <category term="Kodi" scheme="https://rosystain.com/tags/Kodi/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>记一次春游</title>
+    <link href="https://rosystain.com/Life/2019/04/08/219/"/>
+    <id>https://rosystain.com/Life/2019/04/08/219/</id>
+    <published>2019-04-07T17:02:00.000Z</published>
+    <updated>2020-10-25T07:22:13.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>前几日二哥打电话过来提议野餐，想到最近几乎每天都在沉迷只狼需要转换下状态，遂赴约。</p><p>同行的小伙伴里大部分之前都没有见过，但相处还算愉快，若是四五年前的我的话大概会被自己惊讶到。</p><p>四月的第一个星期天已经初具夏天的味道，明媚的光照也非常迎合本次野餐的目的——拍照。</p><a id="more"></a><p><img src="https://i.loli.net/2020/10/01/W17UNFhLRitP6CQ.jpg" alt="IMG_3630"></p><p>BOSE的Soundlink mini发挥不错，一开腔就赶走了JBL的保温杯，几年前入手的时候就觉得它很适合户外音乐，但真正应用在实际场合这还是第一次。</p><p>太湖的夕阳还算别致，二哥喝了不少，我也找到了能拿来写一则大概算得上是日志的东西。</p><p><img src="https://i.loli.net/2020/10/01/Yq2I451WOKp3iaB.jpg" alt="IMG_3635"></p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;前几日二哥打电话过来提议野餐，想到最近几乎每天都在沉迷只狼需要转换下状态，遂赴约。&lt;/p&gt;
+&lt;p&gt;同行的小伙伴里大部分之前都没有见过，但相处还算愉快，若是四五年前的我的话大概会被自己惊讶到。&lt;/p&gt;
+&lt;p&gt;四月的第一个星期天已经初具夏天的味道，明媚的光照也非常迎合本次野餐的目的——拍照。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Life" scheme="https://rosystain.com/categories/Life/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>在Debian Stretch上通过Steam进行游戏串流</title>
+    <link href="https://rosystain.com/Notes/2017/11/27/21/"/>
+    <id>https://rosystain.com/Notes/2017/11/27/21/</id>
+    <published>2017-11-27T05:42:00.000Z</published>
+    <updated>2020-11-24T06:59:37.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>Steam在Linux下已经有不少游戏，但这可不是我用它的理由。</p><p>Steam的家庭流式传输可以使某台PC上的游戏画面以流媒体的形式传输到同网络下另一台装有Steam的设备上，并接受该设备反馈的按键信息。并且在画面损失和延迟控制方面平衡的相当好。</p><p>由于是它的本质是流媒体传输，因此对接受端的硬件要求非常低，只需一台能安装Steam且能流畅播放H264编码视频的机子而已(HTPC绝配)。</p><a id="more"></a><p>安装前首先确保登陆用户拥有以下权限</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">usermod -a -G video,audio second\_user</span><br></pre></td></tr></table></figure><p>添加Steam的Non-free源到/etc/apt/sources.list</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#SteamRepo Stretch</span></span><br><span class="line">deb http://httpredir.debian.org/debian/ stretch main contrib non-free</span><br></pre></td></tr></table></figure><p>对于64位的系统须添加i386的支持</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dpkg --add-architecture i386</span><br></pre></td></tr></table></figure><p>安装并使用aptitude进行包管理使它自动下载相关依赖</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">apt install aptitude</span><br><span class="line">aptitude update</span><br><span class="line">aptitude install steam</span><br></pre></td></tr></table></figure><p>Steam在Stretch上不会像Jessie那样出现各种各样的问题，通常情况下安装完毕后就可以正常登陆。 </p><p>串流时既可以使用接受设备的控制器（手柄、键盘等），也可直接使用源主机的设备（假如距离不远能收到信号的话） 由于Steam是32位的应用，无法使用64位的驱动，因此需要安装32位驱动才能开启硬件解码，否则在性能较低的设备上可能无法流畅运行。</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install i965-va-driver:i386 apt install libva1:i386 apt install libva-x11-1:i386 apt install libva-glx1:i386</span><br></pre></td></tr></table></figure><p>安装后重启Steam，进入设置&gt;家用流式传输&gt;高级客户端选项 确保硬件解码已经勾选，开启显示性能信息，再次通过流式传输打开游戏，左下方Debug区域Decoder一栏显示VAAPI hardware decoding就代表硬解生效了。</p><p>N卡和A卡的驱动及其他相关问题可从在通过以下连接查阅 <a href="https://wiki.debian.org/Steam">https://wiki.debian.org/Steam</a> </p><p>追记: Steam的某次更新似乎修改了控制器的规则，在Debian上可能会遇到手柄无法被识别的情况，需自行添建立配置文件。</p><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/udev/rules.d/99-steam-controller-perms.rules</span><br><span class="line"># This rule is needed for basic functionality of the controller in Steam and keyboard/mouse emulation</span><br><span class="line">SUBSYSTEM==&quot;usb&quot;, ATTRS&#123;idVendor&#125;==&quot;28de&quot;, MODE=&quot;0666&quot;</span><br><span class="line"></span><br><span class="line"># This rule is necessary for gamepad emulation; make sure you replace &#x27;pgriffais&#x27; with a group that the user that runs Steam belongs to</span><br><span class="line">KERNEL==&quot;uinput&quot;, MODE=&quot;0660&quot;, GROUP=&quot;pgriffais&quot;, OPTIONS+=&quot;static_node=uinput&quot;</span><br><span class="line"></span><br><span class="line"># Valve HID devices over USB hidraw</span><br><span class="line">KERNEL==&quot;hidraw*&quot;, ATTRS&#123;idVendor&#125;==&quot;28de&quot;, MODE=&quot;0666&quot;</span><br><span class="line"></span><br><span class="line"># Valve HID devices over bluetooth hidraw</span><br><span class="line">KERNEL==&quot;hidraw*&quot;, KERNELS==&quot;*28DE:*&quot;, MODE=&quot;0666&quot;</span><br><span class="line"></span><br><span class="line"># DualShock 4 over USB hidraw</span><br><span class="line">KERNEL==&quot;hidraw*&quot;, ATTRS&#123;idVendor&#125;==&quot;054c&quot;, ATTRS&#123;idProduct&#125;==&quot;05c4&quot;, MODE=&quot;0666&quot;</span><br><span class="line"></span><br><span class="line"># DualShock 4 wireless adapter over USB hidraw</span><br><span class="line">KERNEL==&quot;hidraw*&quot;, ATTRS&#123;idVendor&#125;==&quot;054c&quot;, ATTRS&#123;idProduct&#125;==&quot;0ba0&quot;, MODE=&quot;0666&quot;</span><br><span class="line"></span><br><span class="line"># DualShock 4 Slim over USB hidraw</span><br><span class="line">KERNEL==&quot;hidraw*&quot;, ATTRS&#123;idVendor&#125;==&quot;054c&quot;, ATTRS&#123;idProduct&#125;==&quot;09cc&quot;, MODE=&quot;0666&quot;</span><br><span class="line"></span><br><span class="line"># DualShock 4 over bluetooth hidraw</span><br><span class="line">KERNEL==&quot;hidraw*&quot;, KERNELS==&quot;*054C:05C4*&quot;, MODE=&quot;0666&quot;</span><br><span class="line"></span><br><span class="line"># DualShock 4 Slim over bluetooth hidraw</span><br><span class="line">KERNEL==&quot;hidraw*&quot;, KERNELS==&quot;*054C:09CC*&quot;, MODE=&quot;0666&quot;</span><br><span class="line"></span><br><span class="line"># Nintendo Switch Pro Controller over USB hidraw</span><br><span class="line">KERNEL==&quot;hidraw*&quot;, ATTRS&#123;idVendor&#125;==&quot;057e&quot;, ATTRS&#123;idProduct&#125;==&quot;2009&quot;, MODE=&quot;0666&quot;</span><br><span class="line"></span><br><span class="line"># Nintendo Switch Pro Controller over bluetooth hidraw</span><br><span class="line">KERNEL==&quot;hidraw*&quot;, KERNELS==&quot;*057E:2009*&quot;, MODE=&quot;0666&quot;</span><br></pre></td></tr></table></figure><p>保存并退出后，重新加载一遍udev </p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">udevadm control --reload udevadm trigger</span><br></pre></td></tr></table></figure><p>再次重启Steam应该就能正常识别手柄了。</p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;Steam在Linux下已经有不少游戏，但这可不是我用它的理由。&lt;/p&gt;
+&lt;p&gt;Steam的家庭流式传输可以使某台PC上的游戏画面以流媒体的形式传输到同网络下另一台装有Steam的设备上，并接受该设备反馈的按键信息。并且在画面损失和延迟控制方面平衡的相当好。&lt;/p&gt;
+&lt;p&gt;由于是它的本质是流媒体传输，因此对接受端的硬件要求非常低，只需一台能安装Steam且能流畅播放H264编码视频的机子而已(HTPC绝配)。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Notes" scheme="https://rosystain.com/categories/Notes/"/>
+    
+    
+    <category term="Linux" scheme="https://rosystain.com/tags/Linux/"/>
+    
+    <category term="Steam" scheme="https://rosystain.com/tags/Steam/"/>
+    
+    <category term="GameStream" scheme="https://rosystain.com/tags/GameStream/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>在Debian Strech上开启Miredo</title>
+    <link href="https://rosystain.com/Notes/2017/11/26/29/"/>
+    <id>https://rosystain.com/Notes/2017/11/26/29/</id>
+    <published>2017-11-26T13:27:00.000Z</published>
+    <updated>2020-11-24T06:58:40.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>Miredo是Debian/Ubuntu上的类Teredo服务，通常可以用它来访问一些ipv6的网络，除此之外，每台Miredo的客户机都可以分到一个2001开头的ipv6 。</p><p>这个ipv6对于内网的BT软件是否有实质性的帮助一直都没有确切的说法，但使用Miredo一段时间后观察数据流量，可以发现确实从它上面走了一些流量，可见它虽然帮助不大，但聊胜于无。</p><p>Debian的官方源自带Miredo，所以 </p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install miredo</span><br></pre></td></tr></table></figure><p>查看网卡信息</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ifconfig</span><br></pre></td></tr></table></figure><p>出现名为teredo的接口即表示安装成功 若出现<code>RTNETLINK permission denied</code>的错误提示 则需要在sysctl.conf的末尾下添加以下几项 </p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/sysctl.conf</span><br><span class="line">net.ipv6.conf.all.disable_ipv6 = 0</span><br><span class="line">net.ipv6.conf.default.disable_ipv6 = 0</span><br><span class="line">net.ipv6.conf.lo.disable_ipv6 = 0</span><br></pre></td></tr></table></figure><p>保存退出重启，这时会遇到另外一个问题。Miredo的默认启动优先级要高于域名解析服务，于是它在每次开机的时候都会因为无法正常解析中继服务器的域名而导致启动失败。</p><p>最简单的办法是将这个地址改成IP </p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/miredo.conf</span><br></pre></td></tr></table></figure><p>将原有的地址注释掉，添加一条</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ServerAddress 83.170.6.76</span><br></pre></td></tr></table></figure><p>保存重启后，检查Miredo运行状况</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service miredo status</span><br></pre></td></tr></table></figure><p>一切正常 。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;Miredo是Debian/Ubuntu上的类Teredo服务，通常可以用它来访问一些ipv6的网络，除此之外，每台Miredo的客户机都可以分到一个2001开头的ipv6 。&lt;/p&gt;
+&lt;p&gt;这个ipv6对于内网的BT软件是否有实质性的帮助一直都没有确切的说法，但使用Mir</summary>
+      
+    
+    
+    
+    <category term="Notes" scheme="https://rosystain.com/categories/Notes/"/>
+    
+    
+    <category term="Linux" scheme="https://rosystain.com/tags/Linux/"/>
+    
+    <category term="IPv6" scheme="https://rosystain.com/tags/IPv6/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>在OMV4上安装Transmission并开启自动下载</title>
+    <link href="https://rosystain.com/Notes/2017/11/26/18/"/>
+    <id>https://rosystain.com/Notes/2017/11/26/18/</id>
+    <published>2017-11-26T12:11:00.000Z</published>
+    <updated>2020-11-24T06:58:05.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>OMV4的插件库上暂时没有任何BT下载器，虽然使用DOCKER安装一样很方便，但Transmission本身有非常优秀的GUI远端控制，配置完后几乎不需要再去使用WEBUI来管理，因此这里直接通过CLI安装了。</p><p>Debian的官方源本身提供Transmission，所以只需 </p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install transmission-daemon</span><br></pre></td></tr></table></figure><p>安装完毕后先中止服务，接着修改的它的配置文件</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">service transmission-daemon stop</span><br><span class="line">vim /etc/transmission-daemon/settings.json</span><br></pre></td></tr></table></figure><p>确保相关设置为以下参数以启用远端管理</p><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&quot;rpc-enable&quot; = true,</span><br><span class="line">&quot;rpc-password&quot; = yourpassword,</span><br><span class="line">&quot;rpc-port&quot; = 9091 (or customport),</span><br><span class="line">&quot;rpc-username&quot; = transmission (or customname),</span><br><span class="line">&quot;rpc-whitelist&quot; = &quot;\*&quot;,</span><br></pre></td></tr></table></figure><p>在末尾添加watch相关参数以开启自动下载（非末尾项须逗号结尾）</p><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&quot;watch-dir&quot;: &quot;PATH/TO/Watch”,</span><br><span class="line">&quot;watch-dir-enabled&quot;: true</span><br></pre></td></tr></table></figure><p>保存并退出，重启Transimission应该就能用Transmission Remote GUI连接上了。 此时可直接通过Remote修改其他数值。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;OMV4的插件库上暂时没有任何BT下载器，虽然使用DOCKER安装一样很方便，但Transmission本身有非常优秀的GUI远端控制，配置完后几乎不需要再去使用WEBUI来管理，因此这里直接通过CLI安装了。&lt;/p&gt;
+&lt;p&gt;Debian的官方源本身提供Transmissi</summary>
+      
+    
+    
+    
+    <category term="Notes" scheme="https://rosystain.com/categories/Notes/"/>
+    
+    
+    <category term="Linux" scheme="https://rosystain.com/tags/Linux/"/>
+    
+    <category term="OpenMediaVault" scheme="https://rosystain.com/tags/OpenMediaVault/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>在Debian Stretch上安装OMV 4</title>
+    <link href="https://rosystain.com/Notes/2017/11/26/6/"/>
+    <id>https://rosystain.com/Notes/2017/11/26/6/</id>
+    <published>2017-11-26T08:53:00.000Z</published>
+    <updated>2020-11-24T06:57:14.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>原先兼职做NAS的HTPC已经接近服役一年，由于近期4K HDR的视频渐渐开始多了起来，Win10 的秋季更新也几乎同一时间提供了HDR的支援，这台基于Ubuntu的AllInOne一体机显然不再是优秀的HTPC方案，于是决定逐步将HTPC与NAS这两样需求分离开来。</p><p>OMV（OPENMEDIAVAULT）是基于Debian的NAS系统，对于原本就习惯使用Debian的人来说，与其说它是一个系统，不如说它是一套针对NAS应用的WEB管理组件而已，这跟我原先使用的Ubuntu+Webmin的组合并无本质上的不同。</p><a id="more"></a><p>Webmin本身是一套非常强大的WEB面板，在管理Linux系统本身无可挑剔，但在应对NAS应用时却显得有力无处使，大多时候我会忘掉这个面板而选择直接使用SSH进行操作。</p><p>尽管OMV可能仍然无法让你完全扔掉SSH，但初期配置做得足够完善的话后面基本可以只靠WebUI来调整一些小设置了。</p><p>目前OMV的最新稳定版为基于Debian 8（Jessie）的OMV3，Jessie的桌面环境对Kaby Lake存在兼容问题，而对应Stretch的OMV4却仍处于测试版，考虑到Debian本身脱离OMV也照样能正常运作，因此这里还是激进地选择了OMV4。</p><p>官方并不会为处于测试状态地OMV4提供完整的打包镜像，这就需先安装Debian后期再安装OMV了</p><p>Stretch已经正式发布且对较新的设备支持良好，安装过程中没有出现任何问题</p><p>完毕后进入SSH，获取root权限，添加OMV4的源并更新软件库</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo su</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;deb http://packages.openmediavault.org/public arrakis main&quot;</span> &gt; /etc/apt/sources.list.d/openmediavault.list</span><br><span class="line">apt-get update</span><br></pre></td></tr></table></figure><p> 提示缺少公钥</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install openmediavault-keyring postfix</span><br></pre></td></tr></table></figure><p>再更新一次后安装</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get update</span><br><span class="line">apt-get install openmediavault</span><br></pre></td></tr></table></figure><p>最后的步骤</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">omv-initsystem</span><br></pre></td></tr></table></figure><p>之后就可以打开浏览器键入OMV所在的主机IP访问管理页面了</p><p>初始账户 </p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">username: admin</span><br><span class="line">password: openmediavault</span><br></pre></td></tr></table></figure><p>OMV安装完毕后会禁用掉非root用户的ssh权限，登陆WEBUI后记得先进入用户管理添加SSH用户组 安装额外的插件库 </p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget http://omv-extras.org/openmediavault-omvextrasorg_latest_all4.deb</span><br><span class="line">dpkg -i openmediavault-omvextrasorg_latest_all4.deb</span><br></pre></td></tr></table></figure><p>如安装失败，可尝试<code>apt-get -f install</code>后<code>apt-get update</code>。</p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;原先兼职做NAS的HTPC已经接近服役一年，由于近期4K HDR的视频渐渐开始多了起来，Win10 的秋季更新也几乎同一时间提供了HDR的支援，这台基于Ubuntu的AllInOne一体机显然不再是优秀的HTPC方案，于是决定逐步将HTPC与NAS这两样需求分离开来。&lt;/p&gt;
+&lt;p&gt;OMV（OPENMEDIAVAULT）是基于Debian的NAS系统，对于原本就习惯使用Debian的人来说，与其说它是一个系统，不如说它是一套针对NAS应用的WEB管理组件而已，这跟我原先使用的Ubuntu+Webmin的组合并无本质上的不同。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Notes" scheme="https://rosystain.com/categories/Notes/"/>
+    
+    
+    <category term="Linux" scheme="https://rosystain.com/tags/Linux/"/>
+    
+    <category term="OpenMediaVault" scheme="https://rosystain.com/tags/OpenMediaVault/"/>
+    
+  </entry>
+  
+</feed>
