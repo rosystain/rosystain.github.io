@@ -18,8 +18,8 @@
   
   <entry>
     <title>使用 Home Assistant 控制 Logitech Unifying 频道</title>
-    <link href="https://rosystain.com/Notes/2023/03/15/cm26a8vqs0009xfrsde0eg8vj/"/>
-    <id>https://rosystain.com/Notes/2023/03/15/cm26a8vqs0009xfrsde0eg8vj/</id>
+    <link href="https://rosystain.com/Notes/2023/03/15/cm26bx5io0006nurs9avx7hta/"/>
+    <id>https://rosystain.com/Notes/2023/03/15/cm26bx5io0006nurs9avx7hta/</id>
     <published>2023-03-14T18:23:00.000Z</published>
     <updated>2023-03-15T05:13:09.315Z</updated>
     
@@ -43,8 +43,8 @@
   
   <entry>
     <title>让 macOS 更好地合并同名文件夹</title>
-    <link href="https://rosystain.com/Notes/2022/09/09/cm26a8vqp0006xfrsc1dt9n8z/"/>
-    <id>https://rosystain.com/Notes/2022/09/09/cm26a8vqp0006xfrsc1dt9n8z/</id>
+    <link href="https://rosystain.com/Notes/2022/09/09/cm26bx5ii0002nurs6jr7d38g/"/>
+    <id>https://rosystain.com/Notes/2022/09/09/cm26bx5ii0002nurs6jr7d38g/</id>
     <published>2022-09-09T10:07:00.000Z</published>
     <updated>2023-03-15T05:13:57.612Z</updated>
     
@@ -74,8 +74,8 @@
   
   <entry>
     <title>独立的Plex音乐客户端：Plexamp</title>
-    <link href="https://rosystain.com/Misc/2020/12/07/cm26a8vqq0007xfrsbcbp5gtx/"/>
-    <id>https://rosystain.com/Misc/2020/12/07/cm26a8vqq0007xfrsbcbp5gtx/</id>
+    <link href="https://rosystain.com/Misc/2020/12/07/cm26bx5ip0007nurscvbjg7tw/"/>
+    <id>https://rosystain.com/Misc/2020/12/07/cm26bx5ip0007nurscvbjg7tw/</id>
     <published>2020-12-07T13:35:00.000Z</published>
     <updated>2022-09-04T14:56:17.888Z</updated>
     
@@ -102,8 +102,8 @@
   
   <entry>
     <title>关于跑步</title>
-    <link href="https://rosystain.com/Life/2020/10/19/cm26a8vqk0002xfrs575sd172/"/>
-    <id>https://rosystain.com/Life/2020/10/19/cm26a8vqk0002xfrs575sd172/</id>
+    <link href="https://rosystain.com/Life/2020/10/19/cm26bx5in0005nursekijem6g/"/>
+    <id>https://rosystain.com/Life/2020/10/19/cm26bx5in0005nursekijem6g/</id>
     <published>2020-10-19T15:03:00.000Z</published>
     <updated>2020-10-25T07:07:34.000Z</updated>
     
@@ -127,8 +127,8 @@
   
   <entry>
     <title>正式弃用Wordpress</title>
-    <link href="https://rosystain.com/Misc/2020/10/01/cm26a8vre0025xfrs7h4r9s7i/"/>
-    <id>https://rosystain.com/Misc/2020/10/01/cm26a8vre0025xfrs7h4r9s7i/</id>
+    <link href="https://rosystain.com/Misc/2020/10/01/cm26bx5jj001hnurshomiffe4/"/>
+    <id>https://rosystain.com/Misc/2020/10/01/cm26bx5jj001hnurshomiffe4/</id>
     <published>2020-10-01T02:55:00.000Z</published>
     <updated>2020-11-24T07:08:36.000Z</updated>
     
@@ -193,13 +193,13 @@
     <category term="Notes" scheme="https://rosystain.com/categories/Notes/"/>
     
     
+    <category term="Linux" scheme="https://rosystain.com/tags/Linux/"/>
+    
     <category term="ER-X" scheme="https://rosystain.com/tags/ER-X/"/>
     
     <category term="ubnt" scheme="https://rosystain.com/tags/ubnt/"/>
     
     <category term="ZeroTier" scheme="https://rosystain.com/tags/ZeroTier/"/>
-    
-    <category term="Linux" scheme="https://rosystain.com/tags/Linux/"/>
     
   </entry>
   
@@ -271,9 +271,9 @@
     <category term="Notes" scheme="https://rosystain.com/categories/Notes/"/>
     
     
-    <category term="Plex" scheme="https://rosystain.com/tags/Plex/"/>
-    
     <category term="IPv6" scheme="https://rosystain.com/tags/IPv6/"/>
+    
+    <category term="Plex" scheme="https://rosystain.com/tags/Plex/"/>
     
   </entry>
   
@@ -340,11 +340,11 @@
     <category term="Notes" scheme="https://rosystain.com/categories/Notes/"/>
     
     
-    <category term="Linux" scheme="https://rosystain.com/tags/Linux/"/>
-    
     <category term="Steam" scheme="https://rosystain.com/tags/Steam/"/>
     
     <category term="GameStream" scheme="https://rosystain.com/tags/GameStream/"/>
+    
+    <category term="Linux" scheme="https://rosystain.com/tags/Linux/"/>
     
   </entry>
   
@@ -369,9 +369,9 @@
     <category term="Notes" scheme="https://rosystain.com/categories/Notes/"/>
     
     
-    <category term="Linux" scheme="https://rosystain.com/tags/Linux/"/>
-    
     <category term="IPv6" scheme="https://rosystain.com/tags/IPv6/"/>
+    
+    <category term="Linux" scheme="https://rosystain.com/tags/Linux/"/>
     
   </entry>
   
