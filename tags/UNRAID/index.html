@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#">
+
+<head>
+  <meta charset="UTF-8" >
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title>Tag: UNRAID | 痴呆屋</title>
+  <meta name="description" content="" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta property="og:type" content="website">
+<meta property="og:title" content="痴呆屋">
+<meta property="og:url" content="https://rosystain.com/tags/UNRAID/index.html">
+<meta property="og:site_name" content="痴呆屋">
+<meta property="og:locale">
+<meta property="article:author" content="Chock">
+<meta name="twitter:card" content="summary">
+  <!-- build:css css/screen.css -->
+
+  
+<link rel="stylesheet" href="/css/screen.css">
+
+  
+  <!-- endbuild -->
+  
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+  <meta name="generator" content="痴呆屋">
+  
+  
+  <link rel="alternate" type="application/atom+xml" title="Atom 0.3" href="atom.xml">
+  
+  
+</head>
+
+
+<body class="home-template">
+
+  <header class="main-header  "  style="background-image: url(https://i.loli.net/2020/10/01/yNHjrehS2dvC4gE.png)" >
+    <nav class="main-nav overlay clearfix">
+        
+        <a class="subscribe-button icon-feed" href="/atom.xml">Subscribe</a>
+    </nav>
+    
+    <div class="vertical">
+        <div class="site-head-content inner">
+             <a class="blog-logo" href="/"><img src="https://i.loli.net/2020/10/01/DLrZt28dBi3NI19.png" alt="Blog Logo"/></a>         
+            <!--<h1 class="page-title">痴呆屋</h1>
+            <h2 class="page-description"></h2>-->
+        </div>
+    </div>
+    
+    <!--<a class="scroll-down icon-arrow-left" href="#content" data-offset="-45"><span class="hidden">Scroll Down</span></a> -->
+</header>
+
+  
+<main id="content" class="content" role="main">
+  
+  <article class="post" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+    
+    <header class="post-header">
+      
+
+  <h2 class="post-title" itemprop="name">
+    <a href="/NOTES/2024/12/04/cm48ohszy0000k3rscicrfn4t/">UNRAID 无法引导 qcow2 的解决办法</a>
+  </h2>
+
+
+    </header>
+    
+    <section class="post-excerpt" itemprop="description articleBody">
+      <p>
+      
+        <p><img src="https://file.rosystain.com/d/Library/Pictures/Obsidian/202412040018113.png?sign=xa-XZkU87hSFQZawuWdqX0bbNLU7OwYn3iiINsi7iFI=:0" alt="unraid_banner.png"></p>
+<p>今天在给 UNRAID 调整缓存池后，发现片刻前仍正常运行的 Home Assistant 在更改了虚拟磁盘的路径后无法启动了。</p>
+<p><img src="https://file.rosystain.com/d/Library/Pictures/Obsidian/Pasted%20image%2020241203170214.png?sign=gWEBTIjXoK3tX4n42Ok55WV9JUJZDW23-woeqAX0xsI=:0" alt="Pasted image 20241203170214"></p>
+<p>各种尝试无果后，爬帖子发现还需要在 xml 视图下稍作修改:</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">  &lt;disk type=&#x27;file&#x27; device=&#x27;disk&#x27;&gt;</span><br><span class="line"><span class="deletion">-   &lt;driver name=&#x27;qemu&#x27; type=&#x27;raw&#x27; cache=&#x27;writeback&#x27;/&gt;</span></span><br><span class="line"><span class="addition">+   &lt;driver name=&#x27;qemu&#x27; type=&#x27;qcow2&#x27; cache=&#x27;writeback&#x27;/&gt;</span></span><br><span class="line">    &lt;source file=&#x27;/mnt/cache/domains/Home Assistant/haos_ova-10.5.qcow2&#x27; index=&#x27;1&#x27;/&gt;</span><br></pre></td></tr></table></figure>
+
+<p>修改后总算是顺利启动了. 应该是刚刚在 webui 中修改了 qcow2 的路径导致 UNRAID 错误得将 <code>type=&#39;raw&#39;</code> 写到了 xml 里. </p>
+<p>但我全然不记得以前也过这样的操作, 如果没有的话, 以前又是如何引导的呢? 带着这样的疑惑, 我重新开了一台新虚拟机, 选择 qcow2 后没有编辑 xml 直接创建后启动, 这次也成功了. 查看此机的 xml 发现 <code>type=&#39;qcow2&#39;</code> 好端端得摆在那.</p>
+<p>看起来是 UNRAID 只有在添加磁盘的时候才能对 qcow2 作出正确的配置了. </p>
+
+      
+      </p>
+    </section>
+    <section class="post-meta">
+    
+      <span> Chock</span>
+    
+    on 
+    <a href="/categories/NOTES/" class="post-category">
+    NOTES
+    </a>
+    
+      <time datetime="2024-12-03T16:07:00.000Z" itemprop="datePublished" class="post-date">
+          Dec 04 2024
+      </time>
+      
+    
+    <div class="post-meta-tags">
+    
+    <a href='/tags/UNRAID/'>UNRAID</a>
+    </div>
+    
+    
+</section>
+
+
+                                
+                                    
+                                
+  </article>
+  
+  <nav class="pagination" role="pagination">
+    
+    <span class="page-number">Page 1 of 1</span>
+    
+  </nav>
+</main>
+
+
+  <footer class="site-footer clearfix">
+ <section class="copyright"><a href="/">痴呆屋</a> &copy; <script>document.write(new Date().getFullYear())</script> &bull; All rights reserved.</section>
+</footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/jquery-2.0.3.min.js"><\/script>')</script>
+
+<script type="text/javascript" src="/js/jquery.fitvids.js"></script>
+<script type="text/javascript">
+(function($){
+  var $postContent = $(".post-content");
+  $postContent.fitVids();
+})(jQuery);
+</script>
+
+<script type="text/javascript" src="/js/index.js"></script>
+
+
+
+
+
+</body>
+</html>
